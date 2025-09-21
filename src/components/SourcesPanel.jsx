@@ -23,26 +23,38 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     } else {
       setFiles([]);
     }
-  }, [selectedProject]);
+  }, [selectedProject, projects]);
 
   const loadProjects = async () => {
     setLoading(true);
     setError(null);
     try {
+      console.log('🔄 Cargando proyectos...');
       const projectsData = await getProjects();
+      console.log('📦 Datos recibidos:', projectsData);
+      
       let projectsList = [];
       
       if (projectsData?.projects && Array.isArray(projectsData.projects)) {
         projectsList = projectsData.projects;
       }
       
+      console.log('📋 Lista de proyectos procesada:', projectsList);
       setProjects(projectsList);
       
-      if (projectsList.length > 0 && !selectedProject) {
+      // Actualizar el proyecto seleccionado con los datos más recientes
+      if (selectedProject) {
+        const updatedProject = projectsList.find(p => p.id === selectedProject.id);
+        if (updatedProject) {
+          console.log('🔄 Actualizando proyecto seleccionado:', updatedProject);
+          setSelectedProject(updatedProject);
+        }
+      } else if (projectsList.length > 0) {
+        console.log('🎯 Seleccionando primer proyecto:', projectsList[0]);
         setSelectedProject(projectsList[0]);
       }
     } catch (err) {
-      console.error('Error al cargar proyectos:', err);
+      console.error('❌ Error al cargar proyectos:', err);
       setError('Error al cargar proyectos');
     } finally {
       setLoading(false);
@@ -50,14 +62,19 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   };
 
   const loadProjectFiles = async (projectId) => {
+    console.log('📁 Cargando archivos para proyecto:', projectId);
     if (!projectId) return;
     
     const project = projects.find(p => p.id === projectId);
+    console.log('📋 Proyecto encontrado:', project);
+    
     if (!project?.documents) {
+      console.log('⚠️ No hay documentos en el proyecto');
       setFiles([]);
       return;
     }
 
+    console.log('📄 Documentos del proyecto:', project.documents);
     const filesData = project.documents.map(doc => ({
       name: doc.fileName || doc.name || 'Documento sin nombre',
       type: doc.fileType || 'pdf',
@@ -67,6 +84,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       createdAt: doc.createdAt
     }));
     
+    console.log('📊 Archivos procesados:', filesData);
     setFiles(filesData);
   };
 
@@ -98,7 +116,14 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !selectedProject) return;
+    console.log('📤 Iniciando upload...');
+    console.log('Selected file:', selectedFile);
+    console.log('Selected project:', selectedProject);
+    
+    if (!selectedFile || !selectedProject) {
+      console.log('⚠️ Upload cancelado: falta archivo o proyecto');
+      return;
+    }
     
     setLoading(true);
     try {
@@ -106,14 +131,22 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       formData.append('documents', selectedFile);
       formData.append('projectId', selectedProject.id);
       
-      await uploadDocuments(formData);
+      console.log('📦 FormData creado:', {
+        file: selectedFile.name,
+        projectId: selectedProject.id,
+        projectName: selectedProject.name
+      });
+      
+      const result = await uploadDocuments(formData);
+      console.log('✅ Upload exitoso:', result);
+      
       await loadProjects();
       
       setShowUploadModal(false);
       setSelectedFile(null);
     } catch (err) {
-      console.error('Error al subir archivo:', err);
-      setError('No se pudo subir el archivo.');
+      console.error('❌ Error al subir archivo:', err);
+      setError(`Error: ${err.response?.data?.message || err.message}`);
     } finally {
       setLoading(false);
     }
@@ -138,14 +171,25 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
         </div>
       </div>
 
-      {projects.length > 0 && (
+      {loading && (
+        <div className="loading-message">
+          <div className="loading-spinner"></div>
+          Cargando proyectos...
+        </div>
+      )}
+
+      {!loading && projects.length > 0 && (
         <div style={{ marginBottom: '1rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>
+            Proyecto actual:
+          </label>
           <select 
             value={selectedProject?.id || ''} 
             onChange={(e) => {
               const project = projects.find(p => p.id === e.target.value);
+              console.log('🎯 Proyecto seleccionado:', project);
               setSelectedProject(project);
-              setSelectedFiles([]); // Clear selected files when changing project
+              setSelectedFiles([]);
             }}
             style={{ 
               width: '100%', 
@@ -156,10 +200,20 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
           >
             {projects.map(project => (
               <option key={project.id} value={project.id}>
-                {project.name} ({project._count?.documents || 0} docs)
+                {project.name} ({project.documents?.length || project._count?.documents || 0} docs)
               </option>
             ))}
           </select>
+        </div>
+      )}
+
+      {!loading && projects.length === 0 && (
+        <div className="empty-state" style={{ textAlign: 'center', padding: '2rem 0' }}>
+          <p>No hay proyectos disponibles.</p>
+          <button className="add-file-button" onClick={() => setShowProjectModal(true)}>
+            <AddIcon className="upload-icon" />
+            Crear primer proyecto
+          </button>
         </div>
       )}
 
@@ -168,7 +222,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
           <strong>Error:</strong> {error}
           <button 
             className="retry-button" 
-            onClick={loadFiles}
+            onClick={loadProjects}
             style={{ marginLeft: '1rem', padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
           >
             Reintentar
@@ -188,22 +242,18 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
         </div>
       </div>
 
-      <div className="files-list">
-        {loading ? (
-          <div className="loading-message">
-            <div className="loading-spinner"></div>
-            Cargando archivos...
-          </div>
-        ) : files.length === 0 && !error ? (
-          <div className="empty-state">
-            <p>No hay archivos disponibles.</p>
-            <p style={{ fontSize: '0.75rem', opacity: 0.7 }}>Sube algunos documentos para comenzar a trabajar.</p>
-            <button className="add-file-button" onClick={handleAddClick}>
-              <UploadIcon className="upload-icon" />
-              Subir documento
-            </button>
-          </div>
-        ) : files.length > 0 ? (
+      {!loading && projects.length > 0 && (
+        <div className="files-list">
+          {files.length === 0 && !error ? (
+            <div className="empty-state">
+              <p>No hay documentos en este proyecto.</p>
+              <p style={{ fontSize: '0.75rem', opacity: 0.7 }}>Sube algunos documentos para comenzar.</p>
+              <button className="add-file-button" onClick={handleAddClick} disabled={!selectedProject}>
+                <UploadIcon className="upload-icon" />
+                Subir documento
+              </button>
+            </div>
+          ) : files.length > 0 ? (
           files.map((file, index) => (
             <div 
               key={index} 
@@ -223,24 +273,9 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
               </div>
             </div>
           ))
-        ) : selectedProject ? (
-          <div className="empty-state">
-            <p>No hay documentos en este proyecto.</p>
-            <button className="add-file-button" onClick={handleAddClick}>
-              <UploadIcon className="upload-icon" />
-              Subir documento
-            </button>
-          </div>
-        ) : (
-          <div className="empty-state">
-            <p>Crea un proyecto para comenzar.</p>
-            <button className="add-file-button" onClick={() => setShowProjectModal(true)}>
-              <AddIcon className="upload-icon" />
-              Crear proyecto
-            </button>
-          </div>
-        )}
-      </div>
+          ) : null}
+        </div>
+      )}
 
       <ProjectModal 
         isOpen={showProjectModal}
