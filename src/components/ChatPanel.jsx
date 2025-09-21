@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { SendIcon } from './icons/index.jsx';
+import { processDocuments } from '../services/api';
 
 const ChatPanel = ({ selectedFiles }) => {
   const [messages, setMessages] = useState([
@@ -15,7 +17,7 @@ const ChatPanel = ({ selectedFiles }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (input.trim() === '' || isProcessing) return;
+    if (input.trim() === '' || isProcessing || selectedFiles.length === 0) return;
     
     // Añadir mensaje del usuario
     const userMessage = { type: 'user', text: input };
@@ -23,15 +25,31 @@ const ChatPanel = ({ selectedFiles }) => {
     setInput('');
     setIsProcessing(true);
     
-    // Simular respuesta de la API (en una implementación real, llamar a la API)
-    setTimeout(() => {
+    try {
+      // Enviar la consulta a la API con los archivos seleccionados
+      const response = await processDocuments({
+        files: selectedFiles,
+        query: input,
+        documentType: 'consulta'
+      });
+      
+      // Añadir respuesta del asistente
       const assistantMessage = { 
         type: 'assistant', 
-        text: `Esta es una respuesta simulada basada en ${selectedFiles.length} archivos seleccionados. En una implementación real, este texto vendría de la respuesta de la API procesando los documentos seleccionados con la consulta del usuario.` 
+        text: response.result || `No se pudo procesar tu consulta. Por favor, intenta de nuevo.` 
       };
       setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error al procesar la consulta:', error);
+      // Mostrar mensaje de error
+      const errorMessage = { 
+        type: 'system', 
+        text: `Ocurrió un error al procesar tu consulta. ${error.message || 'Por favor, intenta de nuevo más tarde.'}` 
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsProcessing(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -61,15 +79,18 @@ const ChatPanel = ({ selectedFiles }) => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Pregunta algo sobre tus documentos..."
-          disabled={isProcessing}
+          placeholder={selectedFiles.length > 0 
+            ? "Pregunta algo sobre tus documentos..." 
+            : "Selecciona documentos para hacer consultas..."}
+          disabled={isProcessing || selectedFiles.length === 0}
         />
         <button 
           type="submit" 
           className="send-button"
-          disabled={input.trim() === '' || isProcessing}
+          disabled={input.trim() === '' || isProcessing || selectedFiles.length === 0}
         >
-          Enviar
+          <SendIcon className="send-icon" />
+          <span>Enviar</span>
         </button>
       </form>
     </div>

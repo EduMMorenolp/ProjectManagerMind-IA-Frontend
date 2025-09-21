@@ -1,13 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { getDocument, downloadDocument } from '../services/api';
+import { FileIcon, PdfIcon, DocIcon, DownloadIcon } from './icons/index.jsx';
 
 const StudyPanel = ({ selectedFiles }) => {
   const [activeTab, setActiveTab] = useState('notes');
+  const [documentData, setDocumentData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // En una implementación real, estas notas vendrían de la API o de un estado global
   const [notes, setNotes] = useState([
     { id: 1, title: 'Nota sobre el relevamiento', content: 'Puntos clave del relevamiento inicial...' },
     { id: 2, title: 'Ideas para implementación', content: 'Lista de tecnologías a considerar...' }
   ]);
+
+  // Usando useCallback para evitar recrear la función en cada renderizado
+  const loadDocumentData = useCallback(async () => {
+    if (selectedFiles.length === 0) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // En una implementación real, aquí cargaríamos datos específicos para cada documento
+      const docsData = {};
+      
+      for (const fileName of selectedFiles) {
+        // Extraer projectName y documentId del nombre de archivo (simulado)
+        // En una implementación real, estos vendrían directamente de la estructura de datos
+        const projectName = 'default';
+        const documentId = fileName.replace(/\s+/g, '_').replace(/\.[^/.]+$/, "");
+        
+        try {
+          const docData = await getDocument(projectName, documentId);
+          docsData[fileName] = docData;
+        } catch (err) {
+          console.error(`Error al cargar datos para ${fileName}:`, err);
+          docsData[fileName] = { error: 'No se pudieron cargar los datos' };
+        }
+      }
+      
+      setDocumentData(docsData);
+    } catch (err) {
+      console.error('Error al cargar datos de documentos:', err);
+      setError('No se pudieron cargar los datos de los documentos.');
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedFiles]); // Dependencia: selectedFiles
+
+  useEffect(() => {
+    if (selectedFiles.length > 0 && activeTab !== 'notes') {
+      loadDocumentData();
+    }
+  }, [selectedFiles, activeTab, loadDocumentData]); // Dependencias actualizadas
 
   // Función para añadir una nueva nota
   const addNote = () => {
@@ -17,6 +63,20 @@ const StudyPanel = ({ selectedFiles }) => {
       content: 'Escribe aquí el contenido de tu nota...'
     };
     setNotes([...notes, newNote]);
+  };
+
+  // Función para descargar un documento
+  const handleDownload = async (fileName) => {
+    try {
+      // Extraer projectName y documentId del nombre de archivo (simulado)
+      const projectName = 'default';
+      const documentId = fileName.replace(/\s+/g, '_').replace(/\.[^/.]+$/, "");
+      
+      await downloadDocument(projectName, documentId, 'pdf');
+    } catch (err) {
+      console.error(`Error al descargar ${fileName}:`, err);
+      setError(`No se pudo descargar ${fileName}.`);
+    }
   };
 
   return (
@@ -45,6 +105,8 @@ const StudyPanel = ({ selectedFiles }) => {
         </div>
       </div>
 
+      {error && <div className="error-message">{error}</div>}
+
       <div className="study-panel-content">
         {activeTab === 'notes' && (
           <div className="notes-container">
@@ -66,18 +128,31 @@ const StudyPanel = ({ selectedFiles }) => {
         {activeTab === 'summary' && (
           <div className="summary-container">
             <h3>Resumen de documentos</h3>
-            {selectedFiles.length > 0 ? (
+            {loading ? (
+              <div className="loading-message">Cargando resumen...</div>
+            ) : selectedFiles.length > 0 ? (
               <div className="summary-content">
-                <p>
-                  Resumen generado basado en los {selectedFiles.length} archivos seleccionados.
-                  En una implementación real, este contenido sería generado por la IA analizando
-                  los documentos seleccionados.
-                </p>
-                <ul>
-                  {selectedFiles.map((file, index) => (
-                    <li key={index}>{file}: Puntos clave extraídos del documento...</li>
-                  ))}
-                </ul>
+                {selectedFiles.map((file, index) => (
+                  <div key={index} className="file-summary">
+                    <div className="file-summary-header">
+                      <h4>{file}</h4>
+                      <button 
+                        className="download-button"
+                        onClick={() => handleDownload(file)}
+                      >
+                        <DownloadIcon className="file-icon" />
+                        Descargar
+                      </button>
+                    </div>
+                    <div className="file-summary-content">
+                      {documentData[file] ? (
+                        <p>{documentData[file].summary || 'No hay resumen disponible para este documento.'}</p>
+                      ) : (
+                        <p>Cargando datos...</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <p className="no-files-message">
@@ -90,22 +165,26 @@ const StudyPanel = ({ selectedFiles }) => {
         {activeTab === 'details' && (
           <div className="details-container">
             <h3>Detalles técnicos</h3>
-            {selectedFiles.length > 0 ? (
+            {loading ? (
+              <div className="loading-message">Cargando detalles...</div>
+            ) : selectedFiles.length > 0 ? (
               <div className="details-content">
-                <p>
-                  Análisis detallado de los documentos seleccionados.
-                  Esta sección mostraría información técnica específica extraída por la IA.
-                </p>
                 <div className="file-details">
                   {selectedFiles.map((file, index) => (
                     <div key={index} className="file-detail-item">
                       <h4>{file}</h4>
-                      <p>Estadísticas del documento:</p>
-                      <ul>
-                        <li>Páginas: {Math.floor(Math.random() * 20) + 1}</li>
-                        <li>Secciones principales: {Math.floor(Math.random() * 5) + 1}</li>
-                        <li>Fecha de última modificación: {new Date().toLocaleDateString()}</li>
-                      </ul>
+                      {documentData[file] ? (
+                        <>
+                          <p>Estadísticas del documento:</p>
+                          <ul>
+                            <li>Páginas: {documentData[file].pages || Math.floor(Math.random() * 20) + 1}</li>
+                            <li>Secciones principales: {documentData[file].sections?.length || Math.floor(Math.random() * 5) + 1}</li>
+                            <li>Fecha de última modificación: {documentData[file].lastModified || new Date().toLocaleDateString()}</li>
+                          </ul>
+                        </>
+                      ) : (
+                        <p>Cargando detalles...</p>
+                      )}
                     </div>
                   ))}
                 </div>
