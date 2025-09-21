@@ -35,7 +35,7 @@ export const getHealthStatus = async () => {
 // Servicios para gestión de documentos
 export const uploadDocuments = async (formData) => {
   try {
-    const response = await api.post('/api/documents/upload', formData, {
+    const response = await api.post('/api/v1/documents/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -49,7 +49,7 @@ export const uploadDocuments = async (formData) => {
 
 export const processDocuments = async (data) => {
   try {
-    const response = await api.post('/api/documents/process', data);
+    const response = await api.post('/api/v1/documents/process', data);
     return response.data;
   } catch (error) {
     console.error('Error al procesar documentos:', error);
@@ -59,7 +59,7 @@ export const processDocuments = async (data) => {
 
 export const workflowDocuments = async (formData) => {
   try {
-    const response = await api.post('/api/documents/workflow', formData, {
+    const response = await api.post('/api/v1/documents/workflow', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -73,7 +73,7 @@ export const workflowDocuments = async (formData) => {
 
 export const getProjects = async () => {
   try {
-    const response = await api.get('/api/documents/projects');
+    const response = await api.get('/api/v1/documents/projects');
     return response.data;
   } catch (error) {
     console.error('Error al obtener proyectos:', error);
@@ -83,7 +83,7 @@ export const getProjects = async () => {
 
 export const getDocumentTypes = async () => {
   try {
-    const response = await api.get('/api/documents/types');
+    const response = await api.get('/api/v1/documents/types');
     return response.data;
   } catch (error) {
     console.error('Error al obtener tipos de documentos:', error);
@@ -93,7 +93,7 @@ export const getDocumentTypes = async () => {
 
 export const getDocument = async (projectName, documentId) => {
   try {
-    const response = await api.get(`/api/documents/${projectName}/${documentId}`);
+    const response = await api.get(`/api/v1/documents/${projectName}/${documentId}`);
     return response.data;
   } catch (error) {
     console.error('Error al obtener documento:', error);
@@ -104,7 +104,7 @@ export const getDocument = async (projectName, documentId) => {
 export const downloadDocument = async (projectName, documentId, format = 'md') => {
   try {
     const response = await api.get(
-      `/api/documents/${projectName}/${documentId}/download?format=${format}`,
+      `/api/v1/documents/${projectName}/${documentId}/download?format=${format}`,
       { responseType: 'blob' }
     );
     
@@ -127,7 +127,7 @@ export const downloadDocument = async (projectName, documentId, format = 'md') =
 // Servicios para IA
 export const testAI = async () => {
   try {
-    const response = await api.get('/api/ai/test');
+    const response = await api.get('/api/v1/ai/test');
     return response.data;
   } catch (error) {
     console.error('Error al probar conexión con IA:', error);
@@ -137,7 +137,7 @@ export const testAI = async () => {
 
 export const getAIInfo = async () => {
   try {
-    const response = await api.get('/api/ai/info');
+    const response = await api.get('/api/v1/ai/info');
     return response.data;
   } catch (error) {
     console.error('Error al obtener información de IA:', error);
