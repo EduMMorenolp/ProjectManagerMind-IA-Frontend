@@ -81,6 +81,26 @@ export const getProjects = async () => {
   }
 };
 
+export const createProject = async (projectData) => {
+  try {
+    const response = await api.post('/api/v1/projects', projectData);
+    return response.data;
+  } catch (error) {
+    console.error('Error al crear proyecto:', error);
+    throw error;
+  }
+};
+
+export const chatWithDocuments = async (chatData) => {
+  try {
+    const response = await api.post('/api/v1/ai/chat', chatData);
+    return response.data;
+  } catch (error) {
+    console.error('Error en chat:', error);
+    throw error;
+  }
+};
+
 export const getDocumentTypes = async () => {
   try {
     const response = await api.get('/api/v1/documents/types');

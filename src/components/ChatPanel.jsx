@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SendIcon } from './icons/index.jsx';
-import { processDocuments } from '../services/api';
+import { chatWithDocuments } from '../services/api';
 
-const ChatPanel = ({ selectedFiles }) => {
+const ChatPanel = ({ selectedFiles, selectedProject }) => {
   const [messages, setMessages] = useState([
     { type: 'system', text: 'Bienvenido al asistente de documentos IA. ¿En qué puedo ayudarte hoy?' }
   ]);
@@ -19,32 +19,28 @@ const ChatPanel = ({ selectedFiles }) => {
     e.preventDefault();
     if (input.trim() === '' || isProcessing || selectedFiles.length === 0) return;
     
-    // Añadir mensaje del usuario
     const userMessage = { type: 'user', text: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsProcessing(true);
     
     try {
-      // Enviar la consulta a la API con los archivos seleccionados
-      const response = await processDocuments({
-        files: selectedFiles,
+      const response = await chatWithDocuments({
         query: input,
-        documentType: 'consulta'
+        projectId: selectedProject?.id,
+        documentIds: selectedFiles // Assuming selectedFiles contains document IDs
       });
       
-      // Añadir respuesta del asistente
       const assistantMessage = { 
         type: 'assistant', 
-        text: response.result || `No se pudo procesar tu consulta. Por favor, intenta de nuevo.` 
+        text: response.response || 'No se pudo procesar tu consulta.' 
       };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error al procesar la consulta:', error);
-      // Mostrar mensaje de error
       const errorMessage = { 
         type: 'system', 
-        text: `Ocurrió un error al procesar tu consulta. ${error.message || 'Por favor, intenta de nuevo más tarde.'}` 
+        text: `Error: ${error.response?.data?.message || error.message}` 
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
