@@ -127,6 +127,8 @@ const FlashIcon = ({ className }) => (
   </svg>
 );
 
+import DownloadIcon from './DownloadIcon';
+
 export {
   FileIcon,
   PdfIcon,
@@ -143,5 +145,6 @@ export {
   FlashIcon,
   MenuIcon,
   SettingsIcon,
-  UploadIcon
+  UploadIcon,
+  DownloadIcon
 };
