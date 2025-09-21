@@ -49,7 +49,7 @@ export const uploadDocuments = async (formData) => {
 
 export const processDocuments = async (data) => {
   try {
-    const response = await api.post('/api/v1/documents/process', data);
+    const response = await api.post('/api/v1/ai/process', data);
     return response.data;
   } catch (error) {
     console.error('Error al procesar documentos:', error);

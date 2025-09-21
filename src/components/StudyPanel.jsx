@@ -1,106 +1,108 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { getDocument, downloadDocument } from '../services/api';
-import { FileIcon, PdfIcon, DocIcon, DownloadIcon } from './icons/index.jsx';
+import React, { useState, useEffect } from 'react';
+import { processDocuments, getAIInfo } from '../services/api';
+import { FileIcon, PdfIcon, DocIcon, DownloadIcon, PlayIcon } from './icons/index.jsx';
 
-const StudyPanel = ({ selectedFiles }) => {
-  const [activeTab, setActiveTab] = useState('notes');
-  const [documentData, setDocumentData] = useState({});
-  const [loading, setLoading] = useState(false);
+const StudyPanel = ({ selectedFiles, selectedProject }) => {
+  const [activeTab, setActiveTab] = useState('generate');
+  const [selectedDocTypes, setSelectedDocTypes] = useState(['relevamiento']);
+  const [processing, setProcessing] = useState(false);
+  const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+  const [aiInfo, setAiInfo] = useState(null);
 
-  // En una implementación real, estas notas vendrían de la API o de un estado global
-  const [notes, setNotes] = useState([
-    { id: 1, title: 'Nota sobre el relevamiento', content: 'Puntos clave del relevamiento inicial...' },
-    { id: 2, title: 'Ideas para implementación', content: 'Lista de tecnologías a considerar...' }
-  ]);
-
-  // Usando useCallback para evitar recrear la función en cada renderizado
-  const loadDocumentData = useCallback(async () => {
-    if (selectedFiles.length === 0) return;
-    
-    setLoading(true);
-    setError(null);
-    
-    try {
-      // En una implementación real, aquí cargaríamos datos específicos para cada documento
-      const docsData = {};
-      
-      for (const fileName of selectedFiles) {
-        // Extraer projectName y documentId del nombre de archivo (simulado)
-        // En una implementación real, estos vendrían directamente de la estructura de datos
-        const projectName = 'default';
-        const documentId = fileName.replace(/\s+/g, '_').replace(/\.[^/.]+$/, "");
-        
-        try {
-          const docData = await getDocument(projectName, documentId);
-          docsData[fileName] = docData;
-        } catch (err) {
-          console.error(`Error al cargar datos para ${fileName}:`, err);
-          docsData[fileName] = { error: 'No se pudieron cargar los datos' };
-        }
-      }
-      
-      setDocumentData(docsData);
-    } catch (err) {
-      console.error('Error al cargar datos de documentos:', err);
-      setError('No se pudieron cargar los datos de los documentos.');
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedFiles]); // Dependencia: selectedFiles
+  const documentTypes = [
+    { id: 'relevamiento', name: 'Relevamiento', description: 'Documento de análisis y requerimientos' },
+    { id: 'informe-ejecutivo', name: 'Informe Ejecutivo', description: 'Resumen ejecutivo del proyecto' },
+    { id: 'default', name: 'Documento General', description: 'Documentación técnica general' }
+  ];
 
   useEffect(() => {
-    if (selectedFiles.length > 0 && activeTab !== 'notes') {
-      loadDocumentData();
-    }
-  }, [selectedFiles, activeTab, loadDocumentData]); // Dependencias actualizadas
+    loadAIInfo();
+  }, []);
 
-  // Función para añadir una nueva nota
-  const addNote = () => {
-    const newNote = {
-      id: notes.length + 1,
-      title: `Nueva nota ${notes.length + 1}`,
-      content: 'Escribe aquí el contenido de tu nota...'
-    };
-    setNotes([...notes, newNote]);
+  const loadAIInfo = async () => {
+    try {
+      const info = await getAIInfo();
+      setAiInfo(info);
+    } catch (err) {
+      console.error('Error al cargar información de IA:', err);
+    }
   };
 
-  // Función para descargar un documento
-  const handleDownload = async (fileName) => {
+  const handleDocTypeChange = (docType) => {
+    setSelectedDocTypes(prev => 
+      prev.includes(docType) 
+        ? prev.filter(t => t !== docType)
+        : [...prev, docType]
+    );
+  };
+
+  const handleGenerateDocuments = async () => {
+    if (!selectedProject) {
+      setError('Selecciona un proyecto primero');
+      return;
+    }
+
+    if (selectedFiles.length === 0) {
+      setError('Selecciona al menos un archivo');
+      return;
+    }
+
+    if (selectedDocTypes.length === 0) {
+      setError('Selecciona al menos un tipo de documento');
+      return;
+    }
+
+    setProcessing(true);
+    setError(null);
+    setResults(null);
+
     try {
-      // Extraer projectName y documentId del nombre de archivo (simulado)
-      const projectName = 'default';
-      const documentId = fileName.replace(/\s+/g, '_').replace(/\.[^/.]+$/, "");
-      
-      await downloadDocument(projectName, documentId, 'pdf');
+      // Preparar datos de archivos extraídos (simulado)
+      const extractedTexts = selectedFiles.map(file => ({
+        fileName: file.fileName || file,
+        text: file.extractedText || `Contenido extraído de ${file.fileName || file}`,
+        extractedAt: new Date().toISOString()
+      }));
+
+      const response = await processDocuments({
+        extractedTexts,
+        documentTypes: selectedDocTypes,
+        projectId: selectedProject.id,
+        projectName: selectedProject.name
+      });
+
+      setResults(response);
     } catch (err) {
-      console.error(`Error al descargar ${fileName}:`, err);
-      setError(`No se pudo descargar ${fileName}.`);
+      console.error('Error al generar documentos:', err);
+      setError(err.message || 'Error al generar documentos');
+    } finally {
+      setProcessing(false);
     }
   };
 
   return (
     <div className="study-panel-container">
       <div className="study-panel-header">
-        <h2>Estudio</h2>
+        <h2>Generador de Documentación</h2>
         <div className="study-tabs">
           <button 
-            className={`tab-button ${activeTab === 'notes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('notes')}
+            className={`tab-button ${activeTab === 'generate' ? 'active' : ''}`}
+            onClick={() => setActiveTab('generate')}
           >
-            Notas
+            Generar
           </button>
           <button 
-            className={`tab-button ${activeTab === 'summary' ? 'active' : ''}`}
-            onClick={() => setActiveTab('summary')}
+            className={`tab-button ${activeTab === 'results' ? 'active' : ''}`}
+            onClick={() => setActiveTab('results')}
           >
-            Resumen
+            Resultados
           </button>
           <button 
-            className={`tab-button ${activeTab === 'details' ? 'active' : ''}`}
-            onClick={() => setActiveTab('details')}
+            className={`tab-button ${activeTab === 'config' ? 'active' : ''}`}
+            onClick={() => setActiveTab('config')}
           >
-            Detalles
+            Configuración
           </button>
         </div>
       </div>
@@ -108,94 +110,121 @@ const StudyPanel = ({ selectedFiles }) => {
       {error && <div className="error-message">{error}</div>}
 
       <div className="study-panel-content">
-        {activeTab === 'notes' && (
-          <div className="notes-container">
-            <div className="notes-header">
-              <h3>Mis notas</h3>
-              <button className="add-note-button" onClick={addNote}>+ Nueva nota</button>
-            </div>
-            <div className="notes-list">
-              {notes.map(note => (
-                <div key={note.id} className="note-item">
-                  <h4>{note.title}</h4>
-                  <p>{note.content}</p>
+        {activeTab === 'generate' && (
+          <div className="generate-container">
+            <div className="project-info">
+              <h3>Proyecto Seleccionado</h3>
+              {selectedProject ? (
+                <div className="project-card">
+                  <h4>{selectedProject.name}</h4>
+                  <p>{selectedProject.description}</p>
                 </div>
-              ))}
+              ) : (
+                <p className="no-project-message">Selecciona un proyecto en el panel de fuentes</p>
+              )}
+            </div>
+
+            <div className="files-info">
+              <h3>Archivos Seleccionados ({selectedFiles.length})</h3>
+              {selectedFiles.length > 0 ? (
+                <div className="files-list">
+                  {selectedFiles.map((file, index) => (
+                    <div key={index} className="file-item">
+                      <FileIcon className="file-icon" />
+                      <span>{file.fileName || file}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="no-files-message">Selecciona archivos en el panel de fuentes</p>
+              )}
+            </div>
+
+            <div className="document-types">
+              <h3>Tipos de Documentos a Generar</h3>
+              <div className="doc-types-grid">
+                {documentTypes.map(docType => (
+                  <div key={docType.id} className="doc-type-card">
+                    <label className="doc-type-label">
+                      <input
+                        type="checkbox"
+                        checked={selectedDocTypes.includes(docType.id)}
+                        onChange={() => handleDocTypeChange(docType.id)}
+                      />
+                      <div className="doc-type-info">
+                        <h4>{docType.name}</h4>
+                        <p>{docType.description}</p>
+                      </div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="generate-actions">
+              <button 
+                className="generate-button"
+                onClick={handleGenerateDocuments}
+                disabled={processing || !selectedProject || selectedFiles.length === 0}
+              >
+                {processing ? (
+                  <span>Generando...</span>
+                ) : (
+                  <>
+                    <PlayIcon className="button-icon" />
+                    Generar Documentación
+                  </>
+                )}
+              </button>
             </div>
           </div>
         )}
 
-        {activeTab === 'summary' && (
-          <div className="summary-container">
-            <h3>Resumen de documentos</h3>
-            {loading ? (
-              <div className="loading-message">Cargando resumen...</div>
-            ) : selectedFiles.length > 0 ? (
-              <div className="summary-content">
-                {selectedFiles.map((file, index) => (
-                  <div key={index} className="file-summary">
-                    <div className="file-summary-header">
-                      <h4>{file}</h4>
-                      <button 
-                        className="download-button"
-                        onClick={() => handleDownload(file)}
-                      >
-                        <DownloadIcon className="file-icon" />
-                        Descargar
-                      </button>
-                    </div>
-                    <div className="file-summary-content">
-                      {documentData[file] ? (
-                        <p>{documentData[file].summary || 'No hay resumen disponible para este documento.'}</p>
-                      ) : (
-                        <p>Cargando datos...</p>
-                      )}
+        {activeTab === 'results' && (
+          <div className="results-container">
+            <h3>Resultados de Generación</h3>
+            {results ? (
+              <div className="results-content">
+                <div className="results-summary">
+                  <h4>Resumen</h4>
+                  <p>Proyecto: {results.projectName}</p>
+                  <p>Documentos generados: {results.processing?.results?.length || 0}</p>
+                  <p>Tiempo de procesamiento: {results.processingTime}</p>
+                  <p>Modelo usado: {results.modelInfo?.modelName}</p>
+                </div>
+                
+                {results.processing?.results?.map((result, index) => (
+                  <div key={index} className="result-item">
+                    <h4>{documentTypes.find(t => t.id === result.documentType)?.name}</h4>
+                    <div className="result-content">
+                      <pre>{result.content}</pre>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="no-files-message">
-                Selecciona archivos en el panel de fuentes para generar un resumen.
-              </p>
+              <p className="no-results-message">No hay resultados aún. Genera documentos primero.</p>
             )}
           </div>
         )}
 
-        {activeTab === 'details' && (
-          <div className="details-container">
-            <h3>Detalles técnicos</h3>
-            {loading ? (
-              <div className="loading-message">Cargando detalles...</div>
-            ) : selectedFiles.length > 0 ? (
-              <div className="details-content">
-                <div className="file-details">
-                  {selectedFiles.map((file, index) => (
-                    <div key={index} className="file-detail-item">
-                      <h4>{file}</h4>
-                      {documentData[file] ? (
-                        <>
-                          <p>Estadísticas del documento:</p>
-                          <ul>
-                            <li>Páginas: {documentData[file].pages || Math.floor(Math.random() * 20) + 1}</li>
-                            <li>Secciones principales: {documentData[file].sections?.length || Math.floor(Math.random() * 5) + 1}</li>
-                            <li>Fecha de última modificación: {documentData[file].lastModified || new Date().toLocaleDateString()}</li>
-                          </ul>
-                        </>
-                      ) : (
-                        <p>Cargando detalles...</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
+        {activeTab === 'config' && (
+          <div className="config-container">
+            <h3>Configuración de IA</h3>
+            {aiInfo ? (
+              <div className="ai-info">
+                <h4>Estado del Modelo</h4>
+                <p>Modelo: {aiInfo.modelInfo?.modelName}</p>
+                <p>Proveedor: {aiInfo.modelInfo?.provider || 'Local'}</p>
+                <p>Estado: {aiInfo.success ? '✅ Conectado' : '❌ Desconectado'}</p>
               </div>
             ) : (
-              <p className="no-files-message">
-                Selecciona archivos en el panel de fuentes para ver detalles.
-              </p>
+              <p>Cargando información de IA...</p>
             )}
           </div>
         )}
+        
+        {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );

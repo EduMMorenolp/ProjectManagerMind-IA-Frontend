@@ -53,15 +53,15 @@ function App() {
               />
             </div>
             
-            <div className="chat-panel">
-              <ChatPanel 
+            <div className="study-panel">
+              <StudyPanel 
                 selectedFiles={selectedFiles} 
                 selectedProject={selectedProject}
               />
             </div>
             
-            <div className="study-panel">
-              <StudyPanel 
+            <div className="chat-panel">
+              <ChatPanel 
                 selectedFiles={selectedFiles} 
                 selectedProject={selectedProject}
               />
