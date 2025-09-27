@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getDocument, downloadDocument } from '../services/api';
+import { getDocument, downloadDocument } from '../services';
 import { FileIcon, PdfIcon, DocIcon, DownloadIcon } from './icons/index.jsx';
 
 const StudyPanel = ({ selectedFiles }) => {

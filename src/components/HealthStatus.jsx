@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getHealthStatus, testAI, getAIInfo } from '../services/api';
+import { getHealthStatus, testAI, getAIInfo } from '../services';
 
 const HealthStatus = () => {
   const [healthData, setHealthData] = useState(null);

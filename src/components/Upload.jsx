@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { uploadDocuments, processDocuments, workflowDocuments, getDocumentTypes } from '../services/api';
+import { uploadDocuments, processDocuments, workflowDocuments, getDocumentTypes } from '../services';
 
 const Upload = () => {
   const navigate = useNavigate();

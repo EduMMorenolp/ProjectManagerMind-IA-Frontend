@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon } from './icons/index.jsx';
-import { getProjects, uploadDocuments } from '../services/api';
+import { getProjects, uploadDocuments } from '../services';
 
 const SourcesPanel = ({ selectedFiles, setSelectedFiles }) => {
   const [files, setFiles] = useState([]);

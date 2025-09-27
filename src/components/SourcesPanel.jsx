@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon } from './icons/index.jsx';
-import { getProjects, uploadDocuments, createProject } from '../services/api';
+import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../services';
 import ProjectModal from './ProjectModal';
 import './upload-modal.css';
 
@@ -65,27 +65,34 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     console.log('📁 Cargando archivos para proyecto:', projectId);
     if (!projectId) return;
     
-    const project = projects.find(p => p.id === projectId);
-    console.log('📋 Proyecto encontrado:', project);
-    
-    if (!project?.documents) {
-      console.log('⚠️ No hay documentos en el proyecto');
+    try {
+      setLoading(true);
+      const documentsResponse = await getProjectDocuments(projectId);
+      console.log('� Respuesta de documentos:', documentsResponse);
+      
+      const documents = documentsResponse?.documents || [];
+      console.log('📄 Documentos del proyecto:', documents);
+      
+      const project = projects.find(p => p.id === projectId);
+      const projectName = project?.name || 'Proyecto sin nombre';
+      
+      const filesData = documents.map(doc => ({
+        name: doc.fileName || doc.name || 'Documento sin nombre',
+        type: doc.fileType || 'pdf',
+        id: doc.id,
+        projectName: projectName,
+        size: doc.characterCount || 0,
+        createdAt: doc.createdAt
+      }));
+      
+      console.log('📊 Archivos procesados:', filesData);
+      setFiles(filesData);
+    } catch (error) {
+      console.error('❌ Error al cargar documentos del proyecto:', error);
       setFiles([]);
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    console.log('📄 Documentos del proyecto:', project.documents);
-    const filesData = project.documents.map(doc => ({
-      name: doc.fileName || doc.name || 'Documento sin nombre',
-      type: doc.fileType || 'pdf',
-      id: doc.id,
-      projectName: project.name,
-      size: doc.characterCount || 0,
-      createdAt: doc.createdAt
-    }));
-    
-    console.log('📊 Archivos procesados:', filesData);
-    setFiles(filesData);
   };
 
   const handleFileSelect = (fileId) => {
