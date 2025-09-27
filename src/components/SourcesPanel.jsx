@@ -35,8 +35,12 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       
       let projectsList = [];
       
+      // La nueva API devuelve los proyectos directamente en el array 'projects'
       if (projectsData?.projects && Array.isArray(projectsData.projects)) {
         projectsList = projectsData.projects;
+      } else if (Array.isArray(projectsData)) {
+        // En caso de que la respuesta sea directamente un array
+        projectsList = projectsData;
       }
       
       console.log('📋 Lista de proyectos procesada:', projectsList);
@@ -147,7 +151,11 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       const result = await uploadDocuments(formData);
       console.log('✅ Upload exitoso:', result);
       
+      // Recargar proyectos y archivos del proyecto actual
       await loadProjects();
+      if (selectedProject?.id) {
+        await loadProjectFiles(selectedProject.id);
+      }
       
       setShowUploadModal(false);
       setSelectedFile(null);

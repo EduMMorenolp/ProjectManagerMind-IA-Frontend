@@ -62,7 +62,7 @@ export const deleteProject = async (projectId) => {
 // Obtener documentos de un proyecto
 export const getProjectDocuments = async (projectId) => {
   try {
-    const response = await api.get(`/api/v1/projects/${projectId}/documents`);
+    const response = await api.get(`/api/v1/documents/projects/${projectId}/documents`);
     return response.data;
   } catch (error) {
     console.error('Error al obtener documentos del proyecto:', error);
@@ -73,7 +73,7 @@ export const getProjectDocuments = async (projectId) => {
 // Obtener resultados procesados de un proyecto
 export const getProjectResults = async (projectId) => {
   try {
-    const response = await api.get(`/api/v1/projects/${projectId}/results`);
+    const response = await api.get(`/api/v1/documents/projects/${projectId}/results`);
     return response.data;
   } catch (error) {
     console.error('Error al obtener resultados del proyecto:', error);
