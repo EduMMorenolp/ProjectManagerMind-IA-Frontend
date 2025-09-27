@@ -8,7 +8,6 @@ Esta carpeta contiene todos los servicios de API organizados de manera modular p
 services/
 ├── config.js           # Configuración base de axios
 ├── index.js            # Punto de entrada principal con todas las exportaciones
-├── api.js              # Archivo de compatibilidad hacia atrás
 ├── systemService.js    # Servicios de información del sistema y salud
 ├── documentService.js  # Servicios de gestión de documentos
 ├── projectService.js   # Servicios de gestión de proyectos
@@ -40,11 +39,11 @@ const health = await getHealthStatus();
 const uploadResult = await uploadDocuments(formData);
 ```
 
-### Importación de Compatibilidad (Para código existente)
+### Importación Directa de index.js
 
 ```javascript
-// Mantiene la compatibilidad con código existente
-import { getHealthStatus, uploadDocuments, getProjects } from '@/services/api.js';
+// Usar el punto de entrada principal
+import { getHealthStatus, uploadDocuments, getProjects } from '@/services';
 ```
 
 ## Servicios Disponibles
@@ -90,14 +89,15 @@ import { getHealthStatus, uploadDocuments, getProjects } from '@/services/api.js
 
 Para migrar código existente a la nueva estructura:
 
-1. **Paso 1**: Cambiar importaciones a la nueva estructura
+1. **Paso 1**: Usar importaciones modulares organizadas
    ```javascript
-   // Antes
-   import { getProjects } from '@/services/api.js';
-   
-   // Después
+   // Importación modular (recomendado)
    import { projectService } from '@/services';
    const projects = await projectService.getProjects();
+   
+   // O importación directa
+   import { getProjects } from '@/services';
+   const projects = await getProjects();
    ```
 
 2. **Paso 2**: Usar los servicios organizados

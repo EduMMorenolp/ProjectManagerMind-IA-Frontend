@@ -26,7 +26,7 @@ function App() {
           <button className="menu-button" onClick={toggleMobileMenu}>
             <MenuIcon className="menu-icon" />
           </button>
-          <h1>Notebook IA</h1>
+          <h1>ProjectManagerMind IA</h1>
         </div>
         <div className="header-right">
           <button 

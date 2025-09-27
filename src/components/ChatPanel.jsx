@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SendIcon } from './icons/index.jsx';
-import { chatWithDocuments } from '../services/api';
+import { chatWithDocuments } from '../services';
 
 const ChatPanel = ({ selectedFiles, selectedProject }) => {
   const [messages, setMessages] = useState([

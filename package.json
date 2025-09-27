@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "projectmanagermind-ia-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Frontend de ProjectManagerMind IA - Sistema inteligente de gestión de proyectos de software",
   "type": "module",
   "scripts": {
     "dev": "vite",
