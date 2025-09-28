@@ -1068,8 +1068,45 @@ body {
 .project-stages {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   gap: 1.5rem;
   margin-bottom: 2rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive breakpoints for project stages */
+@media (max-width: 1400px) {
+  .project-stages {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 1320px) {
+  .project-stages {
+    gap: 0.75rem;
+  }
+  
+  .stage-group {
+    min-width: 240px;
+    max-width: 320px;
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 1280px) {
+  .project-stages {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-stages {
+    padding: 0 0.5rem;
+    gap: 1rem;
+  }
 }
 
 .stage-group {
@@ -1078,6 +1115,25 @@ body {
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
+  flex: 1;
+  min-width: 280px;
+  max-width: 380px;
+}
+
+/* Responsive adjustments for stage groups */
+@media (max-width: 1280px) {
+  .stage-group {
+    width: 100%;
+    max-width: 600px;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .stage-group {
+    padding: 1rem;
+    max-width: none;
+  }
 }
 
 .stage-title {
@@ -1087,12 +1143,36 @@ body {
   margin: 0 0 1rem 0;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid var(--secondary-color);
+  text-align: center;
 }
 
 .stage-tabs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Responsive adjustments for stage tabs */
+@media (min-width: 1281px) {
+  .stage-tabs {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1280px) {
+  .stage-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .stage-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 .tab-button {
