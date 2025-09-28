@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './upload-modal.css';
+import '../../../styles/upload-modal.css';
 
 const ProjectModal = ({ isOpen, onClose, onProjectCreated }) => {
   const [formData, setFormData] = useState({

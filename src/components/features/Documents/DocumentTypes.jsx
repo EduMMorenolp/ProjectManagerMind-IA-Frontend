@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDocumentTypes } from '../services';
+import { getDocumentTypes } from '../../../services';
 
 const DocumentTypes = () => {
   const [documentTypes, setDocumentTypes] = useState([]);

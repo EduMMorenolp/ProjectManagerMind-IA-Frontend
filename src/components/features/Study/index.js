@@ -1,0 +1,1 @@
+export { default as StudyPanel } from './StudyPanel.jsx';

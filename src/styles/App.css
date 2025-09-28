@@ -1047,3 +1047,422 @@ body {
     border-top: 3px solid var(--primary-color);
   }
 }
+
+/* ===============================================
+   STUDYPANEL - PROJECTMANAGERMIND IA STYLES
+   =============================================== */
+
+/* Header del Panel de Estudio */
+.study-panel-header h2 {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Navegación por Etapas */
+.project-stages {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stage-group {
+  background: var(--light-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.stage-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+.stage-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--light-color);
+  color: var(--dark-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.tab-button:hover {
+  border-color: var(--primary-color);
+  background: var(--secondary-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: var(--light-color);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.tab-icon {
+  font-size: 1.1rem;
+}
+
+.tab-text {
+  font-weight: 500;
+}
+
+/* Contenedor de Sección */
+.section-container {
+  background: var(--light-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.section-header {
+  margin-bottom: 2rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.section-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Formulario de Cliente */
+.client-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: var(--light-color);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(87, 84, 228, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Grids de Contenido */
+.methods-grid,
+.objectives-grid,
+.components-grid,
+.sprint-elements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.method-card,
+.objective-type,
+.component-card,
+.element-card,
+.level-card {
+  background: var(--secondary-color);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(87, 84, 228, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.method-card:hover,
+.objective-type:hover,
+.component-card:hover,
+.element-card:hover,
+.level-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.method-card h5,
+.objective-type h5,
+.component-card h5,
+.element-card h5,
+.level-card h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.method-card p,
+.objective-type p,
+.component-card p,
+.element-card p,
+.level-card p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Información Específica de Secciones */
+.informe-preview,
+.objectives-framework,
+.dfd-levels,
+.agile-info,
+.sprint-planning,
+.der-elements,
+.use-case-elements {
+  background: var(--bg-color);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color);
+}
+
+.informe-preview h4,
+.objectives-framework h4,
+.agile-info h4,
+.sprint-planning h4,
+.use-case-elements h4 {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.informe-preview ul,
+.der-elements ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.informe-preview li,
+.der-elements li {
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+/* Tags de SCRUM */
+.scrum-elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.scrum-tag {
+  background: var(--primary-color);
+  color: var(--light-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Información del DER */
+.element-info h5 {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Botón de Generación */
+.generate-section {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.generate-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: var(--light-color);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+.generate-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  background: linear-gradient(135deg, #4c49d6, #7a79ff);
+}
+
+.generate-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.button-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Panel de Resultados */
+.results-panel {
+  background: var(--light-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.results-panel h4 {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+}
+
+.results-content {
+  background: var(--bg-color);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.results-content pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Mensaje de Error */
+.error-message {
+  background: linear-gradient(135deg, #fee, #fdd);
+  color: var(--error-color);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin: 1rem 0;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .stage-tabs {
+    flex-direction: column;
+  }
+  
+  .tab-button {
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .methods-grid,
+  .objectives-grid,
+  .components-grid,
+  .sprint-elements {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-container {
+    padding: 1.5rem;
+  }
+  
+  .generate-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .study-panel-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .section-header h3 {
+    font-size: 1.3rem;
+  }
+  
+  .stage-group {
+    padding: 1rem;
+  }
+  
+  .section-container {
+    padding: 1rem;
+  }
+}

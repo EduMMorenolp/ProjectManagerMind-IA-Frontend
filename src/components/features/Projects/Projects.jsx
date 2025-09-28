@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getProjects, getDocument, downloadDocument } from '../services';
+import { getProjects, getDocument, downloadDocument } from '../../../services';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);

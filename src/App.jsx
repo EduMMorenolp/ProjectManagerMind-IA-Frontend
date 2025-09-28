@@ -1,12 +1,16 @@
 import { useState } from 'react'
-import './App.css'
+import './styles/App.css'
 
-// Importar componentes
-import SourcesPanel from './components/SourcesPanel'
-import ChatPanel from './components/ChatPanel'
-import StudyPanel from './components/StudyPanel'
-import ConnectionTest from './components/ConnectionTest'
-import { MenuIcon, SettingsIcon } from './components/icons/index.jsx'
+// Importar componentes features
+import { SourcesPanel } from './components/features/Documents'
+import { ChatPanel } from './components/features/Chat'
+import { StudyPanel } from './components/features/Study'
+
+// Importar componentes layout
+import { ConnectionTest } from './components/layout'
+
+// Importar componentes UI
+import { MenuIcon, SettingsIcon } from './components/ui/Icons'
 
 function App() {
   const [selectedFiles, setSelectedFiles] = useState([]);

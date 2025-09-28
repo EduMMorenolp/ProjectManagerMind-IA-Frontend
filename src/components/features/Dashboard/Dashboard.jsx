@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getApiInfo, getHealthStatus, getProjects } from '../services';
+import { getApiInfo, getHealthStatus, getProjects } from '../../../services';
 
 const Dashboard = () => {
   const [apiInfo, setApiInfo] = useState(null);

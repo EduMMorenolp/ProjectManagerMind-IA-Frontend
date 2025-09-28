@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon } from './icons/index.jsx';
-import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../services';
-import ProjectModal from './ProjectModal';
-import './upload-modal.css';
+import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon } from '../../ui/Icons';
+import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../../../services';
+import { ProjectModal } from '../../ui/Modal';
+import '../../../styles/upload-modal.css';
 
 const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSelectedProject }) => {
   const [files, setFiles] = useState([]);

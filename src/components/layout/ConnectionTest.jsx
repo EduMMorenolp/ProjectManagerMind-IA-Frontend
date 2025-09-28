@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getApiInfo, getHealthStatus, getProjects } from '../services';
+import { getApiInfo, getHealthStatus, getProjects } from '../../services';
 
 const ConnectionTest = () => {
   const [status, setStatus] = useState({
