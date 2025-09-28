@@ -36,20 +36,20 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         { id: 'INFORME', name: 'Informe', icon: '📄', description: 'Informe ejecutivo del relevamiento' }
       ]
     },
-    analisis: {
+    ANALISIS: {
       name: 'Etapa de Análisis',
       sections: [
-        { id: 'objetivos', name: 'Objetivos', icon: '🎯', description: 'Objetivos del sistema informático' },
-        { id: 'diagramas-flujo', name: 'Diagramas de Flujo', icon: '🔄', description: 'Diagramas de flujo de datos (DFD)' },
-        { id: 'historias-usuario', name: 'Historias de Usuario', icon: '📖', description: 'Historias de usuario y metodologías ágiles' }
+        { id: 'OBJETIVOS', name: 'Objetivos', icon: '🎯', description: 'Objetivos del sistema informático' },
+        { id: 'DIAGRAMAS_FLUJO', name: 'Diagramas de Flujo', icon: '🔄', description: 'Diagramas de flujo de datos (DFD)' },
+        { id: 'HISTORIAS_USUARIO', name: 'Historias de Usuario', icon: '📖', description: 'Historias de usuario y metodologías ágiles' }
       ]
     },
-    diseno: {
+    DISENO: {
       name: 'Etapa de Diseño',
       sections: [
-        { id: 'sprints', name: 'Sprints', icon: '⚡', description: 'Planificación de sprints SCRUM' },
-        { id: 'der', name: 'DER', icon: '🗄️', description: 'Diagrama Entidad-Relación' },
-        { id: 'casos-uso', name: 'Casos de Uso', icon: '⚙️', description: 'Casos de uso del sistema' }
+        { id: 'SPRINTS', name: 'Sprints', icon: '⚡', description: 'Planificación de sprints SCRUM' },
+        { id: 'DER', name: 'DER', icon: '🗄️', description: 'Diagrama Entidad-Relación' },
+        { id: 'CASOS_USO', name: 'Casos de Uso', icon: '⚙️', description: 'Casos de uso del sistema' }
       ]
     }
   };
@@ -148,14 +148,14 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
           />
         )}
 
-        {activeTab === 'relevamiento' && (
+        {activeTab === 'RELEVAMIENTO' && (
           <RelevamientoSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
           />
         )}
 
-        {activeTab === 'informe' && (
+        {activeTab === 'INFORME' && (
           <InformeSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
@@ -163,21 +163,21 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         )}
 
         {/* ETAPA DE ANÁLISIS */}
-        {activeTab === 'objetivos' && (
+        {activeTab === 'OBJETIVOS' && (
           <ObjetivosSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
           />
         )}
 
-        {activeTab === 'diagramas-flujo' && (
+        {activeTab === 'DIAGRAMAS_FLUJO' && (
           <DiagramasFlujoSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
           />
         )}
 
-        {activeTab === 'historias-usuario' && (
+        {activeTab === 'HISTORIAS_USUARIO' && (
           <HistoriasUsuarioSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
@@ -185,21 +185,21 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         )}
 
         {/* ETAPA DE DISEÑO */}
-        {activeTab === 'sprints' && (
+        {activeTab === 'SPRINTS' && (
           <SprintsSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
           />
         )}
 
-        {activeTab === 'der' && (
+        {activeTab === 'DER' && (
           <DerSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
           />
         )}
 
-        {activeTab === 'casos-uso' && (
+        {activeTab === 'CASOS_USO' && (
           <CasosUsoSection 
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}

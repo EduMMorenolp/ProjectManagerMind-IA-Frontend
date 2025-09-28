@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDocumentTypes } from '../../../hooks';
+import '../../../styles/components/DocumentTypeSelector.css';
 
 /**
  * Componente para seleccionar etapa del proyecto y tipo de documento
