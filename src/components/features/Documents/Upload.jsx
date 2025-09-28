@@ -1,37 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { uploadDocuments, processDocuments, workflowDocuments, getDocumentTypes } from '../../../services';
+import { uploadDocuments, processDocuments, workflowDocuments } from '../../../services';
+import DocumentTypeSelector from '../../ui/Form/DocumentTypeSelector';
 
 const Upload = () => {
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [projectName, setProjectName] = useState('');
-  const [documentType, setDocumentType] = useState('');
-  const [documentTypes, setDocumentTypes] = useState([]);
+  const [selectedStage, setSelectedStage] = useState('');
+  const [selectedType, setSelectedType] = useState('');
   const [metadata, setMetadata] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
   const [workflowMode, setWorkflowMode] = useState(false);
 
-  useEffect(() => {
-    const fetchDocumentTypes = async () => {
-      try {
-        const response = await getDocumentTypes();
-        if (response.success && response.documentTypes) {
-          setDocumentTypes(response.documentTypes);
-          // Establecer el primer tipo como default si existe
-          if (response.documentTypes.length > 0) {
-            setDocumentType(response.documentTypes[0].type);
-          }
-        }
-      } catch (err) {
-        console.error('Error al obtener tipos de documentos:', err);
-        setError('No se pudieron cargar los tipos de documentos. Por favor, intenta nuevamente.');
-      }
-    };
+  const handleStageChange = useCallback((stage) => {
+    setSelectedStage(stage);
+  }, []);
 
-    fetchDocumentTypes();
+  const handleTypeChange = useCallback((type) => {
+    setSelectedType(type);
   }, []);
 
   const handleFileChange = (e) => {
@@ -52,6 +41,16 @@ const Upload = () => {
       return;
     }
     
+    if (!selectedStage) {
+      setError('Por favor, selecciona una etapa del proyecto.');
+      return;
+    }
+    
+    if (!selectedType) {
+      setError('Por favor, selecciona un tipo de documento.');
+      return;
+    }
+    
     try {
       setLoading(true);
       setError(null);
@@ -66,7 +65,8 @@ const Upload = () => {
         });
         
         formData.append('projectName', projectName);
-        formData.append('documentType', documentType);
+        formData.append('stage', selectedStage);
+        formData.append('documentType', selectedType);
         
         if (metadata.trim()) {
           formData.append('metadata', metadata);
@@ -89,6 +89,8 @@ const Upload = () => {
         });
         
         formData.append('projectName', projectName);
+        formData.append('stage', selectedStage);
+        formData.append('documentType', selectedType);
         
         const uploadResponse = await uploadDocuments(formData);
         
@@ -96,7 +98,8 @@ const Upload = () => {
           // Luego procesarlos
           const processResponse = await processDocuments({
             projectName,
-            documentType,
+            stage: selectedStage,
+            documentType: selectedType,
             metadata: metadata.trim() ? JSON.parse(metadata) : undefined
           });
           
@@ -172,22 +175,13 @@ const Upload = () => {
             />
           </div>
           
-          <div className="form-group">
-            <label htmlFor="documentType" className="form-label">Tipo de Documento:</label>
-            <select
-              id="documentType"
-              className="form-input"
-              value={documentType}
-              onChange={(e) => setDocumentType(e.target.value)}
-              required
-            >
-              {documentTypes.map((type) => (
-                <option key={type.type} value={type.type}>
-                  {type.name} - {type.description}
-                </option>
-              ))}
-            </select>
-          </div>
+          <DocumentTypeSelector
+            selectedStage={selectedStage}
+            selectedType={selectedType}
+            onStageChange={handleStageChange}
+            onTypeChange={handleTypeChange}
+            disabled={loading}
+          />
           
           <div className="form-group">
             <label htmlFor="metadata" className="form-label">Metadatos (opcional, formato JSON):</label>

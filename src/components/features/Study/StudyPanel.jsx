@@ -14,7 +14,7 @@ import {
 } from './sections';
 
 const StudyPanel = ({ selectedFiles, selectedProject }) => {
-  const [activeTab, setActiveTab] = useState('cliente');
+  const [activeTab, setActiveTab] = useState('CLIENTE');
   const [processing, setProcessing] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
@@ -28,12 +28,12 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
   // Etapas del desarrollo con sus secciones
   const projectStages = {
-    preliminar: {
+    PRELIMINAR: {
       name: 'Etapa Preliminar',
       sections: [
-        { id: 'cliente', name: 'Cliente', icon: '👤', description: 'Información del cliente y requerimientos' },
-        { id: 'relevamiento', name: 'Relevamiento', icon: '📋', description: 'Análisis y recopilación de información' },
-        { id: 'informe', name: 'Informe', icon: '📄', description: 'Informe ejecutivo del relevamiento' }
+        { id: 'CLIENTE', name: 'Cliente', icon: '👤', description: 'Información del cliente y requerimientos' },
+        { id: 'RELEVAMIENTO', name: 'Relevamiento', icon: '📋', description: 'Análisis y recopilación de información' },
+        { id: 'INFORME', name: 'Informe', icon: '📄', description: 'Informe ejecutivo del relevamiento' }
       ]
     },
     analisis: {
@@ -141,7 +141,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       <div className="study-panel-content">
         
         {/* ETAPA PRELIMINAR */}
-        {activeTab === 'cliente' && (
+        {activeTab === 'CLIENTE' && (
           <ClienteSection 
             clientInfo={clientInfo}
             setClientInfo={setClientInfo}

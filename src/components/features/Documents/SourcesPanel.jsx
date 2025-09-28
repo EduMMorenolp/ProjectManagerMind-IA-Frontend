@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon } from '../../ui/Icons';
+import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon, CloseIcon } from '../../ui/Icons';
 import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../../../services';
 import { ProjectModal } from '../../ui/Modal';
 import '../../../styles/upload-modal.css';
+import '../../../styles/components/features/SourcesPanel.css';
 
 // Tipos de documentos organizados por etapas
 const DOCUMENT_TYPES = {
-  preliminar: {
+  PRELIMINAR: {
     name: 'Etapa Preliminar',
     types: [
-      { id: 'cliente', name: 'Cliente', icon: '👤', description: 'Información del cliente y requerimientos' },
-      { id: 'relevamiento', name: 'Relevamiento', icon: '📋', description: 'Análisis y recopilación de información' },
-      { id: 'informe', name: 'Informe', icon: '📄', description: 'Informe ejecutivo del relevamiento' }
+      { id: 'CLIENTE', name: 'Cliente', icon: '👤', description: 'Información del cliente y requerimientos' },
+      { id: 'RELEVAMIENTO', name: 'Relevamiento', icon: '📋', description: 'Análisis y recopilación de información' },
+      { id: 'INFORME', name: 'Informe', icon: '📄', description: 'Informe ejecutivo del relevamiento' }
     ]
   },
-  analisis: {
+  ANALISIS: {
     name: 'Etapa de Análisis',
     types: [
-      { id: 'objetivos', name: 'Objetivos', icon: '🎯', description: 'Objetivos del sistema informático' },
-      { id: 'diagramas-flujo', name: 'Diagramas de Flujo', icon: '🔄', description: 'Diagramas de flujo de datos (DFD)' },
-      { id: 'historias-usuario', name: 'Historias de Usuario', icon: '📖', description: 'Historias de usuario y metodologías ágiles' }
+      { id: 'OBJETIVOS', name: 'Objetivos', icon: '🎯', description: 'Objetivos del sistema informático' },
+      { id: 'DIAGRAMAS_FLUJO', name: 'Diagramas de Flujo', icon: '🔄', description: 'Diagramas de flujo de datos (DFD)' },
+      { id: 'HISTORIAS_USUARIO', name: 'Historias de Usuario', icon: '📖', description: 'Historias de usuario y metodologías ágiles' }
     ]
   },
-  diseno: {
+  DISENO: {
     name: 'Etapa de Diseño',
     types: [
-      { id: 'sprints', name: 'Sprints', icon: '⚡', description: 'Planificación de sprints SCRUM' },
-      { id: 'der', name: 'DER', icon: '🗄️', description: 'Diagrama Entidad-Relación' },
-      { id: 'casos-uso', name: 'Casos de Uso', icon: '⚙️', description: 'Casos de uso del sistema' }
+      { id: 'SPRINTS', name: 'Sprints', icon: '⚡', description: 'Planificación de sprints SCRUM' },
+      { id: 'DER', name: 'DER', icon: '🗄️', description: 'Diagrama Entidad-Relación' },
+      { id: 'CASOS_USO', name: 'Casos de Uso', icon: '⚙️', description: 'Casos de uso del sistema' }
     ]
   }
 };
@@ -41,7 +42,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedDocumentType, setSelectedDocumentType] = useState('');
-  const [selectedStage, setSelectedStage] = useState('preliminar');
+  const [selectedStage, setSelectedStage] = useState('PRELIMINAR');
 
   // Helper function para obtener todos los tipos de documentos
   const getAllDocumentTypes = () => {
@@ -74,8 +75,8 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
 
     // Clasificar archivos en sus respectivos tipos
     files.forEach(file => {
-      const stage = file.stage || 'preliminar';
-      const docType = file.documentType || 'cliente';
+      const stage = file.stage || 'PRELIMINAR';
+      const docType = file.documentType || 'CLIENTE';
       
       if (organized[stage] && organized[stage].types[docType]) {
         organized[stage].types[docType].files.push(file);
@@ -151,8 +152,8 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
         projectName: projectName,
         size: doc.characterCount || 0,
         createdAt: doc.createdAt,
-        documentType: doc.documentType || 'cliente', // Tipo de documento por defecto
-        stage: doc.stage || 'preliminar' // Etapa por defecto
+        documentType: doc.documentType || 'CLIENTE', // Tipo de documento por defecto
+        stage: doc.stage || 'PRELIMINAR' // Etapa por defecto
       }));
       
       setFiles(filesData);
@@ -215,7 +216,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       setShowUploadModal(false);
       setSelectedFile(null);
       setSelectedDocumentType('');
-      setSelectedStage('preliminar');
+      setSelectedStage('PRELIMINAR');
     } catch (err) {
       console.error('❌ Error al subir archivo:', err);
       setError(`Error: ${err.response?.data?.message || err.message}`);
@@ -463,7 +464,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
                   setShowUploadModal(false);
                   setSelectedFile(null);
                   setSelectedDocumentType('');
-                  setSelectedStage('preliminar');
+                  setSelectedStage('PRELIMINAR');
                 }}
               >
                 Cancelar

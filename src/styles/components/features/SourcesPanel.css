@@ -1,0 +1,238 @@
+/* ===============================================
+   SOURCES PANEL COMPONENT STYLES
+   =============================================== */
+
+.sources-panel-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.sources-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sources-header h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.sources-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.select-all-container {
+  margin-bottom: 1rem;
+}
+
+.select-all-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.files-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.file-item:hover {
+  background-color: var(--secondary-color);
+}
+
+.file-item.selected {
+  background-color: var(--secondary-color);
+}
+
+.file-checkbox {
+  margin-right: 0.75rem;
+}
+
+.checkbox-button {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 4px;
+  border: 2px solid var(--border-color);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.checkbox-button.selected {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.check-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: white;
+}
+
+.file-icon {
+  margin-right: 0.75rem;
+}
+
+.file-type-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--dark-color);
+}
+
+.file-name {
+  font-size: 0.875rem;
+}
+
+/* Project Selection */
+.project-selection {
+  margin-bottom: 1rem;
+}
+
+.project-selection label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.project-selection select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--light-color);
+  font-size: 0.875rem;
+}
+
+.no-project-message,
+.no-files-message {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.875rem;
+  font-style: italic;
+  text-align: center;
+  padding: 1rem;
+}
+
+.loading-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: var(--dark-color);
+}
+
+.loading-message .loading-spinner {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+
+/* File organization by stages */
+.files-by-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stage-group {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.stage-header {
+  background-color: var(--secondary-color);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.document-types {
+  display: flex;
+  flex-direction: column;
+}
+
+.document-type-group {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.document-type-group:last-child {
+  border-bottom: none;
+}
+
+.document-type-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-color);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.document-type-icon {
+  font-size: 1rem;
+}
+
+.document-type-files {
+  padding: 0.5rem;
+}
+
+.document-type-files .file-item {
+  padding: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.empty-type {
+  padding: 0.5rem 1rem;
+  color: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .sources-panel-container {
+    padding: 0.75rem;
+  }
+  
+  .sources-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .files-list {
+    gap: 0.25rem;
+  }
+  
+  .file-item {
+    padding: 0.5rem;
+  }
+}

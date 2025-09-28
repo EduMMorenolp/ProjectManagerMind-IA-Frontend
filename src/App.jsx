@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import './styles/App.css'
+import { useState, useEffect } from 'react'
+import './styles/main.css'
 
 // Importar componentes features
 import { SourcesPanel } from './components/features/Documents'
