@@ -10,26 +10,17 @@ import { StudyPanel } from './components/features/Study'
 import { ConnectionTest } from './components/layout'
 
 // Importar componentes UI
-import { MenuIcon, SettingsIcon } from './components/ui/Icons'
+import { SettingsIcon } from './components/ui/Icons'
 
 function App() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showConnectionTest, setShowConnectionTest] = useState(false);
-
-  // Función para manejar la vista en dispositivos móviles
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
 
   return (
     <div className="app-container">
       <header className="app-header">
         <div className="header-left">
-          <button className="menu-button" onClick={toggleMobileMenu}>
-            <MenuIcon className="menu-icon" />
-          </button>
           <h1>ProjectManagerMind IA</h1>
         </div>
         <div className="header-right">
@@ -48,7 +39,7 @@ function App() {
           <ConnectionTest />
         ) : (
           <>
-            <div className={`sources-panel ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+            <div className="sources-panel">
               <SourcesPanel 
                 selectedFiles={selectedFiles} 
                 setSelectedFiles={setSelectedFiles}

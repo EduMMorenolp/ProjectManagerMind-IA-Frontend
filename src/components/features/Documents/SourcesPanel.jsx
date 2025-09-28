@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon, CloseIcon } from '../../ui/Icons';
+import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon, CloseIcon, MenuIcon } from '../../ui/Icons';
 import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../../../services';
 import { ProjectModal } from '../../ui/Modal';
 import '../../../styles/upload-modal.css';
@@ -43,6 +43,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedDocumentType, setSelectedDocumentType] = useState('');
   const [selectedStage, setSelectedStage] = useState('PRELIMINAR');
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Helper function para obtener todos los tipos de documentos
   const getAllDocumentTypes = () => {
@@ -230,19 +231,32 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     await loadProjects();
   };
 
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
-    <div className="sources-panel-container">
-      <div className="sources-header">
-        <h2>Fuentes</h2>
-        <div className="sources-actions">
-          <button className="icon-button" onClick={() => setShowProjectModal(true)} title="Nuevo proyecto">
-            <AddIcon className="icon" />
-          </button>
-          <button className="icon-button" onClick={handleAddClick} title="Subir documento" disabled={!selectedProject}>
-            <UploadIcon className="icon" />
-          </button>
-        </div>
+    <div className={`sources-panel-container ${isCollapsed ? 'collapsed' : 'expanded'}`}>
+      {/* Botón de menú siempre visible */}
+      <div className="menu-button-container">
+        <button className="menu-button" onClick={toggleCollapse} title={isCollapsed ? 'Expandir panel' : 'Colapsar panel'}>
+          <MenuIcon className="menu-icon" />
+        </button>
       </div>
+
+      {/* Contenido del panel (solo visible cuando no está colapsado) */}
+      <div className={`sources-content ${isCollapsed ? 'hidden' : 'visible'}`}>
+        <div className="sources-header">
+          <h2>Fuentes</h2>
+          <div className="sources-actions">
+            <button className="icon-button" onClick={() => setShowProjectModal(true)} title="Nuevo proyecto">
+              <AddIcon className="icon" />
+            </button>
+            <button className="icon-button" onClick={handleAddClick} title="Subir documento" disabled={!selectedProject}>
+              <UploadIcon className="icon" />
+            </button>
+          </div>
+        </div>
 
       {loading && (
         <div className="loading-message">
@@ -480,6 +494,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
           </div>
         </div>
       )}
+      </div> {/* Cierre de sources-content */}
     </div>
   );
 };

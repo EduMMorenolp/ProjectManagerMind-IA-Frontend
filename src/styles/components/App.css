@@ -40,7 +40,7 @@
   align-items: center;
 }
 
-.menu-button, .settings-button {
+.settings-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -52,11 +52,11 @@
   border-radius: var(--radius-sm);
 }
 
-.menu-button:hover, .settings-button:hover {
+.settings-button:hover {
   background-color: var(--secondary-color);
 }
 
-.menu-icon, .settings-icon {
+.settings-icon {
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -79,10 +79,11 @@
 }
 
 .sources-panel {
-  width: 300px;
-  min-width: 280px;
   flex-shrink: 0;
   border-right: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  width: auto; /* El ancho será controlado por el componente interno */
+  min-width: auto; /* El min-width será controlado por el componente interno */
 }
 
 .study-panel {
@@ -208,58 +209,23 @@
   }
 
   .sources-panel {
+    /* Mantener el comportamiento colapsable en móvil */
+    position: relative;
     width: 100%;
-    max-width: 100%;
     min-width: auto;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 500;
+    max-width: none;
+    height: auto;
+    min-height: 60px; /* Altura mínima para el botón de menú */
+    transform: none;
+    transition: all 0.3s ease;
+    z-index: 10;
     border-right: none;
-    border-bottom: none;
-    box-shadow: var(--shadow-lg);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: none;
+    order: -1; /* Poner el panel de fuentes arriba en móvil */
   }
 
-  .sources-panel.mobile-open {
-    transform: translateX(0);
-  }
 
-  /* Overlay para móvil */
-  .mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 400;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-
-  .mobile-overlay.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* Botón de cerrar móvil */
-  .mobile-close-btn {
-    order: -1;
-    margin-right: 0.5rem;
-    background-color: var(--error-color);
-    color: white;
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .mobile-close-btn:hover {
-    background-color: #d32f2f;
-  }
 
   .study-panel {
     width: 100%;
