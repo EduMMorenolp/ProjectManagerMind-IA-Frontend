@@ -1,0 +1,10 @@
+// Exportaciones de todas las secciones del StudyPanel
+export { default as ClienteSection } from './ClienteSection';
+export { default as RelevamientoSection } from './RelevamientoSection';
+export { default as InformeSection } from './InformeSection';
+export { default as ObjetivosSection } from './ObjetivosSection';
+export { default as DiagramasFlujoSection } from './DiagramasFlujoSection';
+export { default as HistoriasUsuarioSection } from './HistoriasUsuarioSection';
+export { default as SprintsSection } from './SprintsSection';
+export { default as DerSection } from './DerSection';
+export { default as CasosUsoSection } from './CasosUsoSection';

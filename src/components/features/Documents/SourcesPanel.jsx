@@ -29,9 +29,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     setLoading(true);
     setError(null);
     try {
-      console.log('🔄 Cargando proyectos...');
       const projectsData = await getProjects();
-      console.log('📦 Datos recibidos:', projectsData);
       
       let projectsList = [];
       
@@ -43,18 +41,15 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
         projectsList = projectsData;
       }
       
-      console.log('📋 Lista de proyectos procesada:', projectsList);
       setProjects(projectsList);
       
       // Actualizar el proyecto seleccionado con los datos más recientes
       if (selectedProject) {
         const updatedProject = projectsList.find(p => p.id === selectedProject.id);
         if (updatedProject) {
-          console.log('🔄 Actualizando proyecto seleccionado:', updatedProject);
           setSelectedProject(updatedProject);
         }
       } else if (projectsList.length > 0) {
-        console.log('🎯 Seleccionando primer proyecto:', projectsList[0]);
         setSelectedProject(projectsList[0]);
       }
     } catch (err) {
@@ -66,16 +61,13 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   };
 
   const loadProjectFiles = async (projectId) => {
-    console.log('📁 Cargando archivos para proyecto:', projectId);
     if (!projectId) return;
     
     try {
       setLoading(true);
       const documentsResponse = await getProjectDocuments(projectId);
-      console.log('� Respuesta de documentos:', documentsResponse);
       
       const documents = documentsResponse?.documents || [];
-      console.log('📄 Documentos del proyecto:', documents);
       
       const project = projects.find(p => p.id === projectId);
       const projectName = project?.name || 'Proyecto sin nombre';
@@ -89,7 +81,6 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
         createdAt: doc.createdAt
       }));
       
-      console.log('📊 Archivos procesados:', filesData);
       setFiles(filesData);
     } catch (error) {
       console.error('❌ Error al cargar documentos del proyecto:', error);
@@ -127,12 +118,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   };
 
   const handleUpload = async () => {
-    console.log('📤 Iniciando upload...');
-    console.log('Selected file:', selectedFile);
-    console.log('Selected project:', selectedProject);
-    
     if (!selectedFile || !selectedProject) {
-      console.log('⚠️ Upload cancelado: falta archivo o proyecto');
       return;
     }
     
@@ -142,14 +128,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       formData.append('documents', selectedFile);
       formData.append('projectId', selectedProject.id);
       
-      console.log('📦 FormData creado:', {
-        file: selectedFile.name,
-        projectId: selectedProject.id,
-        projectName: selectedProject.name
-      });
-      
       const result = await uploadDocuments(formData);
-      console.log('✅ Upload exitoso:', result);
       
       // Recargar proyectos y archivos del proyecto actual
       await loadProjects();
@@ -202,7 +181,6 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
             value={selectedProject?.id || ''} 
             onChange={(e) => {
               const project = projects.find(p => p.id === e.target.value);
-              console.log('🎯 Proyecto seleccionado:', project);
               setSelectedProject(project);
               setSelectedFiles([]);
             }}
