@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SendIcon } from '../../ui/Icons';
+import { SendIcon, MenuIcon } from '../../ui/Icons';
 import { chatWithDocuments } from '../../../services';
 
 const ChatPanel = ({ selectedFiles, selectedProject }) => {
@@ -8,6 +8,7 @@ const ChatPanel = ({ selectedFiles, selectedProject }) => {
   ]);
   const [input, setInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const messagesEndRef = useRef(null);
 
   // Scroll al final de los mensajes cuando se añade uno nuevo
@@ -48,9 +49,22 @@ const ChatPanel = ({ selectedFiles, selectedProject }) => {
     }
   };
 
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
-    <div className="chat-panel-container">
-      <div className="chat-messages">
+    <div className={`chat-panel-container ${isCollapsed ? 'collapsed' : 'expanded'}`}>
+      {/* Botón de menú siempre visible */}
+      <div className="chat-menu-button-container">
+        <button className="chat-menu-button" onClick={toggleCollapse} title={isCollapsed ? 'Expandir chat' : 'Colapsar chat'}>
+          <MenuIcon className="chat-menu-icon" />
+        </button>
+      </div>
+
+      {/* Contenido del chat (solo visible cuando no está colapsado) */}
+      <div className={`chat-content ${isCollapsed ? 'hidden' : 'visible'}`}>
+        <div className="chat-messages">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.type}`}>
             <div className="message-content">
@@ -89,6 +103,7 @@ const ChatPanel = ({ selectedFiles, selectedProject }) => {
           <span>Enviar</span>
         </button>
       </form>
+      </div> {/* Cierre de chat-content */}
     </div>
   );
 };

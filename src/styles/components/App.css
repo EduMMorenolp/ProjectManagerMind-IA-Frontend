@@ -95,10 +95,11 @@
 }
 
 .chat-panel {
-  width: 320px;
-  min-width: 300px;
   flex-shrink: 0;
   border-right: none;
+  transition: all 0.3s ease;
+  width: auto; /* El ancho será controlado por el componente interno */
+  min-width: auto; /* El min-width será controlado por el componente interno */
 }
 
 /* Transiciones suaves para cambios de layout */
@@ -240,8 +241,8 @@
     width: 100%;
     max-width: 100%;
     min-width: auto;
-    height: 40vh;
-    min-height: 300px;
+    height: auto;
+    min-height: 60px; /* Altura mínima para el botón de menú */
     flex-shrink: 0;
   }
 }
