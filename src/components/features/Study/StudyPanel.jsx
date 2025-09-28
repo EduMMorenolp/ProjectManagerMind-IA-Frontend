@@ -114,11 +114,36 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         <h2>Gestión de Proyectos</h2>
         
         {/* Navegación por etapas */}
-        <div className="project-stages">
+        <div className="project-stages" style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '1.5rem',
+          flexWrap: 'wrap',
+          margin: '1rem 0',
+          padding: '0 1rem'
+        }}>
           {Object.entries(projectStages).map(([stageKey, stage]) => (
-            <div key={stageKey} className="stage-group">
-              <h3 className="stage-title">{stage.name}</h3>
-              <div className="stage-tabs">
+            <div key={stageKey} className="stage-group" style={{
+              flex: '1',
+              minWidth: '250px',
+              maxWidth: '350px',
+              padding: '1rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border-color)',
+              backgroundColor: 'var(--card-background, #fafafa)'
+            }}>
+              <h3 className="stage-title" style={{
+                textAlign: 'center',
+                marginBottom: '0.75rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: 'var(--text-color)'
+              }}>{stage.name}</h3>
+              <div className="stage-tabs" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem'
+              }}>
                 {stage.sections.map(section => (
                   <button
                     key={section.id}
