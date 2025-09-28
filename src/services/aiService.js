@@ -48,6 +48,21 @@ export const getAIInfo = async () => {
   }
 };
 
+// Extraer información del cliente desde documentos
+export const extractClientInfo = async (formData) => {
+  try {
+    const response = await api.post('/api/v1/ai/extract-client-info', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al extraer información del cliente:', error);
+    throw error;
+  }
+};
+
 // Generar análisis personalizado
 export const generateAnalysis = async (analysisData) => {
   try {

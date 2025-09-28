@@ -1,11 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { extractClientInfo } from '../../../../services/aiService';
 
 const ClienteSection = ({ clientInfo, setClientInfo }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [uploadSuccess, setUploadSuccess] = useState('');
+
+  const handleFileUpload = async (event) => {
+    const files = Array.from(event.target.files);
+    if (files.length === 0) return;
+
+    setIsLoading(true);
+    setUploadError('');
+    setUploadSuccess('');
+
+    try {
+      const formData = new FormData();
+      files.forEach(file => {
+        formData.append('documents', file);
+      });
+
+      const response = await extractClientInfo(formData);
+      
+      if (response.success && response.clientInfo) {
+        // Actualizar el formulario con la información extraída
+        setClientInfo(prevInfo => ({
+          ...prevInfo,
+          ...response.clientInfo
+        }));
+        setUploadSuccess('Información del cliente extraída exitosamente del documento');
+      } else {
+        setUploadError('No se pudo extraer información del cliente del documento');
+      }
+    } catch (error) {
+      console.error('Error al procesar documento:', error);
+      setUploadError('Error al procesar el documento. Por favor, inténtalo nuevamente.');
+    } finally {
+      setIsLoading(false);
+      // Limpiar el input de archivo
+      event.target.value = '';
+    }
+  };
+
   return (
     <div className="section-container">
       <div className="section-header">
         <h3>👤 Información del Cliente</h3>
         <p className="section-description">Ingresa los datos del cliente y sus requerimientos</p>
+        
+        {/* Botón para cargar documento */}
+        <div className="document-upload-section">
+          <div className="upload-button-container">
+            <label htmlFor="client-document-upload" className="upload-button">
+              📄 Cargar Documento del Cliente
+            </label>
+            <input
+              id="client-document-upload"
+              type="file"
+              accept=".pdf,.docx,.doc"
+              onChange={handleFileUpload}
+              disabled={isLoading}
+              style={{ display: 'none' }}
+              multiple
+            />
+            <span className="upload-help-text">
+              {isLoading ? 'Procesando documento...' : 'Sube un documento para rellenar automáticamente el formulario'}
+            </span>
+          </div>
+          
+          {uploadError && (
+            <div className="upload-error">
+              ⚠️ {uploadError}
+            </div>
+          )}
+          
+          {uploadSuccess && (
+            <div className="upload-success">
+              ✅ {uploadSuccess}
+            </div>
+          )}
+        </div>
       </div>
       
       <div className="client-form">
