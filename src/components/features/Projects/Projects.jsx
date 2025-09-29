@@ -54,9 +54,8 @@ const Projects = () => {
           if (docResponse.success && docResponse.document) {
             fetchedDocuments.push(docResponse.document);
           }
-        } catch (docErr) {
+        } catch {
           // Simplemente ignoramos los tipos que no existen para este proyecto
-          console.log(`No se encontró documento de tipo ${docType} para el proyecto ${projectName}`);
         }
       }
       

@@ -59,21 +59,14 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     }
   });
 
-  // Debug: Log clientInfo changes in StudyPanel
-  useEffect(() => {
-    console.log('StudyPanel - clientInfo updated:', JSON.stringify(clientInfo, null, 2));
-  }, [clientInfo]);
-
   // Cargar información existente del cliente para un proyecto
   const loadExistingClientInfo = useCallback(async (projectId) => {
     try {
       const response = await loadClientInfo(projectId);
       
       if (response.success && response.clientInfo) {
-        console.log('Setting new client info:', JSON.stringify(response.clientInfo, null, 2));
         setClientInfo(response.clientInfo);
       } else {
-        console.log('No existing client info found for project:', projectId);
         // Limpiar el formulario si no hay información
         setClientInfo({
           name: '', 
@@ -101,13 +94,11 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
   useEffect(() => {
     if (selectedProject && selectedProject.id) {
       setProjectId(selectedProject.id);
-      console.log('ProjectId set from selectedProject:', selectedProject.id);
       
       // Cargar información del cliente si existe para este proyecto
       loadExistingClientInfo(selectedProject.id);
     } else {
       setProjectId(null);
-      console.log('ProjectId cleared - no selectedProject');
       // Limpiar información del cliente
       setClientInfo({
         name: '', 
@@ -174,11 +165,6 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
       // Manejar generación específica de relevamiento
       if (documentType === 'RELEVAMIENTO') {
-        console.log('=== GENERATING RELEVAMIENTO ===');
-        console.log('ProjectId:', selectedProject.id);
-        console.log('ClientInfo:', clientInfo);
-        console.log('RelevamientoInfo:', relevamientoInfo);
-
         response = await generateRelevamiento(selectedProject.id, clientInfo, relevamientoInfo);
       } else {
         // Preparar datos para otros tipos de documento

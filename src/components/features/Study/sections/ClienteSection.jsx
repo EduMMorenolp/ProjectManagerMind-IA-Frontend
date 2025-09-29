@@ -10,16 +10,6 @@ const ClienteSection = ({ clientInfo, setClientInfo, projectId, setProjectId }) 
   const [updateSuccess, setUpdateSuccess] = useState('');
   const [saveSuccess, setSaveSuccess] = useState('');
 
-  // Debug: Log projectId changes
-  React.useEffect(() => {
-    console.log('ClienteSection - projectId changed:', projectId);
-  }, [projectId]);
-
-  // Debug: Log clientInfo changes
-  React.useEffect(() => {
-    console.log('ClienteSection - clientInfo updated:', JSON.stringify(clientInfo, null, 2));
-  }, [clientInfo]);
-
   const handleFileUpload = async (event) => {
     const files = Array.from(event.target.files);
     if (files.length === 0) return;
@@ -39,21 +29,11 @@ const ClienteSection = ({ clientInfo, setClientInfo, projectId, setProjectId }) 
       formData.append('projectName', projectName);
       if (projectId) {
         formData.append('projectId', projectId);
-        console.log('Adding projectId to FormData:', projectId);
-      } else {
-        console.log('No projectId available, will create new project');
       }
 
       const response = await extractClientInfo(formData);
       
-      console.log('=== EXTRACT CLIENT INFO RESPONSE ===');
-      console.log('Response:', response);
-      console.log('Response success:', response.success);
-      console.log('Response clientInfo:', response.clientInfo);
-      
       if (response.success && response.clientInfo) {
-        console.log('Updating clientInfo with:', response.clientInfo);
-        console.log('Previous clientInfo:', clientInfo);
         
         // Actualizar el formulario con la información extraída
         setClientInfo(prevInfo => ({

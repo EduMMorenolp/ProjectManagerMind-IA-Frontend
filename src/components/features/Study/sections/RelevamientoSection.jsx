@@ -13,7 +13,6 @@ const RelevamientoSection = ({
 
   // Debug: Log relevamientoInfo changes
   useEffect(() => {
-    console.log('RelevamientoSection - relevamientoInfo updated:', relevamientoInfo);
   }, [relevamientoInfo]);
 
   const tabs = [
