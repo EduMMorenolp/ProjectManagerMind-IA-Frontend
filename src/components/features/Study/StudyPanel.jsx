@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { processDocuments, getAIInfo } from '../../../services';
+import { loadClientInfo } from '../../../services/aiService';
 import { FileIcon, PdfIcon, DocIcon, DownloadIcon, PlayIcon } from '../../ui/Icons';
 import {
   ClienteSection,
@@ -18,6 +19,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
   const [processing, setProcessing] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+  const [projectId, setProjectId] = useState(null);
   const [clientInfo, setClientInfo] = useState({
     name: '', 
     business: '', 
@@ -25,6 +27,33 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     needs: '', 
     history: ''
   });
+
+  // Debug: Log clientInfo changes in StudyPanel
+  useEffect(() => {
+    console.log('StudyPanel - clientInfo updated:', JSON.stringify(clientInfo, null, 2));
+  }, [clientInfo]);
+
+  // Sincronizar projectId con selectedProject
+  useEffect(() => {
+    if (selectedProject && selectedProject.id) {
+      setProjectId(selectedProject.id);
+      console.log('ProjectId set from selectedProject:', selectedProject.id);
+      
+      // Cargar información del cliente si existe para este proyecto
+      loadExistingClientInfo(selectedProject.id);
+    } else {
+      setProjectId(null);
+      console.log('ProjectId cleared - no selectedProject');
+      // Limpiar información del cliente
+      setClientInfo({
+        name: '', 
+        business: '', 
+        description: '', 
+        needs: '', 
+        history: ''
+      });
+    }
+  }, [selectedProject]);
 
   // Etapas del desarrollo con sus secciones
   const projectStages = {
@@ -63,6 +92,24 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       await getAIInfo();
     } catch (err) {
       console.error('Error al cargar información de IA:', err);
+    }
+  };
+
+  // Cargar información existente del cliente para un proyecto
+  const loadExistingClientInfo = async (projectId) => {
+    try {
+      console.log('Loading existing client info for project:', projectId);
+      const response = await loadClientInfo(projectId);
+      
+      if (response.success && response.clientInfo) {
+        console.log('Loaded existing client info:', response.clientInfo);
+        setClientInfo(response.clientInfo);
+      } else {
+        console.log('No existing client info found for project:', projectId);
+      }
+    } catch (error) {
+      console.error('Error loading client info:', error);
+      // No mostrar error al usuario, simplemente no cargar nada
     }
   };
 
@@ -145,6 +192,8 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
           <ClienteSection 
             clientInfo={clientInfo}
             setClientInfo={setClientInfo}
+            projectId={projectId}
+            setProjectId={setProjectId}
           />
         )}
 

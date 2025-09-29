@@ -63,6 +63,46 @@ export const extractClientInfo = async (formData) => {
   }
 };
 
+// Actualizar información del cliente
+export const updateClientInfo = async (projectId, clientInfo) => {
+  try {
+    const response = await api.put('/api/v1/ai/update-client-info', {
+      projectId,
+      clientInfo
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar información del cliente:', error);
+    throw error;
+  }
+};
+
+// Guardar información del cliente (crear documento base)
+export const saveClientInfo = async (clientInfo, projectName = null, projectId = null) => {
+  try {
+    const response = await api.post('/api/v1/ai/save-client-info', {
+      clientInfo,
+      projectName,
+      projectId
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al guardar información del cliente:', error);
+    throw error;
+  }
+};
+
+// Cargar información del cliente desde la base de datos
+export const loadClientInfo = async (projectId) => {
+  try {
+    const response = await api.get(`/api/v1/ai/load-client-info/${projectId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al cargar información del cliente:', error);
+    throw error;
+  }
+};
+
 // Generar análisis personalizado
 export const generateAnalysis = async (analysisData) => {
   try {
