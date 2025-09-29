@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { processDocuments, getAIInfo } from '../../../services';
-import { loadClientInfo } from '../../../services/aiService';
+import { loadClientInfo, generateRelevamiento } from '../../../services/aiService';
 import { FileIcon, PdfIcon, DocIcon, DownloadIcon, PlayIcon } from '../../ui/Icons';
 import {
   ClienteSection,
@@ -26,6 +26,37 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     description: '', 
     needs: '', 
     history: ''
+  });
+
+  const [relevamientoInfo, setRelevamientoInfo] = useState({
+    entrevistas: {
+      stakeholders: [
+        { id: 1, nombre: '', cargo: '', area: '', contacto: '', notas: '' }
+      ],
+      preguntas: [
+        { id: 1, categoria: 'Procesos Actuales', pregunta: '', respuesta: '' }
+      ]
+    },
+    cuestionarios: {
+      areas: ['Operaciones', 'IT', 'RRHH', 'Finanzas'],
+      preguntas: [
+        { id: 1, area: 'Operaciones', tipo: 'abierta', pregunta: '', respuesta: '' }
+      ]
+    },
+    observacion: {
+      procesos: [
+        { id: 1, proceso: '', descripcion: '', problemas: '', oportunidades: '' }
+      ],
+      sistemas: [
+        { id: 1, sistema: '', version: '', usuarios: '', problemas: '' }
+      ]
+    },
+    documentacion: {
+      archivos: [
+        { id: 1, nombre: '', tipo: '', ubicacion: '', relevancia: '', notas: '' }
+      ],
+      normativas: ''
+    }
   });
 
   // Debug: Log clientInfo changes in StudyPanel
@@ -143,24 +174,37 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     setResults(null);
 
     try {
-      // Preparar datos según el tipo de documento
-      let requestData = {
-        documentType,
-        projectId: selectedProject.id,
-        projectName: selectedProject.name,
-        clientInfo: clientInfo
-      };
+      let response;
 
-      // Agregar archivos si están disponibles
-      if (selectedFiles.length > 0) {
-        requestData.extractedTexts = selectedFiles.map(file => ({
-          fileName: file.fileName || file,
-          text: file.extractedText || `Contenido extraído de ${file.fileName || file}`,
-          extractedAt: new Date().toISOString()
-        }));
+      // Manejar generación específica de relevamiento
+      if (documentType === 'RELEVAMIENTO') {
+        console.log('=== GENERATING RELEVAMIENTO ===');
+        console.log('ProjectId:', selectedProject.id);
+        console.log('ClientInfo:', clientInfo);
+        console.log('RelevamientoInfo:', relevamientoInfo);
+
+        response = await generateRelevamiento(selectedProject.id, clientInfo, relevamientoInfo);
+      } else {
+        // Preparar datos para otros tipos de documento
+        let requestData = {
+          documentType,
+          projectId: selectedProject.id,
+          projectName: selectedProject.name,
+          clientInfo: clientInfo
+        };
+
+        // Agregar archivos si están disponibles
+        if (selectedFiles.length > 0) {
+          requestData.extractedTexts = selectedFiles.map(file => ({
+            fileName: file.fileName || file,
+            text: file.extractedText || `Contenido extraído de ${file.fileName || file}`,
+            extractedAt: new Date().toISOString()
+          }));
+        }
+
+        response = await processDocuments(requestData);
       }
 
-      const response = await processDocuments(requestData);
       setResults(response);
       
       // Opcional: cambiar a una tab de resultados
@@ -218,6 +262,9 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
         {activeTab === 'RELEVAMIENTO' && (
           <RelevamientoSection 
+            relevamientoInfo={relevamientoInfo}
+            setRelevamientoInfo={setRelevamientoInfo}
+            projectId={projectId}
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
           />

@@ -125,6 +125,21 @@ export const getAvailableModels = async () => {
   }
 };
 
+// Generar documento de relevamiento
+export const generateRelevamiento = async (projectId, clientInfo, relevamientoInfo) => {
+  try {
+    const response = await api.post('/api/v1/ai/generate-relevamiento', {
+      projectId,
+      clientInfo,
+      relevamientoInfo
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al generar relevamiento:', error);
+    throw error;
+  }
+};
+
 export default {
   processDocuments,
   chatWithDocuments,

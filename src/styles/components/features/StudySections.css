@@ -620,3 +620,144 @@
     padding: 1rem;
   }
 }
+
+/* ===============================================
+   RELEVAMIENTO SECTION STYLES
+   =============================================== */
+
+.relevamiento-content {
+  margin-top: 1.5rem;
+}
+
+.relevamiento-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e7ff;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-button:hover {
+  color: #4f46e5;
+  background: #f8fafc;
+}
+
+.tab-button.active {
+  color: #4f46e5;
+  border-bottom-color: #4f46e5;
+  background: #f8fafc;
+}
+
+.tab-content {
+  min-height: 300px;
+}
+
+.tab-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stakeholder-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.stakeholder-card .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stakeholder-card .form-group {
+  margin-bottom: 1rem;
+}
+
+.stakeholder-card .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.add-button {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-button:hover {
+  background: #059669;
+}
+
+.remove-button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  transition: background 0.3s ease;
+}
+
+.remove-button:hover {
+  background: #dc2626;
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.placeholder-content h4 {
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+/* Responsive para las pestañas */
+@media (max-width: 768px) {
+  .relevamiento-tabs {
+    justify-content: center;
+  }
+  
+  .tab-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .stakeholder-card .form-row {
+    grid-template-columns: 1fr;
+  }
+}
