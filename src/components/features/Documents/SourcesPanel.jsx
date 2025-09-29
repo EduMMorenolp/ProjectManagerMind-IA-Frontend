@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon, CloseIcon, MenuIcon } from '../../ui/Icons';
 import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../../../services';
-import { ProjectModal } from '../../ui/Modal';
+import { updateDocument, deleteDocument } from '../../../services/documentService';
+import { ProjectModal, DocumentModal } from '../../ui/Modal';
 import '../../../styles/upload-modal.css';
 import '../../../styles/components/features/SourcesPanel.css';
 
@@ -44,6 +45,9 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   const [selectedDocumentType, setSelectedDocumentType] = useState('');
   const [selectedStage, setSelectedStage] = useState('PRELIMINAR');
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [documentModalMode, setDocumentModalMode] = useState('view');
 
   // Helper function para obtener todos los tipos de documentos
   const getAllDocumentTypes = () => {
@@ -235,6 +239,46 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     setIsCollapsed(!isCollapsed);
   };
 
+  const handleViewDocument = (file) => {
+    setSelectedDocument(file);
+    setDocumentModalMode('view');
+    setShowDocumentModal(true);
+  };
+
+  const handleEditDocument = (file) => {
+    setSelectedDocument(file);
+    setDocumentModalMode('edit');
+    setShowDocumentModal(true);
+  };
+
+  const handleDeleteDocument = async (documentId) => {
+    try {
+      await deleteDocument(documentId);
+      // Recargar archivos del proyecto actual
+      if (selectedProject?.id) {
+        await loadProjectFiles(selectedProject.id);
+      }
+      // También recargar proyectos para actualizar contadores
+      await loadProjects();
+    } catch (error) {
+      console.error('Error al eliminar documento:', error);
+      setError('Error al eliminar el documento');
+    }
+  };
+
+  const handleUpdateDocument = async (documentId, content) => {
+    try {
+      await updateDocument(documentId, content);
+      // Recargar archivos del proyecto actual
+      if (selectedProject?.id) {
+        await loadProjectFiles(selectedProject.id);
+      }
+    } catch (error) {
+      console.error('Error al actualizar documento:', error);
+      throw error;
+    }
+  };
+
   return (
     <div className={`sources-panel-container ${isCollapsed ? 'collapsed' : 'expanded'}`}>
       {/* Botón de menú siempre visible */}
@@ -386,22 +430,101 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
                             paddingLeft: '0.75rem'
                           }}>
                             {docType.files.map((file, index) => (
-                              <div 
-                                key={`${file.id}-${index}`} 
-                                className={`file-item ${selectedFiles.includes(file.id) ? 'selected' : ''}`}
-                                onClick={() => handleFileSelect(file.id)}
-                              >
-                                <div className="file-checkbox">
-                                  <button className={`checkbox-button ${selectedFiles.includes(file.id) ? 'selected' : ''}`}>
-                                    {selectedFiles.includes(file.id) && <CheckIcon className="check-icon" />}
-                                  </button>
+                              <div key={`${file.id}-${index}`} className="file-item-container">
+                                <div 
+                                  className={`file-item ${selectedFiles.includes(file.id) ? 'selected' : ''}`}
+                                  onClick={() => handleFileSelect(file.id)}
+                                >
+                                  <div className="file-checkbox">
+                                    <button className={`checkbox-button ${selectedFiles.includes(file.id) ? 'selected' : ''}`}>
+                                      {selectedFiles.includes(file.id) && <CheckIcon className="check-icon" />}
+                                    </button>
+                                  </div>
+                                  <div className="file-icon">
+                                    {file.type === 'pdf' ? <PdfIcon className="file-type-icon" /> : <DocIcon className="file-type-icon" />}
+                                  </div>
+                                  <div className="file-info">
+                                    <div className="file-name">{file.name}</div>
+                                  </div>
                                 </div>
-                                <div className="file-icon">
-                                  {file.type === 'pdf' ? <PdfIcon className="file-type-icon" /> : <DocIcon className="file-type-icon" />}
-                                </div>
-                                <div className="file-info">
-                                  <div className="file-name">{file.name}</div>
-                                </div>
+                                
+                                {/* Botones de acción que aparecen cuando el archivo está seleccionado */}
+                                {selectedFiles.includes(file.id) && (
+                                  <div className="file-actions" style={{
+                                    display: 'flex',
+                                    gap: '0.25rem',
+                                    marginTop: '0.5rem',
+                                    marginLeft: '2.5rem',
+                                    flexWrap: 'wrap'
+                                  }}>
+                                    <button
+                                      className="action-button view-button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleViewDocument(file);
+                                      }}
+                                      style={{
+                                        padding: '0.25rem 0.5rem',
+                                        fontSize: '0.75rem',
+                                        backgroundColor: '#007bff',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem'
+                                      }}
+                                      title="Ver documento"
+                                    >
+                                      👁️ Ver
+                                    </button>
+                                    <button
+                                      className="action-button edit-button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleEditDocument(file);
+                                      }}
+                                      style={{
+                                        padding: '0.25rem 0.5rem',
+                                        fontSize: '0.75rem',
+                                        backgroundColor: '#28a745',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem'
+                                      }}
+                                      title="Editar documento"
+                                    >
+                                      ✏️ Editar
+                                    </button>
+                                    <button
+                                      className="action-button delete-button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteDocument(file.id);
+                                      }}
+                                      style={{
+                                        padding: '0.25rem 0.5rem',
+                                        fontSize: '0.75rem',
+                                        backgroundColor: '#dc3545',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem'
+                                      }}
+                                      title="Eliminar documento"
+                                    >
+                                      🗑️ Eliminar
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -494,6 +617,23 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
           </div>
         </div>
       )}
+
+      <DocumentModal
+        isOpen={showDocumentModal}
+        onClose={() => {
+          setShowDocumentModal(false);
+          setSelectedDocument(null);
+          setDocumentModalMode('view');
+        }}
+        document={selectedDocument}
+        onEdit={handleUpdateDocument}
+        onDelete={(documentId) => {
+          handleDeleteDocument(documentId);
+          setShowDocumentModal(false);
+          setSelectedDocument(null);
+        }}
+        mode={documentModalMode}
+      />
       </div> {/* Cierre de sources-content */}
     </div>
   );

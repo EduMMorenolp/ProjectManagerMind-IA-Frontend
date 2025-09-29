@@ -306,6 +306,72 @@
 }
 
 /* Mobile adjustments */
+/* ===============================================
+   FILE ACTION BUTTONS
+   =============================================== */
+
+.file-item-container {
+  width: 100%;
+}
+
+.file-actions {
+  opacity: 0.9;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+.action-button {
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  font-weight: 500;
+}
+
+.action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:active {
+  transform: translateY(0);
+}
+
+.view-button:hover {
+  background-color: #0056b3 !important;
+}
+
+.edit-button:hover {
+  background-color: #1e7e34 !important;
+}
+
+.delete-button:hover {
+  background-color: #c82333 !important;
+}
+
+/* Responsive adjustments para botones */
+@media (max-width: 480px) {
+  .file-actions {
+    gap: 0.15rem !important;
+  }
+  
+  .action-button {
+    padding: 0.2rem 0.4rem !important;
+    font-size: 0.7rem !important;
+  }
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+   =============================================== */
+
 @media (max-width: 768px) {
   /* Solo aplicar padding cuando está expandido */
   .sources-panel-container.expanded {

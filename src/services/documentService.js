@@ -45,9 +45,16 @@ export const getDocumentTypes = async () => {
   }
 };
 
-// Obtener documento específico
+// Obtener documento específico por ID (de base de datos)
 export const getDocument = async (projectName, documentId) => {
   try {
+    // Si solo tenemos documentId, usar la nueva ruta para documentos de BD
+    if (!projectName || documentId.includes('-')) { // UUID format
+      const response = await api.get(`/api/v1/documents/db/${documentId}`);
+      return response.data;
+    }
+    
+    // Para documentos generados (legacy)
     const response = await api.get(`/api/v1/documents/${projectName}/${documentId}`);
     return response.data;
   } catch (error) {
@@ -80,10 +87,36 @@ export const downloadDocument = async (projectName, documentId, format = 'md') =
   }
 };
 
+// Editar documento
+export const updateDocument = async (documentId, content) => {
+  try {
+    const response = await api.put(`/api/v1/documents/${documentId}`, {
+      content
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar documento:', error);
+    throw error;
+  }
+};
+
+// Eliminar documento
+export const deleteDocument = async (documentId) => {
+  try {
+    const response = await api.delete(`/api/v1/documents/${documentId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al eliminar documento:', error);
+    throw error;
+  }
+};
+
 export default {
   uploadDocuments,
   workflowDocuments,
   getDocumentTypes,
   getDocument,
   downloadDocument,
+  updateDocument,
+  deleteDocument,
 };

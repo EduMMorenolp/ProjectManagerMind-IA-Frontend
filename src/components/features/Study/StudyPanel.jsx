@@ -67,11 +67,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
   // Cargar información existente del cliente para un proyecto
   const loadExistingClientInfo = useCallback(async (projectId) => {
     try {
-      console.log('=== LOADING CLIENT INFO ===');
-      console.log('Project ID:', projectId);
-      
       const response = await loadClientInfo(projectId);
-      console.log('LoadClientInfo response:', response);
       
       if (response.success && response.clientInfo) {
         console.log('Setting new client info:', JSON.stringify(response.clientInfo, null, 2));

@@ -24,10 +24,6 @@ const ClienteSection = ({ clientInfo, setClientInfo, projectId, setProjectId }) 
     const files = Array.from(event.target.files);
     if (files.length === 0) return;
 
-    console.log('=== HANDLE FILE UPLOAD DEBUG ===');
-    console.log('Current projectId:', projectId);
-    console.log('Client info name:', clientInfo.name);
-
     setIsLoading(true);
     setUploadError('');
     setUploadSuccess('');
@@ -111,10 +107,6 @@ const ClienteSection = ({ clientInfo, setClientInfo, projectId, setProjectId }) 
   };
 
   const handleSaveClientInfo = async () => {
-    console.log('=== HANDLE SAVE CLIENT INFO DEBUG ===');
-    console.log('Current projectId:', projectId);
-    console.log('Client info:', clientInfo);
-
     setIsSaving(true);
     setUploadError('');
     setSaveSuccess('');
