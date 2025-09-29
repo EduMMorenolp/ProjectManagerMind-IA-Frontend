@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { processDocuments, getAIInfo } from '../../../services';
 import { loadClientInfo } from '../../../services/aiService';
 import { FileIcon, PdfIcon, DocIcon, DownloadIcon, PlayIcon } from '../../ui/Icons';
@@ -33,6 +33,43 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     console.log('StudyPanel - clientInfo updated:', JSON.stringify(clientInfo, null, 2));
   }, [clientInfo]);
 
+  // Cargar información existente del cliente para un proyecto
+  const loadExistingClientInfo = useCallback(async (projectId) => {
+    try {
+      console.log('=== LOADING CLIENT INFO ===');
+      console.log('Project ID:', projectId);
+      
+      const response = await loadClientInfo(projectId);
+      console.log('LoadClientInfo response:', response);
+      
+      if (response.success && response.clientInfo) {
+        console.log('Setting new client info:', JSON.stringify(response.clientInfo, null, 2));
+        setClientInfo(response.clientInfo);
+      } else {
+        console.log('No existing client info found for project:', projectId);
+        // Limpiar el formulario si no hay información
+        setClientInfo({
+          name: '', 
+          business: '', 
+          description: '', 
+          needs: '', 
+          history: ''
+        });
+      }
+    } catch (error) {
+      console.error('Error loading client info:', error);
+      console.error('Error details:', error.response?.data || error.message);
+      // Limpiar el formulario en caso de error
+      setClientInfo({
+        name: '', 
+        business: '', 
+        description: '', 
+        needs: '', 
+        history: ''
+      });
+    }
+  }, []);
+
   // Sincronizar projectId con selectedProject
   useEffect(() => {
     if (selectedProject && selectedProject.id) {
@@ -53,7 +90,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         history: ''
       });
     }
-  }, [selectedProject]);
+  }, [selectedProject, loadExistingClientInfo]);
 
   // Etapas del desarrollo con sus secciones
   const projectStages = {
@@ -92,24 +129,6 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       await getAIInfo();
     } catch (err) {
       console.error('Error al cargar información de IA:', err);
-    }
-  };
-
-  // Cargar información existente del cliente para un proyecto
-  const loadExistingClientInfo = async (projectId) => {
-    try {
-      console.log('Loading existing client info for project:', projectId);
-      const response = await loadClientInfo(projectId);
-      
-      if (response.success && response.clientInfo) {
-        console.log('Loaded existing client info:', response.clientInfo);
-        setClientInfo(response.clientInfo);
-      } else {
-        console.log('No existing client info found for project:', projectId);
-      }
-    } catch (error) {
-      console.error('Error loading client info:', error);
-      // No mostrar error al usuario, simplemente no cargar nada
     }
   };
 
