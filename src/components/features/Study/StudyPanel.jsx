@@ -150,6 +150,27 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     }
   };
 
+  // Función para descargar documentos generados
+  const downloadGeneratedDocument = (result) => {
+    if (!result.content && !result.fileName) {
+      console.error('No hay contenido para descargar');
+      return;
+    }
+
+    const content = result.content || JSON.stringify(result, null, 2);
+    const fileName = result.fileName || `documento_${result.documentType || 'generado'}.md`;
+    
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const handleGenerateDocument = async (documentType) => {
     if (!selectedProject) {
       setError('Selecciona un proyecto primero');
@@ -188,6 +209,15 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       }
 
       setResults(response);
+      
+      // Revalidar precondiciones después de generar un documento
+      if (documentType === 'RELEVAMIENTO') {
+        // Esto activará la revalidación en RelevamientoSection
+        setTimeout(() => {
+          // Trigger re-validation by updating a dependency
+          setProjectId(prev => prev);
+        }, 1000);
+      }
       
       // Opcional: cambiar a una tab de resultados
       // setActiveTab('results');
@@ -247,6 +277,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
             relevamientoInfo={relevamientoInfo}
             setRelevamientoInfo={setRelevamientoInfo}
             projectId={projectId}
+            selectedProject={selectedProject}
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
           />
@@ -306,9 +337,42 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         {/* Sección de Resultados */}
         {results && (
           <div className="results-panel">
-            <h4>📊 Resultados Generados</h4>
+            <div className="results-header">
+              <h4>📊 Resultados Generados</h4>
+              {results.fileName && (
+                <button 
+                  className="download-button"
+                  onClick={() => downloadGeneratedDocument(results)}
+                  title="Descargar documento"
+                >
+                  <DownloadIcon className="download-icon" />
+                  Descargar
+                </button>
+              )}
+            </div>
             <div className="results-content">
-              <pre>{JSON.stringify(results, null, 2)}</pre>
+              {results.content ? (
+                <div className="document-preview">
+                  <div className="document-info">
+                    <p><strong>Archivo:</strong> {results.fileName}</p>
+                    <p><strong>Tipo:</strong> {results.documentType || 'Documento generado'}</p>
+                    <p><strong>Proyecto:</strong> {results.projectName}</p>
+                    {results.wordCount && (
+                      <p><strong>Palabras:</strong> {results.wordCount}</p>
+                    )}
+                  </div>
+                  <div className="document-content">
+                    <h5>Vista previa del contenido:</h5>
+                    <div className="content-preview">
+                      {results.content.substring(0, 500)}...
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="results-raw">
+                  <pre>{JSON.stringify(results, null, 2)}</pre>
+                </div>
+              )}
             </div>
           </div>
         )}
