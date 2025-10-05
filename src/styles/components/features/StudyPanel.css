@@ -499,3 +499,141 @@
   font-size: 0.8125rem;
   line-height: 1.4;
 }
+
+/* ===============================================
+   INFORME EJECUTIVO CONFIGURATION STYLES
+   =============================================== */
+
+.configuration-form {
+  background-color: var(--bg-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin: 1rem 0;
+  border: 1px solid var(--border-color);
+}
+
+.configuration-form h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: var(--dark-color);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.config-group {
+  margin-bottom: 1rem;
+}
+
+.config-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+}
+
+.config-select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  background-color: white;
+  transition: border-color 0.2s;
+}
+
+.config-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.config-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--dark-color);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.checkbox-label:hover {
+  color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.preview-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.preview-section {
+  background-color: var(--light-color);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  border-left: 3px solid var(--accent-color);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.preview-section:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.preview-section strong {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-bottom: 0.25rem;
+}
+
+.preview-section p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.4;
+}
+
+/* Mobile adjustments for configuration */
+@media (max-width: 768px) {
+  .configuration-form {
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+  
+  .config-checkboxes {
+    gap: 0.5rem;
+  }
+  
+  .checkbox-label {
+    font-size: 0.8125rem;
+  }
+  
+  .preview-sections {
+    gap: 0.5rem;
+  }
+  
+  .preview-section {
+    padding: 0.5rem;
+  }
+}

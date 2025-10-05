@@ -140,6 +140,22 @@ export const generateRelevamiento = async (projectId, clientInfo, relevamientoIn
   }
 };
 
+// Generar informe ejecutivo
+export const generateInformeEjecutivo = async (projectId, clientInfo, relevamientoInfo, configuracion) => {
+  try {
+    const response = await api.post('/api/v1/ai/generate-informe-ejecutivo', {
+      projectId,
+      clientInfo,
+      relevamientoInfo,
+      configuracion
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al generar informe ejecutivo:', error);
+    throw error;
+  }
+};
+
 export default {
   processDocuments,
   chatWithDocuments,

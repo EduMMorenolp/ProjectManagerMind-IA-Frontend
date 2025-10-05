@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { processDocuments, getAIInfo } from '../../../services';
-import { loadClientInfo, generateRelevamiento } from '../../../services/aiService';
+import { loadClientInfo, generateRelevamiento, generateInformeEjecutivo } from '../../../services/aiService';
 import { FileIcon, PdfIcon, DocIcon, DownloadIcon, PlayIcon } from '../../ui/Icons';
 import {
   ClienteSection,
@@ -171,7 +171,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     URL.revokeObjectURL(url);
   };
 
-  const handleGenerateDocument = async (documentType) => {
+  const handleGenerateDocument = async (documentType, additionalParams = {}) => {
     if (!selectedProject) {
       setError('Selecciona un proyecto primero');
       return;
@@ -187,13 +187,25 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       // Manejar generación específica de relevamiento
       if (documentType === 'RELEVAMIENTO') {
         response = await generateRelevamiento(selectedProject.id, clientInfo, relevamientoInfo);
-      } else {
+      } 
+      // Manejar generación específica de informe ejecutivo
+      else if (documentType === 'informe-ejecutivo') {
+        const { configuracion } = additionalParams;
+        response = await generateInformeEjecutivo(
+          selectedProject.id, 
+          clientInfo, 
+          relevamientoInfo, 
+          configuracion
+        );
+      } 
+      else {
         // Preparar datos para otros tipos de documento
         let requestData = {
           documentType,
           projectId: selectedProject.id,
           projectName: selectedProject.name,
-          clientInfo: clientInfo
+          clientInfo: clientInfo,
+          ...additionalParams
         };
 
         // Agregar archivos si están disponibles
@@ -211,8 +223,8 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       setResults(response);
       
       // Revalidar precondiciones después de generar un documento
-      if (documentType === 'RELEVAMIENTO') {
-        // Esto activará la revalidación en RelevamientoSection
+      if (documentType === 'RELEVAMIENTO' || documentType === 'informe-ejecutivo') {
+        // Esto activará la revalidación en las secciones correspondientes
         setTimeout(() => {
           // Trigger re-validation by updating a dependency
           setProjectId(prev => prev);
@@ -285,8 +297,12 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
         {activeTab === 'INFORME' && (
           <InformeSection 
+            projectId={projectId}
+            clientInfo={clientInfo}
+            relevamientoInfo={relevamientoInfo}
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
+            generationResults={results?.results || []}
           />
         )}
 
