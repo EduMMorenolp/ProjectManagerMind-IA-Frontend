@@ -14,8 +14,19 @@ import {
   CasosUsoSection
 } from './sections';
 
+// Importar nuevos componentes
+import ProjectProgress from './ProjectProgress';
+import GenerationProgress from './GenerationProgress';
+import NotificationSystem from './NotificationSystem';
+
+// Importar contexto y hooks
+import { useStudy } from '../../../contexts';
+import { useNotifications } from '../../../hooks';
+
 const StudyPanel = ({ selectedFiles, selectedProject }) => {
   const [activeTab, setActiveTab] = useState('CLIENTE');
+  
+  // Estados temporales (mantenemos compatibilidad mientras refactorizamos)
   const [processing, setProcessing] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
@@ -110,33 +121,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     }
   }, [selectedProject, loadExistingClientInfo]);
 
-  // Etapas del desarrollo con sus secciones
-  const projectStages = {
-    PRELIMINAR: {
-      name: 'Etapa Preliminar',
-      sections: [
-        { id: 'CLIENTE', name: 'Cliente', icon: '👤', description: 'Información del cliente y requerimientos' },
-        { id: 'RELEVAMIENTO', name: 'Relevamiento', icon: '📋', description: 'Análisis y recopilación de información' },
-        { id: 'INFORME', name: 'Informe', icon: '📄', description: 'Informe ejecutivo del relevamiento' }
-      ]
-    },
-    ANALISIS: {
-      name: 'Etapa de Análisis',
-      sections: [
-        { id: 'OBJETIVOS', name: 'Objetivos', icon: '🎯', description: 'Objetivos del sistema informático' },
-        { id: 'DIAGRAMAS_FLUJO', name: 'Diagramas de Flujo', icon: '🔄', description: 'Diagramas de flujo de datos (DFD)' },
-        { id: 'HISTORIAS_USUARIO', name: 'Historias de Usuario', icon: '📖', description: 'Historias de usuario y metodologías ágiles' }
-      ]
-    },
-    DISENO: {
-      name: 'Etapa de Diseño',
-      sections: [
-        { id: 'SPRINTS', name: 'Sprints', icon: '⚡', description: 'Planificación de sprints SCRUM' },
-        { id: 'DER', name: 'DER', icon: '🗄️', description: 'Diagrama Entidad-Relación' },
-        { id: 'CASOS_USO', name: 'Casos de Uso', icon: '⚙️', description: 'Casos de uso del sistema' }
-      ]
-    }
-  };
+
 
   useEffect(() => {
     loadAIInfo();
@@ -244,30 +229,17 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
   return (
     <div className="study-panel-container">
+      {/* Sistema de notificaciones */}
+      <NotificationSystem />
+      
+      {/* Progreso de generación */}
+      <GenerationProgress />
+      
       <div className="study-panel-header">
         <h2>Gestión de Proyectos</h2>
         
-        {/* Navegación por etapas */}
-        <div className="project-stages">
-          {Object.entries(projectStages).map(([stageKey, stage]) => (
-            <div key={stageKey} className="stage-group">
-              <h3 className="stage-title">{stage.name}</h3>
-              <div className="stage-tabs">
-                {stage.sections.map(section => (
-                  <button
-                    key={section.id}
-                    className={`tab-button ${activeTab === section.id ? 'active' : ''}`}
-                    onClick={() => setActiveTab(section.id)}
-                    title={section.description}
-                  >
-                    <span className="tab-icon">{section.icon}</span>
-                    <span className="tab-text">{section.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Navegación inteligente con progreso */}
+        <ProjectProgress activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
       {error && <div className="error-message">{error}</div>}
