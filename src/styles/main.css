@@ -18,6 +18,7 @@
 @import './components/ui/common.css';
 @import './components/DocumentTypeSelector.css';
 @import './components/DiagramViewer.css';
+@import './components/SprintPlanning.css';
 
 /* Upload modal styles (keep existing) */
 @import './upload-modal.css';

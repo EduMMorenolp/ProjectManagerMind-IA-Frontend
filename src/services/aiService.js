@@ -205,6 +205,68 @@ export const generateDiagramasFlujo = async (projectId, configuracion = {}) => {
   }
 };
 
+export const generateSprintPlanning = async (projectId, configuracion = {}) => {
+  try {
+    const response = await api.post('/api/v1/ai/generate-sprint-planning', {
+      projectId,
+      configuracionSprints: {
+        duracionSprint: configuracion.duracionSprint || 14,
+        factorBuffering: configuracion.factorBuffering || 0.8,
+        prioridadAutomatica: configuracion.prioridadAutomatica !== false
+      },
+      configuracionEquipo: {
+        capacidadEquipo: configuracion.capacidadEquipo || 40,
+        miembrosEquipo: configuracion.miembrosEquipo || 5,
+        horasPorDia: configuracion.horasPorDia || 8,
+        experiencia: configuracion.experiencia || 'intermedio'
+      },
+      historiasUsuarioId: configuracion.historiasUsuarioId || null
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al generar planificación de sprints:', error);
+    throw error;
+  }
+};
+
+export const exportSprintPlanning = async (planificacionId, formato = 'json', configuracion = {}) => {
+  try {
+    const response = await api.post('/api/v1/ai/export-sprint-planning', {
+      planificacionId,
+      formato,
+      configuracion
+    }, {
+      responseType: 'blob' // Para manejar archivos
+    });
+    
+    // Crear URL para descarga
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    
+    // Obtener nombre de archivo desde headers o generar uno
+    const contentDisposition = response.headers['content-disposition'];
+    let filename = `sprint-planning.${formato}`;
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="([^"]+)"/);
+      if (filenameMatch) {
+        filename = filenameMatch[1];
+      }
+    }
+    
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    
+    return { success: true, filename };
+  } catch (error) {
+    console.error('Error al exportar planificación de sprints:', error);
+    throw error;
+  }
+};
+
 export default {
   processDocuments,
   chatWithDocuments,
@@ -214,4 +276,6 @@ export default {
   getAvailableModels,
   generateHistoriasUsuario,
   generateDiagramasFlujo,
+  generateSprintPlanning,
+  exportSprintPlanning,
 };

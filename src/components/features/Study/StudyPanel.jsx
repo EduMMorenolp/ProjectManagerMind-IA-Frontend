@@ -311,8 +311,8 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         {/* ETAPA DE DISEÑO */}
         {activeTab === 'SPRINTS' && (
           <SprintsSection 
-            handleGenerateDocument={handleGenerateDocument}
-            processing={processing}
+            projectId={projectId}
+            onNotification={handleNotification}
           />
         )}
 
