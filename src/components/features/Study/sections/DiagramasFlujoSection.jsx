@@ -1,47 +1,38 @@
-import React from 'react';
-import { PlayIcon } from '../../../ui/Icons';
+import React, { useState } from 'react';
+import { DiagramasFlujoViewer } from '../../DiagramViewer';
 
-const DiagramasFlujoSection = ({ handleGenerateDocument, processing }) => {
+const DiagramasFlujoSection = ({ projectId, onNotification }) => {
+  const [, setNotifications] = useState([]);
+
+  const handleSuccess = (message) => {
+    const notification = {
+      id: Date.now(),
+      type: 'success',
+      message,
+      timestamp: new Date().toISOString()
+    };
+    setNotifications(prev => [...prev, notification]);
+    onNotification?.(notification);
+  };
+
+  const handleError = (message) => {
+    const notification = {
+      id: Date.now(),
+      type: 'error',
+      message,
+      timestamp: new Date().toISOString()
+    };
+    setNotifications(prev => [...prev, notification]);
+    onNotification?.(notification);
+  };
+
   return (
     <div className="section-container">
-      <div className="section-header">
-        <h3>🔄 Diagramas de Flujo de Datos (DFD)</h3>
-        <p className="section-description">Componentes, reglas y niveles de diagramas</p>
-      </div>
-      
-      <div className="dfd-content">
-        <div className="dfd-levels">
-          <div className="level-card">
-            <h5>📊 Diagrama de Contexto</h5>
-            <p>Vista general del sistema</p>
-          </div>
-          <div className="level-card">
-            <h5>📈 Diagrama Nivel 1</h5>
-            <p>Procesos principales</p>
-          </div>
-          <div className="level-card">
-            <h5>📉 Diagrama Nivel 2</h5>
-            <p>Detalle de subprocesos</p>
-          </div>
-        </div>
-        
-        <div className="generate-section">
-          <button 
-            className="generate-button" 
-            onClick={() => handleGenerateDocument('diagramas-flujo')}
-            disabled={processing}
-          >
-            {processing ? (
-              <span>Generando...</span>
-            ) : (
-              <>
-                <PlayIcon className="button-icon" />
-                Generar Diagramas DFD
-              </>
-            )}
-          </button>
-        </div>
-      </div>
+      <DiagramasFlujoViewer
+        projectId={projectId}
+        onSuccess={handleSuccess}
+        onError={handleError}
+      />
     </div>
   );
 };

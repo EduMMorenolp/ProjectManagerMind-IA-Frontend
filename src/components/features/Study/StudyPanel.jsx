@@ -121,8 +121,6 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
     }
   }, [selectedProject, loadExistingClientInfo]);
 
-
-
   useEffect(() => {
     loadAIInfo();
   }, []);
@@ -132,6 +130,15 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       await getAIInfo();
     } catch (err) {
       console.error('Error al cargar información de IA:', err);
+    }
+  };
+
+  // Función para manejar notificaciones
+  const handleNotification = (notification) => {
+    console.log('Notification:', notification);
+    // Aquí se podría integrar con un sistema de notificaciones más complejo
+    if (notification.type === 'error') {
+      setError(notification.message);
     }
   };
 
@@ -288,8 +295,8 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
         {activeTab === 'DIAGRAMAS_FLUJO' && (
           <DiagramasFlujoSection 
-            handleGenerateDocument={handleGenerateDocument}
-            processing={processing}
+            projectId={projectId}
+            onNotification={handleNotification}
           />
         )}
 

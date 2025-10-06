@@ -180,6 +180,31 @@ export const generateHistoriasUsuario = async (projectId, configuracion = {}) =>
   }
 };
 
+// Generar diagramas de flujo
+export const generateDiagramasFlujo = async (projectId, configuracion = {}) => {
+  try {
+    const response = await api.post('/api/v1/ai/generate-diagramas-flujo', {
+      projectId,
+      documentIds: configuracion.documentIds || [],
+      configuracion: {
+        tipoDiagrama: configuracion.tipoDiagrama || 'dfd',
+        nivelDetalle: configuracion.nivelDetalle || 'nivel1',
+        notacion: configuracion.notacion || 'mermaid',
+        incluirActores: configuracion.incluirActores !== false,
+        industry: configuracion.industry,
+        processes: configuracion.processes,
+        stakeholders: configuracion.stakeholders,
+        existingSystems: configuracion.existingSystems,
+        personalizada: configuracion.personalizada || {}
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al generar diagramas de flujo:', error);
+    throw error;
+  }
+};
+
 export default {
   processDocuments,
   chatWithDocuments,
@@ -188,4 +213,5 @@ export default {
   generateAnalysis,
   getAvailableModels,
   generateHistoriasUsuario,
+  generateDiagramasFlujo,
 };

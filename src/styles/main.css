@@ -17,6 +17,7 @@
 /* UI component styles */
 @import './components/ui/common.css';
 @import './components/DocumentTypeSelector.css';
+@import './components/DiagramViewer.css';
 
 /* Upload modal styles (keep existing) */
 @import './upload-modal.css';
