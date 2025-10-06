@@ -111,6 +111,17 @@ export const deleteDocument = async (documentId) => {
   }
 };
 
+// Obtener documentos por proyecto
+export const getDocumentsByProject = async (projectId) => {
+  try {
+    const response = await api.get(`/api/v1/projects/${projectId}/documents`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener documentos del proyecto:', error);
+    throw error;
+  }
+};
+
 export default {
   uploadDocuments,
   workflowDocuments,
@@ -119,4 +130,5 @@ export default {
   downloadDocument,
   updateDocument,
   deleteDocument,
+  getDocumentsByProject,
 };

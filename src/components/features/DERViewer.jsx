@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { aiService } from '../../services';
-import MermaidViewer from './MermaidViewer';
+import MermaidViewer from './DiagramViewer/MermaidViewer';
 
 /**
  * Componente para visualizar Diagramas de Entidad-Relación (DER)

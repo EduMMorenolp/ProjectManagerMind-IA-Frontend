@@ -36,21 +36,22 @@ const RelevamientoSection = ({
       const currentProjectId = projectId || selectedProject?.id;
       const documentsResponse = await getProjectDocuments(currentProjectId);
       
-      if (documentsResponse.success) {
-        const clientDocuments = documentsResponse.documents.filter(
-          doc => doc.documentType === 'CLIENTE' && doc.stage === 'PRELIMINAR'
-        );
+      console.log('📋 RelevamientoSection: Documentos obtenidos:', documentsResponse);
+      
+      // Ahora documentsResponse es directamente el array de documentos
+      const documents = documentsResponse || [];
+      const clientDocuments = documents.filter(
+        doc => doc.documentType === 'CLIENTE' && doc.stage === 'PRELIMINAR'
+      );
+      
+      console.log('👤 RelevamientoSection: Documentos de cliente encontrados:', clientDocuments);
 
-        if (clientDocuments.length > 0) {
-          setHasClientDocuments(true);
-          setValidationMessage(`✅ Encontrados ${clientDocuments.length} documento(s) de cliente. Listo para generar relevamiento.`);
-        } else {
-          setHasClientDocuments(false);
-          setValidationMessage('❌ No se encontraron documentos de cliente. Sube documentos tipo CLIENTE en la etapa PRELIMINAR primero.');
-        }
+      if (clientDocuments.length > 0) {
+        setHasClientDocuments(true);
+        setValidationMessage(`✅ Encontrados ${clientDocuments.length} documento(s) de cliente. Listo para generar relevamiento.`);
       } else {
         setHasClientDocuments(false);
-        setValidationMessage('⚠️ Error al validar documentos del proyecto');
+        setValidationMessage('❌ No se encontraron documentos de cliente. Sube documentos tipo CLIENTE en la etapa PRELIMINAR primero.');
       }
     } catch (error) {
       console.error('Error validating preconditions:', error);
@@ -80,7 +81,21 @@ const RelevamientoSection = ({
       setValidationMessage('✅ Relevamiento generado exitosamente');
     } catch (error) {
       console.error('Error generating relevamiento:', error);
-      setValidationMessage('❌ Error al generar relevamiento: ' + (error.message || 'Error desconocido'));
+      
+      // Manejo específico de errores comunes
+      let errorMessage = '❌ Error al generar relevamiento: ';
+      
+      if (error.message && error.message.includes('429')) {
+        errorMessage += 'Límite de solicitudes excedido. Espera unos minutos e intenta de nuevo.';
+      } else if (error.message && error.message.includes('quota')) {
+        errorMessage += 'Cuota de API agotada. Verifica los límites en Google AI Studio.';
+      } else if (error.message && error.message.includes('Límite de solicitudes')) {
+        errorMessage += error.message;
+      } else {
+        errorMessage += (error.message || 'Error desconocido');
+      }
+      
+      setValidationMessage(errorMessage);
     } finally {
       setIsGenerating(false);
     }

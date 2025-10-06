@@ -1,4 +1,4 @@
-import { apiClient } from './config';
+import api from './config.js';
 
 /**
  * Servicio de Flujo de Trabajo
@@ -22,7 +22,7 @@ class WorkflowService {
       const queryString = params.toString();
       const url = `/workflow/projects/${projectId}/dashboard${queryString ? `?${queryString}` : ''}`;
       
-      const response = await apiClient.get(url);
+      const response = await api.get(url);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo dashboard del proyecto:', error);
@@ -46,7 +46,7 @@ class WorkflowService {
       if (documentId) payload.documentId = documentId;
       if (stage) payload.stage = stage;
 
-      const response = await apiClient.post('/workflow/validate-prerequisites', payload);
+      const response = await api.post('/workflow/validate-prerequisites', payload);
       return response.data;
     } catch (error) {
       console.error('Error validando prerequisitos:', error);
@@ -70,7 +70,7 @@ class WorkflowService {
    */
   async executeTransition(transitionData) {
     try {
-      const response = await apiClient.post('/workflow/execute-transition', transitionData);
+      const response = await api.post('/workflow/execute-transition', transitionData);
       return response.data;
     } catch (error) {
       console.error('Error ejecutando transición:', error);
@@ -88,7 +88,7 @@ class WorkflowService {
    */
   async getAvailableDocuments(projectId) {
     try {
-      const response = await apiClient.get(`/workflow/projects/${projectId}/available-documents`);
+      const response = await api.get(`/workflow/projects/${projectId}/available-documents`);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo documentos disponibles:', error);
@@ -107,7 +107,7 @@ class WorkflowService {
    */
   async getProjectProgress(projectId) {
     try {
-      const response = await apiClient.get(`/workflow/projects/${projectId}/progress`);
+      const response = await api.get(`/workflow/projects/${projectId}/progress`);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo progreso del proyecto:', error);
@@ -129,7 +129,7 @@ class WorkflowService {
    */
   async submitForReview(reviewData) {
     try {
-      const response = await apiClient.post('/workflow/submit-for-review', reviewData);
+      const response = await api.post('/workflow/submit-for-review', reviewData);
       return response.data;
     } catch (error) {
       console.error('Error enviando para revisión:', error);
@@ -152,7 +152,7 @@ class WorkflowService {
    */
   async addComment(commentData) {
     try {
-      const response = await apiClient.post('/workflow/add-comment', commentData);
+      const response = await api.post('/workflow/add-comment', commentData);
       return response.data;
     } catch (error) {
       console.error('Error agregando comentario:', error);
@@ -173,7 +173,7 @@ class WorkflowService {
    */
   async approveDocument(approvalData) {
     try {
-      const response = await apiClient.post('/workflow/approve-document', approvalData);
+      const response = await api.post('/workflow/approve-document', approvalData);
       return response.data;
     } catch (error) {
       console.error('Error aprobando documento:', error);
@@ -195,7 +195,7 @@ class WorkflowService {
    */
   async rejectDocument(rejectionData) {
     try {
-      const response = await apiClient.post('/workflow/reject-document', rejectionData);
+      const response = await api.post('/workflow/reject-document', rejectionData);
       return response.data;
     } catch (error) {
       console.error('Error rechazando documento:', error);
@@ -223,7 +223,7 @@ class WorkflowService {
       const queryString = params.toString();
       const url = `/workflow/documents/${documentId}/comments${queryString ? `?${queryString}` : ''}`;
       
-      const response = await apiClient.get(url);
+      const response = await api.get(url);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo comentarios:', error);
@@ -242,7 +242,7 @@ class WorkflowService {
    */
   async getTransitionHistory(documentId) {
     try {
-      const response = await apiClient.get(`/workflow/documents/${documentId}/transitions`);
+      const response = await api.get(`/workflow/documents/${documentId}/transitions`);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo historial de transiciones:', error);
@@ -270,7 +270,7 @@ class WorkflowService {
       const queryString = params.toString();
       const url = `/workflow/pending-approvals?${queryString}`;
       
-      const response = await apiClient.get(url);
+      const response = await api.get(url);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo aprobaciones pendientes:', error);
@@ -297,7 +297,7 @@ class WorkflowService {
       const queryString = params.toString();
       const url = `/workflow/projects/${projectId}/alerts${queryString ? `?${queryString}` : ''}`;
       
-      const response = await apiClient.get(url);
+      const response = await api.get(url);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo alertas del proyecto:', error);
@@ -324,7 +324,7 @@ class WorkflowService {
       const queryString = params.toString();
       const url = `/workflow/projects/${projectId}/kpis${queryString ? `?${queryString}` : ''}`;
       
-      const response = await apiClient.get(url);
+      const response = await api.get(url);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo KPIs del proyecto:', error);
@@ -342,7 +342,7 @@ class WorkflowService {
    */
   async getProjectTimeline(projectId) {
     try {
-      const response = await apiClient.get(`/workflow/projects/${projectId}/timeline`);
+      const response = await api.get(`/workflow/projects/${projectId}/timeline`);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo timeline del proyecto:', error);
@@ -364,7 +364,7 @@ class WorkflowService {
    */
   async searchDocuments(searchCriteria) {
     try {
-      const response = await apiClient.post('/workflow/search-documents', searchCriteria);
+      const response = await api.post('/workflow/search-documents', searchCriteria);
       return response.data;
     } catch (error) {
       console.error('Error en búsqueda de documentos:', error);
@@ -390,7 +390,7 @@ class WorkflowService {
       const queryString = params.toString();
       const url = `/workflow/stats${queryString ? `?${queryString}` : ''}`;
       
-      const response = await apiClient.get(url);
+      const response = await api.get(url);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo estadísticas de workflow:', error);
@@ -409,7 +409,7 @@ class WorkflowService {
    */
   async forceAutoTransition(projectId, documentId) {
     try {
-      const response = await apiClient.post('/workflow/force-auto-transition', {
+      const response = await api.post('/workflow/force-auto-transition', {
         projectId,
         documentId
       });
@@ -430,7 +430,7 @@ class WorkflowService {
    */
   async getWorkflowHealth(projectId) {
     try {
-      const response = await apiClient.get(`/workflow/projects/${projectId}/health`);
+      const response = await api.get(`/workflow/projects/${projectId}/health`);
       return response.data;
     } catch (error) {
       console.error('Error obteniendo salud del workflow:', error);

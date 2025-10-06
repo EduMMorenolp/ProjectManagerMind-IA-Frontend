@@ -62,8 +62,8 @@ export const deleteProject = async (projectId) => {
 // Obtener documentos de un proyecto
 export const getProjectDocuments = async (projectId) => {
   try {
-    const response = await api.get(`/api/v1/documents/projects/${projectId}/documents`);
-    return response.data;
+    const response = await api.get(`/api/v1/projects/${projectId}/documents`);
+    return response.data.data; // Extraer el array de documentos de la respuesta
   } catch (error) {
     console.error('Error al obtener documentos del proyecto:', error);
     throw error;

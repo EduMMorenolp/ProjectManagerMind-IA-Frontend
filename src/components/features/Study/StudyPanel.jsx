@@ -20,11 +20,19 @@ import GenerationProgress from './GenerationProgress';
 import NotificationSystem from './NotificationSystem';
 
 // Importar contexto y hooks
-// import { useStudy } from '../../../contexts';
+import { useStudy } from '../../../contexts';
 // import { useNotifications } from '../../../hooks';
 
 const StudyPanel = ({ selectedFiles, selectedProject }) => {
   const [activeTab, setActiveTab] = useState('CLIENTE');
+  
+  // Usar el contexto de estudio
+  const { 
+    prerequisites,
+    isDocumentEnabled,
+    updateDocumentStates,
+    dispatch
+  } = useStudy();
   
   // Estados temporales (mantenemos compatibilidad mientras refactorizamos)
   const [processing, setProcessing] = useState(false);
@@ -108,6 +116,9 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       
       // Cargar información del cliente si existe para este proyecto
       loadExistingClientInfo(selectedProject.id);
+      
+      // Actualizar estados de documentos en el contexto
+      updateDocumentStates(selectedProject.id);
     } else {
       setProjectId(null);
       // Limpiar información del cliente
@@ -119,7 +130,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         history: ''
       });
     }
-  }, [selectedProject, loadExistingClientInfo]);
+  }, [selectedProject, loadExistingClientInfo, updateDocumentStates]);
 
   useEffect(() => {
     loadAIInfo();

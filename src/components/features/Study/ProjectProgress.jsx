@@ -43,7 +43,6 @@ const ProjectProgress = ({ activeTab, setActiveTab }) => {
     const docState = documentStates[sectionId];
     const canGen = canGenerate(sectionId);
     const missing = getMissingRequirements(sectionId);
-
     switch (docState) {
       case DOCUMENT_STATES.COMPLETED:
         return {
@@ -73,21 +72,21 @@ const ProjectProgress = ({ activeTab, setActiveTab }) => {
         };
       
       default:
-        if (canGen) {
-          return {
-            status: 'ready',
-            icon: <div className="status-dot ready"></div>,
-            color: 'var(--primary-color)',
-            message: 'Listo para generar',
-            disabled: false
-          };
-        } else if (missing.length > 0) {
+        if (missing.length > 0) {
           return {
             status: 'blocked',
             icon: <AlertTriangleIcon className="status-icon blocked" />,
             color: 'var(--muted-color)',
             message: `Requiere: ${missing.join(', ')}`,
             disabled: true
+          };
+        } else if (canGen) {
+          return {
+            status: 'ready',
+            icon: <div className="status-dot ready"></div>,
+            color: 'var(--primary-color)',
+            message: 'Listo para generar',
+            disabled: false
           };
         } else {
           return {

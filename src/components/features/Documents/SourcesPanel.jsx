@@ -3,6 +3,7 @@ import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon, CloseIcon
 import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../../../services';
 import { updateDocument, deleteDocument } from '../../../services/documentService';
 import { ProjectModal, DocumentModal } from '../../ui/Modal';
+import { useStudy } from '../../../contexts';
 import '../../../styles/upload-modal.css';
 import '../../../styles/components/features/SourcesPanel.css';
 
@@ -39,6 +40,9 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Usar el contexto de estudio para actualizar states de documentos
+  const { updateDocumentStates } = useStudy();
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -145,7 +149,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       setLoading(true);
       const documentsResponse = await getProjectDocuments(projectId);
       
-      const documents = documentsResponse?.documents || [];
+      const documents = documentsResponse || []; // Ahora documentsResponse es directamente el array
       
       const project = projects.find(p => p.id === projectId);
       const projectName = project?.name || 'Proyecto sin nombre';
@@ -216,6 +220,8 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       await loadProjects();
       if (selectedProject?.id) {
         await loadProjectFiles(selectedProject.id);
+        // Actualizar estados de documentos en el contexto de estudio
+        await updateDocumentStates(selectedProject.id);
       }
       
       setShowUploadModal(false);

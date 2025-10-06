@@ -188,6 +188,8 @@ function studyReducer(state, action) {
       action.payload.documents.forEach(doc => {
         if (doc.documentType && updatedStates[doc.documentType] !== undefined) {
           updatedStates[doc.documentType] = DOCUMENT_STATES.COMPLETED;
+        } else {
+          console.log(`⚠️ StudyContext: Documento ignorado - Type: ${doc.documentType}, Available: ${doc.documentType in updatedStates}`);
         }
       });
       
