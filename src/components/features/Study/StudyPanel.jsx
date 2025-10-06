@@ -20,8 +20,8 @@ import GenerationProgress from './GenerationProgress';
 import NotificationSystem from './NotificationSystem';
 
 // Importar contexto y hooks
-import { useStudy } from '../../../contexts';
-import { useNotifications } from '../../../hooks';
+// import { useStudy } from '../../../contexts';
+// import { useNotifications } from '../../../hooks';
 
 const StudyPanel = ({ selectedFiles, selectedProject }) => {
   const [activeTab, setActiveTab] = useState('CLIENTE');

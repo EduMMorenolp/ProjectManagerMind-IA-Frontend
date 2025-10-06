@@ -1,4 +1,4 @@
-import { useStudy } from '../../../contexts';
+import { useStudy } from '../contexts';
 
 // Hook personalizado para agregar notificaciones fácilmente
 export const useNotifications = () => {
