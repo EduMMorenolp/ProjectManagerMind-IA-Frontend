@@ -42,7 +42,8 @@ export {
   testAI, 
   getAIInfo, 
   generateAnalysis, 
-  getAvailableModels 
+  getAvailableModels,
+  generateHistoriasUsuario
 } from './aiService.js';
 
 // Objeto con todos los servicios agrupados (alternativa de importación)
@@ -74,5 +75,6 @@ export const services = {
     getInfo: () => import('./aiService.js').then(m => m.getAIInfo),
     analyze: () => import('./aiService.js').then(m => m.generateAnalysis),
     getModels: () => import('./aiService.js').then(m => m.getAvailableModels),
+    generateHistoriasUsuario: () => import('./aiService.js').then(m => m.generateHistoriasUsuario),
   },
 };
