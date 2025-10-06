@@ -156,6 +156,30 @@ export const generateInformeEjecutivo = async (projectId, clientInfo, relevamien
   }
 };
 
+// Generar historias de usuario
+export const generateHistoriasUsuario = async (projectId, configuracion = {}) => {
+  try {
+    const response = await api.post('/api/v1/ai/generate-historias-usuario', {
+      projectId,
+      documentIds: configuracion.documentIds || [],
+      configuracion: {
+        roles: configuracion.roles,
+        epicas: configuracion.epicas,
+        nivelDetalle: configuracion.nivelDetalle || 'intermedio',
+        industry: configuracion.industry,
+        objectives: configuracion.objectives,
+        constraints: configuracion.constraints,
+        stakeholders: configuracion.stakeholders,
+        personalizada: configuracion.personalizada || {}
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al generar historias de usuario:', error);
+    throw error;
+  }
+};
+
 export default {
   processDocuments,
   chatWithDocuments,
@@ -163,4 +187,5 @@ export default {
   getAIInfo,
   generateAnalysis,
   getAvailableModels,
+  generateHistoriasUsuario,
 };

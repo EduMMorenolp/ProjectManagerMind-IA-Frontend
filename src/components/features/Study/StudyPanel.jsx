@@ -295,8 +295,9 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
         {activeTab === 'HISTORIAS_USUARIO' && (
           <HistoriasUsuarioSection 
-            handleGenerateDocument={handleGenerateDocument}
+            projectId={projectId}
             processing={processing}
+            setProcessing={setProcessing}
           />
         )}
 

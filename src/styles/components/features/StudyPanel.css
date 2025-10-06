@@ -1253,3 +1253,553 @@
     max-width: none;
   }
 }
+
+/* ===============================================
+   HISTORIAS DE USUARIO SECTION STYLES
+   =============================================== */
+
+.historias-usuario-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Configuración Panel */
+.configuration-panel {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.config-toggle-button {
+  width: 100%;
+  padding: 1rem;
+  background: var(--secondary-color);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.config-toggle-button:hover {
+  background: var(--border-color);
+}
+
+.config-expanded {
+  padding: 1.5rem;
+  background: var(--surface-color);
+}
+
+.config-section {
+  margin-bottom: 1.5rem;
+}
+
+.config-section:last-child {
+  margin-bottom: 0;
+}
+
+.config-section h4 {
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Tags Container */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.config-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.config-tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: white;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.config-tag button:hover {
+  opacity: 1;
+}
+
+.tag-remove-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.add-tag-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--border-color);
+  color: var(--text-color);
+  border: 1px dashed var(--text-color);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-tag-button:hover {
+  background: var(--secondary-color);
+  border-color: var(--primary-color);
+}
+
+/* Checkboxes */
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s;
+}
+
+.checkbox-item:hover {
+  background: var(--secondary-color);
+}
+
+.checkbox-item input[type="checkbox"] {
+  margin: 0;
+}
+
+.no-documents {
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Detail Level Select */
+.detail-level-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--surface-color);
+  color: var(--text-color);
+  font-size: 0.875rem;
+}
+
+/* Results Summary */
+.results-summary {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.results-summary h4 {
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem;
+  background: var(--secondary-color);
+  border-radius: var(--radius-md);
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* Filters Section */
+.filters-section {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.filters-section h4 {
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.filters-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.filters-container select {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--surface-color);
+  color: var(--text-color);
+  font-size: 0.875rem;
+}
+
+/* Historias List */
+.historias-list h4 {
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.historia-card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.historia-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Historia Header */
+.historia-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--secondary-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.historia-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.historia-id {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.historia-title h5 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Historia Badges */
+.historia-badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.priority-badge,
+.story-points-badge,
+.epica-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.epica-badge {
+  background: var(--accent-color);
+}
+
+.edit-historia-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.edit-historia-button:hover {
+  background: var(--border-color);
+  color: var(--text-color);
+}
+
+/* Historia Content */
+.historia-content {
+  padding: 1.5rem;
+}
+
+.historia-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--secondary-color);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--primary-color);
+}
+
+.historia-text strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Criterios de Aceptación */
+.criterios-aceptacion {
+  margin-bottom: 1rem;
+}
+
+.criterios-aceptacion h6 {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.criterios-aceptacion ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.criterios-aceptacion > ul > li {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.condiciones-list {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+
+.condiciones-list li {
+  background: var(--secondary-color);
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  position: relative;
+}
+
+.condiciones-list li:before {
+  content: "→";
+  color: var(--primary-color);
+  font-weight: bold;
+  position: absolute;
+  left: 0.25rem;
+}
+
+/* Dependencias */
+.dependencias {
+  margin-bottom: 1rem;
+}
+
+.dependencias h6 {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.dependencias-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dependencia-tag {
+  background: var(--warning-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Historia Notas */
+.historia-notas h6 {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.historia-notas p {
+  background: var(--secondary-color);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Edit Mode */
+.historia-edit-mode {
+  padding: 1.5rem;
+}
+
+.edit-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.edit-title-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--surface-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.save-button,
+.cancel-button {
+  background: none;
+  border: 1px solid;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.save-button {
+  border-color: var(--success-color);
+  color: var(--success-color);
+}
+
+.save-button:hover {
+  background: var(--success-color);
+  color: white;
+}
+
+.cancel-button {
+  border-color: var(--error-color);
+  color: var(--error-color);
+}
+
+.cancel-button:hover {
+  background: var(--error-color);
+  color: white;
+}
+
+.edit-historia-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--surface-color);
+  color: var(--text-color);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* No Historias */
+.no-historias {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.no-historias p {
+  margin-bottom: 0.5rem;
+}
+
+/* Spinning Animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .historia-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .historia-badges {
+    align-self: stretch;
+    justify-content: space-between;
+  }
+  
+  .summary-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .filters-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .tags-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .edit-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .edit-actions {
+    align-self: flex-end;
+  }
+}
