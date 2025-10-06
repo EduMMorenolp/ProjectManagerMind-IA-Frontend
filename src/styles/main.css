@@ -18,6 +18,8 @@
 @import './components/ui/common.css';
 @import './components/DocumentTypeSelector.css';
 @import './components/DiagramViewer.css';
+@import './components/workflow-dashboard.css';
+@import './components/validation-panel.css';
 @import './components/SprintPlanning.css';
 @import './components/der-viewer.css';
 @import './components/der-hardcoded.css';

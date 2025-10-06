@@ -11,6 +11,7 @@ export * as systemService from './systemService.js';
 export * as documentService from './documentService.js';
 export * as projectService from './projectService.js';
 export * as aiService from './aiService.js';
+export * as workflowService from './workflowService.js';
 
 // Exportaciones individuales para compatibilidad hacia atrás
 export { 
