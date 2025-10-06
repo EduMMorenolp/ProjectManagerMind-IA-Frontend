@@ -19,6 +19,8 @@
 @import './components/DocumentTypeSelector.css';
 @import './components/DiagramViewer.css';
 @import './components/SprintPlanning.css';
+@import './components/der-viewer.css';
+@import './components/der-hardcoded.css';
 
 /* Upload modal styles (keep existing) */
 @import './upload-modal.css';

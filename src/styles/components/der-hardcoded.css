@@ -1,0 +1,83 @@
+/**
+ * Estilos para DERViewerHardcoded
+ * Componente de ejemplo para testing
+ */
+
+.der-hardcoded-example {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.example-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.example-header h2 {
+  margin: 0 0 15px 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.example-description {
+  font-size: 16px;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.mock-data-info {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mock-data-info h4 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+}
+
+.mock-data-info ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.mock-data-info li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.mock-data-info strong {
+  color: #ffeb3b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .der-hardcoded-example {
+    padding: 15px;
+  }
+  
+  .example-header {
+    padding: 20px;
+  }
+  
+  .example-header h2 {
+    font-size: 24px;
+  }
+  
+  .example-description {
+    font-size: 14px;
+  }
+  
+  .mock-data-info {
+    padding: 15px;
+  }
+}

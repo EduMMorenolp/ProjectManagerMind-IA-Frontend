@@ -318,8 +318,9 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
         {activeTab === 'DER' && (
           <DerSection 
-            handleGenerateDocument={handleGenerateDocument}
             processing={processing}
+            selectedFiles={selectedFiles}
+            selectedProject={selectedProject}
           />
         )}
 

@@ -260,9 +260,103 @@ export const exportSprintPlanning = async (planificacionId, formato = 'json', co
     link.remove();
     window.URL.revokeObjectURL(url);
     
-    return { success: true, filename };
+      return { success: true, filename };
   } catch (error) {
     console.error('Error al exportar planificación de sprints:', error);
+    throw error;
+  }
+};
+
+// Generar Diagrama de Entidad-Relación (DER)
+export const generateDER = async (derConfig) => {
+  try {
+    console.log('Generando DER con configuración:', derConfig);
+    
+    const response = await api.post('/api/v1/ai/generate-der', derConfig);
+    
+    if (response.data && response.data.success) {
+      console.log('DER generado exitosamente:', {
+        entidades: response.data.data.entidades?.length || 0,
+        relaciones: response.data.data.relaciones?.length || 0
+      });
+      return response.data;
+    } else {
+      throw new Error(response.data?.error || 'Error generando DER');
+    }
+  } catch (error) {
+    console.error('Error al generar DER:', error);
+    throw error;
+  }
+};
+
+// Exportar DER in different formats
+export const exportDER = async (exportConfig) => {
+  try {
+    console.log('Exportando DER:', exportConfig);
+    
+    const response = await api.post('/api/v1/ai/export-der', exportConfig, {
+      responseType: 'text' // Importante para recibir contenido como texto
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error al exportar DER:', error);
+    throw error;
+  }
+};
+
+// Exportar DER como descarga directa
+export const exportDERAsDownload = async (exportConfig) => {
+  try {
+    console.log('Exportando DER como descarga:', exportConfig);
+    
+    const response = await api.post('/api/v1/ai/export-der', exportConfig, {
+      responseType: 'blob' // Para descargas
+    });
+    
+    // Determinar nombre del archivo
+    const contentDisposition = response.headers['content-disposition'];
+    let filename = `der_export_${Date.now()}`;
+    
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      if (filenameMatch) {
+        filename = filenameMatch[1];
+      }
+    }
+    
+    // Crear y descargar archivo
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    
+    return { success: true, filename };
+  } catch (error) {
+    console.error('Error al exportar DER como descarga:', error);
+    throw error;
+  }
+};
+
+// Validar modelo DER
+export const validateDER = async (validationConfig) => {
+  try {
+    console.log('Validando DER:', validationConfig);
+    
+    const response = await api.post('/api/v1/ai/validate-der', validationConfig);
+    
+    if (response.data && response.data.success) {
+      console.log('DER validado exitosamente');
+      return response.data;
+    } else {
+      throw new Error(response.data?.error || 'Error validando DER');
+    }
+  } catch (error) {
+    console.error('Error al validar DER:', error);
     throw error;
   }
 };
@@ -278,4 +372,8 @@ export default {
   generateDiagramasFlujo,
   generateSprintPlanning,
   exportSprintPlanning,
+  generateDER,
+  exportDER,
+  exportDERAsDownload,
+  validateDER,
 };
