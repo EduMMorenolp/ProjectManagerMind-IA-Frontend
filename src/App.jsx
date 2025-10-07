@@ -9,11 +9,12 @@ import { StudyPanel } from './components/features/Study'
 // Importar componentes layout
 import { ConnectionTest } from './components/layout'
 
-// Importar componentes UI
-import { SettingsIcon } from './components/ui/Icons'
-
 // Importar contextos
 import { StudyProvider } from './contexts'
+import { AIConfigProvider } from './contexts/AIConfigContext'
+
+// Importar componentes de configuración IA
+import { AISettingsButton } from './components/ui/AISettingsButton'
 
 function App() {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -21,19 +22,20 @@ function App() {
   const [showConnectionTest, setShowConnectionTest] = useState(false);
 
   return (
-    <StudyProvider>
-      <div className="app-container">
+    <AIConfigProvider>
+      <StudyProvider>
+        <div className="app-container">
         <header className="app-header">
           <div className="header-left">
             <h1>ProjectManagerMind IA</h1>
           </div>
           <div className="header-right">
+            <AISettingsButton />
             <button 
               className="settings-button" 
               onClick={() => setShowConnectionTest(!showConnectionTest)}
               title="Prueba de conexión"
             >
-              <SettingsIcon className="settings-icon" />
             </button>
           </div>
         </header>
@@ -68,8 +70,9 @@ function App() {
             </>
           )}
         </main>
-      </div>
-    </StudyProvider>
+        </div>
+      </StudyProvider>
+    </AIConfigProvider>
   );
 }
 
