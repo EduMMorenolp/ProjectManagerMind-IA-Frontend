@@ -103,6 +103,41 @@ export const generateHistoriasUsuario = async (projectId, configuracion = {}) =>
 // Extraer información del cliente desde documentos
 export const extractClientInfo = async (formData) => {
   try {
+    if (isTestMode()) {
+      console.log('🧪 Extrayendo información del cliente en modo test');
+      // Simular extracción de información del cliente
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simular procesamiento más largo
+      
+      // Generar información mock realista
+      const mockClientInfo = {
+        name: 'Cliente Mock Extraído',
+        company: 'Empresa Extraída S.A.',
+        email: 'cliente.extraido@test.com',
+        phone: '+54 11 1234-5678',
+        address: 'Av. Corrientes 1234, CABA',
+        industry: 'Tecnología',
+        projectName: 'Sistema de Gestión Mock',
+        projectDescription: 'Sistema integral de gestión extraído de documentos de prueba',
+        requirements: [
+          'Gestión de usuarios y permisos',
+          'Dashboard ejecutivo',
+          'Reportes automatizados',
+          'Integración con APIs externas'
+        ]
+      };
+      
+      return {
+        success: true,
+        data: {
+          clientInfo: mockClientInfo,
+          confidence: 0.95,
+          extractedFields: Object.keys(mockClientInfo),
+          processingTime: '1.2s',
+          message: 'Información del cliente extraída correctamente (modo test)'
+        }
+      };
+    }
+
     const response = await api.post('/api/v1/ai/extract-client-info', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -118,6 +153,39 @@ export const extractClientInfo = async (formData) => {
 // Actualizar información del cliente
 export const updateClientInfo = async (projectId, clientInfo) => {
   try {
+    if (isTestMode()) {
+      console.log('🧪 Actualizando información del cliente en modo test:', { projectId, clientInfo });
+      // Simular actualización de información del cliente
+      await new Promise(resolve => setTimeout(resolve, 600));
+      
+      // Actualizar proyecto mock en localStorage
+      const mockProjects = JSON.parse(localStorage.getItem('mockProjects') || '[]');
+      const projectIndex = mockProjects.findIndex(p => p.id === projectId.toString());
+      
+      if (projectIndex !== -1) {
+        mockProjects[projectIndex] = {
+          ...mockProjects[projectIndex],
+          clientName: clientInfo.name || mockProjects[projectIndex].clientName,
+          clientEmail: clientInfo.email,
+          clientPhone: clientInfo.phone,
+          clientCompany: clientInfo.company,
+          updatedAt: new Date().toISOString()
+        };
+        localStorage.setItem('mockProjects', JSON.stringify(mockProjects));
+        console.log('🔄 Información del cliente actualizada en proyecto mock');
+      }
+      
+      return {
+        success: true,
+        data: {
+          message: 'Información del cliente actualizada correctamente (modo test)',
+          clientInfo: clientInfo,
+          projectId: projectId,
+          updatedAt: new Date().toISOString()
+        }
+      };
+    }
+
     const response = await api.put(`/api/v1/ai/client-info/${projectId}`, clientInfo);
     return response.data;
   } catch (error) {
@@ -129,6 +197,41 @@ export const updateClientInfo = async (projectId, clientInfo) => {
 // Guardar información del cliente
 export const saveClientInfo = async (clientInfo, projectName = null, projectId = null) => {
   try {
+    if (isTestMode()) {
+      console.log('🧪 Guardando información del cliente en modo test:', { clientInfo, projectName, projectId });
+      // Simular guardado de información del cliente
+      await new Promise(resolve => setTimeout(resolve, 800)); // Simular delay de guardado
+      
+      // Simular actualización en localStorage si hay datos de proyecto mock
+      if (projectId) {
+        const mockProjects = JSON.parse(localStorage.getItem('mockProjects') || '[]');
+        const projectIndex = mockProjects.findIndex(p => p.id === projectId.toString());
+        
+        if (projectIndex !== -1) {
+          mockProjects[projectIndex] = {
+            ...mockProjects[projectIndex],
+            clientName: clientInfo.name || mockProjects[projectIndex].clientName,
+            clientEmail: clientInfo.email,
+            clientPhone: clientInfo.phone,
+            clientCompany: clientInfo.company,
+            updatedAt: new Date().toISOString()
+          };
+          localStorage.setItem('mockProjects', JSON.stringify(mockProjects));
+          console.log('🔄 Proyecto mock actualizado con información del cliente');
+        }
+      }
+      
+      return {
+        success: true,
+        data: {
+          message: 'Información del cliente guardada correctamente (modo test)',
+          clientInfo: clientInfo,
+          projectId: projectId,
+          savedAt: new Date().toISOString()
+        }
+      };
+    }
+
     const response = await api.post('/api/v1/ai/save-client-info', {
       clientInfo,
       projectName,
