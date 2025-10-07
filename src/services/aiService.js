@@ -106,7 +106,9 @@ export const loadClientInfo = async (projectId) => {
 // Generar análisis personalizado
 export const generateAnalysis = async (analysisData) => {
   try {
-    const response = await api.post('/api/v1/ai/analysis', analysisData);
+    // TODO: Implementar endpoint /api/v1/ai/analysis en el backend
+    console.warn('Endpoint /api/v1/ai/analysis no disponible - usando processDocuments como alternativa');
+    const response = await api.post('/api/v1/ai/process', analysisData);
     return response.data;
   } catch (error) {
     console.error('Error al generar análisis:', error);
@@ -117,7 +119,9 @@ export const generateAnalysis = async (analysisData) => {
 // Obtener modelos disponibles
 export const getAvailableModels = async () => {
   try {
-    const response = await api.get('/api/v1/ai/models');
+    // TODO: Implementar endpoint /api/v1/ai/models en el backend
+    console.warn('Endpoint /api/v1/ai/models no disponible - usando ai/info como alternativa');
+    const response = await api.get('/api/v1/ai/info');
     return response.data;
   } catch (error) {
     console.error('Error al obtener modelos disponibles:', error);
