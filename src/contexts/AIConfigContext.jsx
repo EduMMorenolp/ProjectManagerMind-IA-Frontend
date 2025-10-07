@@ -10,24 +10,26 @@ const AIConfigContext = createContext();
 
 export const AIConfigProvider = ({ children }) => {
   const [currentProvider, setCurrentProvider] = useState(() => {
-    // Recuperar configuración guardada o usar Gemini por defecto
-    const saved = localStorage.getItem('ai-provider');
-    return saved || AI_PROVIDERS.GEMINI.id;
+    // Recuperar configuración guardada o usar Gemini por defecto  
+    const saved = localStorage.getItem('aiConfig');
+    const config = saved ? JSON.parse(saved) : null;
+    return config?.provider || AI_PROVIDERS.GEMINI.id;
   });
 
   const [providerConfig, setProviderConfig] = useState(() => {
-    const saved = localStorage.getItem('ai-provider-config');
-    return saved ? JSON.parse(saved) : DEFAULT_CONFIG;
+    const saved = localStorage.getItem('aiConfig');
+    const config = saved ? JSON.parse(saved) : null;
+    return config?.config || DEFAULT_CONFIG;
   });
 
   // Guardar configuración en localStorage cuando cambie
   useEffect(() => {
-    localStorage.setItem('ai-provider', currentProvider);
-  }, [currentProvider]);
-
-  useEffect(() => {
-    localStorage.setItem('ai-provider-config', JSON.stringify(providerConfig));
-  }, [providerConfig]);
+    const config = {
+      provider: currentProvider,
+      config: providerConfig
+    };
+    localStorage.setItem('aiConfig', JSON.stringify(config));
+  }, [currentProvider, providerConfig]);
 
   const switchProvider = (providerId) => {
     if (AI_PROVIDERS[providerId.toUpperCase()]?.status === 'active') {
@@ -92,5 +94,4 @@ export const useAIConfig = () => {
   return context;
 };
 
-const AIConfigContext_default = AIConfigContext;
-export default AIConfigContext_default;
+export default AIConfigContext;

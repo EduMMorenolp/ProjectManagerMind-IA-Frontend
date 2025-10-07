@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAIConfig } from '../../../contexts/AIConfigContext.jsx';
 import { AI_PROVIDERS, MOCK_SPEEDS } from '../../../constants/aiProviders.js';
+import { clearMockData, seedMockData } from '../../../services/aiService.js';
 import './AISettingsButton.css';
 
 const AISettingsButton = () => {
@@ -27,6 +28,34 @@ const AISettingsButton = () => {
 
   const handleConfigChange = (key, value) => {
     updateConfig({ [key]: value });
+  };
+
+  const handleClearMockData = async () => {
+    if (confirm('¿Estás seguro de que quieres eliminar todos los datos de prueba? Esta acción no se puede deshacer.')) {
+      try {
+        const result = await clearMockData();
+        if (result.success) {
+          alert('Datos de prueba eliminados exitosamente');
+        } else {
+          alert('Error: ' + result.message);
+        }
+      } catch (error) {
+        alert('Error al eliminar datos: ' + error.message);
+      }
+    }
+  };
+
+  const handleSeedMockData = async () => {
+    try {
+      const result = await seedMockData();
+      if (result.success) {
+        alert('Datos de ejemplo creados exitosamente');
+      } else {
+        alert('Error: ' + result.message);
+      }
+    } catch (error) {
+      alert('Error al crear datos de ejemplo: ' + error.message);
+    }
   };
 
   const toggleSettings = () => {
@@ -127,6 +156,27 @@ const AISettingsButton = () => {
                     onChange={(e) => handleConfigChange('completionRate', parseInt(e.target.value))}
                   />
                   <span>{providerConfig.completionRate}%</span>
+                </div>
+
+                {/* Utilidades de datos mock */}
+                <div className="mock-utilities">
+                  <h5>Utilidades de Datos</h5>
+                  <div className="utility-buttons">
+                    <button 
+                      className="utility-button seed-button"
+                      onClick={handleSeedMockData}
+                      title="Crear proyectos de ejemplo para testing"
+                    >
+                      📊 Generar Datos de Ejemplo
+                    </button>
+                    <button 
+                      className="utility-button clear-button"
+                      onClick={handleClearMockData}
+                      title="Eliminar todos los datos de prueba almacenados"
+                    >
+                      🗑️ Limpiar Datos de Prueba
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

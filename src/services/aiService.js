@@ -5,7 +5,7 @@ import { AI_PROVIDERS } from '../constants/aiProviders';
 // Función auxiliar para verificar si estamos en modo test
 const isTestMode = () => {
   const config = JSON.parse(localStorage.getItem('aiConfig') || '{}');
-  return config.selectedProvider === AI_PROVIDERS.TEST.id;
+  return config.provider === AI_PROVIDERS.TEST.id;
 };
 
 // Procesar documentos
@@ -306,6 +306,24 @@ export const testAI = async () => {
   }
 };
 
+// Función de utilidad para limpiar datos mock (solo en modo test)
+export const clearMockData = async () => {
+  if (isTestMode()) {
+    const MockProjectService = (await import('./mockProjectService.js')).default;
+    return await MockProjectService.clearAllMockData();
+  }
+  return { success: false, message: 'Solo disponible en modo Test IA' };
+};
+
+// Función de utilidad para generar datos de ejemplo (solo en modo test)
+export const seedMockData = async () => {
+  if (isTestMode()) {
+    const MockProjectService = (await import('./mockProjectService.js')).default;
+    return await MockProjectService.seedMockData();
+  }
+  return { success: false, message: 'Solo disponible en modo Test IA' };
+};
+
 // Exportar por defecto
 export default {
   processDocuments,
@@ -326,5 +344,7 @@ export default {
   getAIInfo,
   generateAnalysis,
   getAvailableModels,
-  testAI
+  testAI,
+  clearMockData,
+  seedMockData
 };
