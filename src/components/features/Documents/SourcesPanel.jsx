@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { AddIcon, SearchIcon, CheckIcon, PdfIcon, DocIcon, UploadIcon, CloseIcon, MenuIcon } from '../../ui/Icons';
 import { getProjects, uploadDocuments, createProject, getProjectDocuments } from '../../../services';
 import { updateDocument, deleteDocument } from '../../../services/documentService';
@@ -95,19 +95,8 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     return organized;
   };
 
-  useEffect(() => {
-    loadProjects();
-  }, []);
-
-  useEffect(() => {
-    if (selectedProject) {
-      loadProjectFiles(selectedProject.id);
-    } else {
-      setFiles([]);
-    }
-  }, [selectedProject, projects]);
-
-  const loadProjects = async () => {
+  // Definir funciones useCallback ANTES de los useEffect
+  const loadProjects = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -123,26 +112,25 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
         projectsList = projectsData;
       }
       
+      console.log('🔍 Proyectos cargados en SourcesPanel:', projectsList.length, projectsList);
       setProjects(projectsList);
       
-      // Actualizar el proyecto seleccionado con los datos más recientes
-      if (selectedProject) {
-        const updatedProject = projectsList.find(p => p.id === selectedProject.id);
-        if (updatedProject) {
-          setSelectedProject(updatedProject);
-        }
-      } else if (projectsList.length > 0) {
+      // Solo seleccionar proyecto automáticamente si no hay uno seleccionado
+      if (!selectedProject && projectsList.length > 0) {
+        console.log('🎯 Seleccionando primer proyecto:', projectsList[0]);
         setSelectedProject(projectsList[0]);
       }
+      
+      console.log('📊 Estado final - projects:', projectsList.length, 'selectedProject:', selectedProject?.name);
     } catch (err) {
       console.error('❌ Error al cargar proyectos:', err);
       setError('Error al cargar proyectos');
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const loadProjectFiles = async (projectId) => {
+  const loadProjectFiles = useCallback(async (projectId) => {
     if (!projectId) return;
     
     try {
@@ -151,14 +139,12 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       
       const documents = documentsResponse || []; // Ahora documentsResponse es directamente el array
       
-      const project = projects.find(p => p.id === projectId);
-      const projectName = project?.name || 'Proyecto sin nombre';
-      
+      // Usar el projectId directamente en lugar de buscar en el array projects
       const filesData = documents.map(doc => ({
         name: doc.fileName || doc.name || 'Documento sin nombre',
         type: doc.fileType || 'pdf',
         id: doc.id,
-        projectName: projectName,
+        projectName: `Proyecto ${projectId}`,
         size: doc.characterCount || 0,
         createdAt: doc.createdAt,
         documentType: doc.documentType || 'CLIENTE', // Tipo de documento por defecto
@@ -172,7 +158,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Eliminamos la dependencia de projects
 
   const handleFileSelect = (fileId) => {
     if (selectedFiles.includes(fileId)) {
@@ -284,6 +270,31 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       throw error;
     }
   };
+
+  // useEffect hooks después de todas las definiciones de funciones
+  useEffect(() => {
+    loadProjects();
+    
+    // Escuchar evento de proyecto creado
+    const handleProjectCreated = (event) => {
+      console.log('🔄 Proyecto creado detectado, recargando lista:', event.detail);
+      loadProjects();
+    };
+    
+    window.addEventListener('project-created', handleProjectCreated);
+    
+    return () => {
+      window.removeEventListener('project-created', handleProjectCreated);
+    };
+  }, []); // Solo cargar al montar el componente
+
+  useEffect(() => {
+    if (selectedProject?.id) {
+      loadProjectFiles(selectedProject.id);
+    } else {
+      setFiles([]);
+    }
+  }, [selectedProject?.id, loadProjectFiles]); // Solo depender del ID del proyecto
 
   return (
     <div className={`sources-panel-container ${isCollapsed ? 'collapsed' : 'expanded'}`}>

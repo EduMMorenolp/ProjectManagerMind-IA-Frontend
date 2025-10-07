@@ -128,15 +128,18 @@ Incluye información relevante para el proyecto de desarrollo de software.`,
     const documents = this.getAllDocuments();
     const results = this.getAllProcessedResults();
     
+    const projectsWithCounts = projects.map(project => ({
+      ...project,
+      _count: {
+        documents: documents.filter(d => d.projectId === project.id).length,
+        processedResults: results.filter(r => r.projectId === project.id).length
+      }
+    }));
+
     return {
       success: true,
-      data: projects.map(project => ({
-        ...project,
-        _count: {
-          documents: documents.filter(d => d.projectId === project.id).length,
-          processedResults: results.filter(r => r.projectId === project.id).length
-        }
-      }))
+      count: projectsWithCounts.length,
+      projects: projectsWithCounts
     };
   }
 
@@ -180,6 +183,11 @@ Incluye información relevante para el proyecto de desarrollo de software.`,
     this.saveProjects(projects);
 
     console.log('🧪 Proyecto mock creado:', newProject);
+    
+    // Disparar evento personalizado para notificar a componentes
+    window.dispatchEvent(new CustomEvent('project-created', {
+      detail: { project: newProject }
+    }));
     
     return {
       success: true,

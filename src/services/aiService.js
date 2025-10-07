@@ -144,6 +144,27 @@ export const saveClientInfo = async (clientInfo, projectName = null, projectId =
 // Cargar información del cliente
 export const loadClientInfo = async (projectId) => {
   try {
+    if (isTestMode()) {
+      console.log('🧪 Cargando información del cliente en modo test:', projectId);
+      // Simular información del cliente mock
+      await new Promise(resolve => setTimeout(resolve, 500)); // Simular delay
+      return {
+        success: true,
+        data: {
+          clientName: `Cliente Mock ${projectId}`,
+          company: 'Empresa de Prueba',
+          email: 'cliente@test.com',
+          phone: '+1234567890',
+          project: {
+            name: `Proyecto Test ${projectId}`,
+            description: 'Proyecto de prueba generado automáticamente',
+            startDate: new Date().toISOString(),
+            status: 'ACTIVE'
+          }
+        }
+      };
+    }
+
     const response = await api.get(`/api/v1/ai/client-info/${projectId}`);
     return response.data;
   } catch (error) {

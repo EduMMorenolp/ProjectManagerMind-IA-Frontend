@@ -61,6 +61,12 @@ export const createProject = async (projectData) => {
     }
 
     const response = await api.post('/api/v1/projects', projectData);
+    
+    // Disparar evento personalizado para notificar a componentes
+    window.dispatchEvent(new CustomEvent('project-created', {
+      detail: { project: response.data }
+    }));
+    
     return response.data;
   } catch (error) {
     console.error('Error al crear proyecto:', error);
