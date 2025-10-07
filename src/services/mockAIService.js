@@ -809,6 +809,290 @@ Los objetivos definidos establecen un marco claro para el desarrollo del sistema
       }
     };
   }
+
+  // Método principal para procesar documentos
+  async processDocuments(data) {
+    console.log('🧪 MockAIService.processDocuments llamado con:', data);
+    return await this.simulateProcessDocuments(data);
+  }
+
+  // Método principal para chat con documentos
+  async chatWithDocuments(chatData) {
+    console.log('🧪 MockAIService.chatWithDocuments llamado con:', chatData);
+    return await this.simulateChatWithDocuments(chatData);
+  }
+
+  // Generar relevamiento
+  async generateRelevamiento(projectId, clientInfo, relevamientoInfo) {
+    console.log('🧪 MockAIService.generateRelevamiento llamado');
+    await this.simulateDelay();
+    
+    return {
+      success: true,
+      data: {
+        projectId,
+        documentType: 'RELEVAMIENTO',
+        content: this.generateRelevamientoDocument(projectId, `Proyecto ${projectId}`, clientInfo),
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          model: 'mock-ai',
+          processingTime: '2.5s'
+        }
+      }
+    };
+  }
+
+  // Generar informe ejecutivo
+  async generateInformeEjecutivo(projectId, clientInfo, relevamientoInfo, configuracion) {
+    console.log('🧪 MockAIService.generateInformeEjecutivo llamado');
+    await this.simulateDelay();
+    
+    return {
+      success: true,
+      data: {
+        projectId,
+        documentType: 'INFORME',
+        content: this.generateInformeDocument(projectId, `Proyecto ${projectId}`),
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          model: 'mock-ai',
+          processingTime: '3.2s'
+        }
+      }
+    };
+  }
+
+  // Generar historias de usuario
+  async generateHistoriasUsuario(projectId, configuracion) {
+    console.log('🧪 MockAIService.generateHistoriasUsuario llamado');
+    await this.simulateDelay();
+    
+    const historias = [
+      {
+        id: 'HU-001',
+        titulo: 'Login de Usuario',
+        descripcion: 'Como usuario quiero poder iniciar sesión para acceder al sistema',
+        criteriosAceptacion: ['Validar credenciales', 'Mostrar mensaje de error si fallan', 'Redirigir al dashboard si son correctas'],
+        prioridad: 'Alta',
+        estimacion: '3 puntos'
+      },
+      {
+        id: 'HU-002', 
+        titulo: 'Gestión de Proyectos',
+        descripcion: 'Como usuario quiero poder crear y gestionar proyectos',
+        criteriosAceptacion: ['Crear proyecto nuevo', 'Editar información', 'Eliminar proyecto'],
+        prioridad: 'Alta',
+        estimacion: '8 puntos'
+      },
+      {
+        id: 'HU-003',
+        titulo: 'Subida de Documentos',
+        descripcion: 'Como usuario quiero subir documentos a mis proyectos',
+        criteriosAceptacion: ['Seleccionar archivos', 'Validar formato', 'Guardar en proyecto'],
+        prioridad: 'Media',
+        estimacion: '5 puntos'
+      }
+    ];
+    
+    return {
+      success: true,
+      data: {
+        projectId,
+        documentType: 'HISTORIAS_USUARIO',
+        historias,
+        resumen: {
+          totalHistorias: historias.length,
+          puntosEstimados: 16,
+          prioridadAlta: 2,
+          prioridadMedia: 1
+        },
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          model: 'mock-ai',
+          processingTime: '1.8s'
+        }
+      }
+    };
+  }
+
+  // Generar diagramas de flujo
+  async generateDiagramasFlujo(projectId, configuracion) {
+    console.log('🧪 MockAIService.generateDiagramasFlujo llamado');
+    await this.simulateDelay();
+    
+    const diagramas = [
+      {
+        nombre: 'Flujo de Login',
+        tipo: 'flowchart',
+        mermaidCode: `flowchart TD
+          A[Inicio] --> B[Ingresar credenciales]
+          B --> C{¿Credenciales válidas?}
+          C -->|Sí| D[Acceso al sistema]
+          C -->|No| E[Mostrar error]
+          E --> B
+          D --> F[Fin]`
+      },
+      {
+        nombre: 'Gestión de Documentos',
+        tipo: 'flowchart',
+        mermaidCode: `flowchart TD
+          A[Seleccionar archivo] --> B[Validar formato]
+          B -->|Válido| C[Subir archivo]
+          B -->|Inválido| D[Mostrar error]
+          C --> E[Procesar documento]
+          E --> F[Guardar en proyecto]
+          D --> A`
+      }
+    ];
+    
+    return {
+      success: true,
+      data: {
+        projectId,
+        documentType: 'DIAGRAMAS_FLUJO',
+        diagramas,
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          model: 'mock-ai',
+          processingTime: '2.1s'
+        }
+      }
+    };
+  }
+
+  // Generar sprint planning
+  async generateSprintPlanning(projectId, configuracion) {
+    console.log('🧪 MockAIService.generateSprintPlanning llamado');
+    await this.simulateDelay();
+    
+    const sprints = [
+      {
+        numero: 1,
+        duracion: '2 semanas',
+        objetivo: 'Implementar funcionalidades básicas de autenticación y gestión de usuarios',
+        historias: ['HU-001', 'HU-004', 'HU-007'],
+        estimacionPuntos: 21,
+        fechaInicio: new Date().toISOString(),
+        fechaFin: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        numero: 2,
+        duracion: '2 semanas', 
+        objetivo: 'Desarrollar módulo de gestión de proyectos y documentos',
+        historias: ['HU-002', 'HU-003', 'HU-005'],
+        estimacionPuntos: 18,
+        fechaInicio: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+        fechaFin: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString()
+      }
+    ];
+    
+    return {
+      success: true,
+      data: {
+        projectId,
+        documentType: 'SPRINTS',
+        sprints,
+        resumen: {
+          totalSprints: sprints.length,
+          duracionTotal: '4 semanas',
+          puntosTotal: 39,
+          fechaEntrega: sprints[sprints.length - 1].fechaFin
+        },
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          model: 'mock-ai',
+          processingTime: '2.8s'
+        }
+      }
+    };
+  }
+
+  // Generar DER (Diagrama Entidad-Relación)
+  async generateDER(derConfig) {
+    console.log('🧪 MockAIService.generateDER llamado');
+    await this.simulateDelay();
+    
+    const entidades = [
+      {
+        nombre: 'Usuario',
+        atributos: ['id', 'email', 'password', 'nombre', 'fechaCreacion'],
+        clavePrimaria: 'id'
+      },
+      {
+        nombre: 'Proyecto',
+        atributos: ['id', 'nombre', 'descripcion', 'fechaInicio', 'estado', 'usuarioId'],
+        clavePrimaria: 'id',
+        claveForanea: ['usuarioId -> Usuario(id)']
+      },
+      {
+        nombre: 'Documento',
+        atributos: ['id', 'nombre', 'tipo', 'ruta', 'fechaSubida', 'proyectoId'],
+        clavePrimaria: 'id',
+        claveForanea: ['proyectoId -> Proyecto(id)']
+      }
+    ];
+    
+    const relaciones = [
+      {
+        entidad1: 'Usuario',
+        entidad2: 'Proyecto',
+        tipo: '1:N',
+        descripcion: 'Un usuario puede tener múltiples proyectos'
+      },
+      {
+        entidad1: 'Proyecto',
+        entidad2: 'Documento',
+        tipo: '1:N',
+        descripcion: 'Un proyecto puede tener múltiples documentos'
+      }
+    ];
+    
+    const mermaidCode = `erDiagram
+      Usuario {
+        int id PK
+        string email
+        string password
+        string nombre
+        datetime fechaCreacion
+      }
+      
+      Proyecto {
+        int id PK
+        string nombre
+        string descripcion
+        datetime fechaInicio
+        string estado
+        int usuarioId FK
+      }
+      
+      Documento {
+        int id PK
+        string nombre
+        string tipo
+        string ruta
+        datetime fechaSubida
+        int proyectoId FK
+      }
+      
+      Usuario ||--o{ Proyecto : "posee"
+      Proyecto ||--o{ Documento : "contiene"`;
+    
+    return {
+      success: true,
+      data: {
+        projectId: derConfig.projectId,
+        documentType: 'DER',
+        entidades,
+        relaciones,
+        mermaidCode,
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          model: 'mock-ai',
+          processingTime: '3.5s'
+        }
+      }
+    };
+  }
 }
 
 export default MockAIService;

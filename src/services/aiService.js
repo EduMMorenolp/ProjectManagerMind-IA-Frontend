@@ -1,6 +1,9 @@
-import api from './config';
-import MockAIService from './mockAIService';
-import { AI_PROVIDERS } from '../constants/aiProviders';
+import api from './config.js';
+import MockAIService from './mockAIService.js';
+import { AI_PROVIDERS } from '../constants/aiProviders.js';
+
+// Instancia del servicio mock
+const mockAIService = new MockAIService();
 
 // Función auxiliar para verificar si estamos en modo test
 const isTestMode = () => {
@@ -13,7 +16,7 @@ export const processDocuments = async (data) => {
   try {
     if (isTestMode()) {
       console.log('🧪 Procesando documentos en modo test:', data);
-      return await MockAIService.processDocuments(data);
+      return await mockAIService.processDocuments(data);
     }
 
     const response = await api.post('/api/v1/ai/process', data);
@@ -29,7 +32,7 @@ export const chatWithDocuments = async (chatData) => {
   try {
     if (isTestMode()) {
       console.log('🧪 Chat en modo test:', chatData);
-      return await MockAIService.chatWithDocuments(chatData);
+      return await mockAIService.chatWithDocuments(chatData);
     }
 
     const response = await api.post('/api/v1/ai/chat', chatData);
@@ -45,7 +48,7 @@ export const generateRelevamiento = async (projectId, clientInfo, relevamientoIn
   try {
     if (isTestMode()) {
       console.log('🧪 Generando relevamiento en modo test:', { projectId, clientInfo, relevamientoInfo });
-      return await MockAIService.generateRelevamiento(projectId, clientInfo, relevamientoInfo);
+      return await mockAIService.generateRelevamiento(projectId, clientInfo, relevamientoInfo);
     }
 
     const response = await api.post('/api/v1/ai/generate-relevamiento', {
@@ -65,7 +68,7 @@ export const generateInformeEjecutivo = async (projectId, clientInfo, relevamien
   try {
     if (isTestMode()) {
       console.log('🧪 Generando informe ejecutivo en modo test:', { projectId });
-      return await MockAIService.generateInformeEjecutivo(projectId, clientInfo, relevamientoInfo, configuracion);
+      return await mockAIService.generateInformeEjecutivo(projectId, clientInfo, relevamientoInfo, configuracion);
     }
 
     const response = await api.post('/api/v1/ai/generate-informe-ejecutivo', {
@@ -86,7 +89,7 @@ export const generateHistoriasUsuario = async (projectId, configuracion = {}) =>
   try {
     if (isTestMode()) {
       console.log('🧪 Generando historias de usuario en modo test:', { projectId });
-      return await MockAIService.generateHistoriasUsuario(projectId, configuracion);
+      return await mockAIService.generateHistoriasUsuario(projectId, configuracion);
     }
 
     const response = await api.post('/api/v1/ai/generate-historias-usuario', {
@@ -281,7 +284,7 @@ export const generateDiagramasFlujo = async (projectId, configuracion = {}) => {
   try {
     if (isTestMode()) {
       console.log('🧪 Generando diagramas de flujo en modo test:', { projectId });
-      return await MockAIService.generateDiagramasFlujo(projectId, configuracion);
+      return await mockAIService.generateDiagramasFlujo(projectId, configuracion);
     }
 
     const response = await api.post('/api/v1/ai/generate-diagramas-flujo', {
@@ -300,7 +303,7 @@ export const generateSprintPlanning = async (projectId, configuracion = {}) => {
   try {
     if (isTestMode()) {
       console.log('🧪 Generando planificación de sprints en modo test:', { projectId });
-      return await MockAIService.generateSprintPlanning(projectId, configuracion);
+      return await mockAIService.generateSprintPlanning(projectId, configuracion);
     }
 
     const response = await api.post('/api/v1/ai/generate-sprint-planning', {
@@ -353,7 +356,7 @@ export const generateDER = async (derConfig) => {
   try {
     if (isTestMode()) {
       console.log('🧪 Generando DER en modo test:', derConfig);
-      return await MockAIService.generateDER(derConfig);
+      return await mockAIService.generateDER(derConfig);
     }
 
     const response = await api.post('/api/v1/ai/generate-der', derConfig);
@@ -388,6 +391,40 @@ export const validateDER = async (validationConfig) => {
 
 // Obtener información de IA
 export const getAIInfo = async () => {
+  if (isTestMode()) {
+    console.log('🧪 Obteniendo información de IA en modo test');
+    
+    // Simular delay de red
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    return {
+      success: true,
+      data: {
+        provider: 'Test IA (Mock)',
+        model: 'mock-gemini-pro',
+        status: 'active',
+        version: '1.0.0-test',
+        capabilities: [
+          'document_analysis',
+          'text_extraction',
+          'content_generation',
+          'mock_processing'
+        ],
+        limits: {
+          maxTokens: 100000,
+          maxFileSize: '10MB',
+          supportedFormats: ['pdf', 'docx', 'txt']
+        },
+        statistics: {
+          processedDocuments: 42,
+          totalRequests: 156,
+          successRate: '98.5%',
+          averageResponseTime: '1.2s'
+        }
+      }
+    };
+  }
+
   try {
     const response = await api.get('/api/v1/ai/info');
     return response.data;
@@ -399,6 +436,50 @@ export const getAIInfo = async () => {
 
 // Generar análisis
 export const generateAnalysis = async (analysisData) => {
+  if (isTestMode()) {
+    console.log('🧪 Generando análisis en modo test:', analysisData);
+    
+    // Simular proceso de análisis más largo
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    return {
+      success: true,
+      data: {
+        analysisId: `mock-analysis-${Date.now()}`,
+        projectId: analysisData.projectId,
+        documentType: analysisData.documentType || 'ANALISIS',
+        analysis: {
+          summary: 'Análisis completo del documento generado por Test IA (Mock)',
+          keyPoints: [
+            'Identificación de requisitos funcionales',
+            'Análisis de casos de uso principales',
+            'Evaluación de restricciones técnicas',
+            'Propuestas de mejora'
+          ],
+          recommendations: [
+            'Implementar validación de entrada robusta',
+            'Considerar escalabilidad futura',
+            'Optimizar rendimiento de consultas',
+            'Mejorar experiencia de usuario'
+          ],
+          risks: [
+            'Dependencia de servicios externos',
+            'Complejidad de integración',
+            'Posibles cuellos de botella'
+          ],
+          estimatedEffort: '3-4 semanas',
+          priority: 'Alta'
+        },
+        metadata: {
+          processedAt: new Date().toISOString(),
+          processingTime: '2.1s',
+          confidence: 0.94,
+          model: 'mock-gemini-pro'
+        }
+      }
+    };
+  }
+
   try {
     const response = await api.post('/api/v1/ai/generate-analysis', analysisData);
     return response.data;

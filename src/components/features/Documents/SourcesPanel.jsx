@@ -115,13 +115,19 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
       console.log('🔍 Proyectos cargados en SourcesPanel:', projectsList.length, projectsList);
       setProjects(projectsList);
       
-      // Solo seleccionar proyecto automáticamente si no hay uno seleccionado
-      if (!selectedProject && projectsList.length > 0) {
-        console.log('🎯 Seleccionando primer proyecto:', projectsList[0]);
-        setSelectedProject(projectsList[0]);
+      // Solo seleccionar proyecto automáticamente si no hay uno seleccionado y hay proyectos
+      if (projectsList.length > 0) {
+        setSelectedProject(prev => {
+          if (!prev) {
+            const firstProject = projectsList[0];
+            console.log('🎯 Seleccionando primer proyecto:', firstProject);
+            return firstProject;
+          }
+          return prev;
+        });
       }
       
-      console.log('📊 Estado final - projects:', projectsList.length, 'selectedProject:', selectedProject?.name);
+      console.log('📊 Estado final - projects:', projectsList.length);
     } catch (err) {
       console.error('❌ Error al cargar proyectos:', err);
       setError('Error al cargar proyectos');
@@ -286,7 +292,7 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
     return () => {
       window.removeEventListener('project-created', handleProjectCreated);
     };
-  }, []); // Solo cargar al montar el componente
+  }, [loadProjects]); // Solo cargar al montar el componente
 
   useEffect(() => {
     if (selectedProject?.id) {
