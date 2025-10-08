@@ -134,7 +134,7 @@ const ProjectProgress = ({ activeTab, setActiveTab }) => {
       {/* Navigation por etapas */}
       <div className="stages-navigation">
         {Object.entries(projectStages).map(([stageKey, stage]) => (
-          <div key={stageKey} className="stage-group">
+          <div key={stageKey} className={`stage-group stage-${stageKey.toLowerCase()}`}>
             <div className="stage-header">
               <h4 className="stage-title">{stage.name}</h4>
               <div className="stage-progress">
@@ -143,14 +143,14 @@ const ProjectProgress = ({ activeTab, setActiveTab }) => {
             </div>
             
             <div className="stage-sections">
-              {stage.sections.map(section => {
+              {stage.sections.map((section, sectionIndex) => {
                 const status = getSectionStatus(section.id);
                 const isActive = activeTab === section.id;
                 
                 return (
                   <button
                     key={section.id}
-                    className={`section-button ${status.status} ${isActive ? 'active' : ''} ${status.disabled ? 'disabled' : ''}`}
+                    className={`section-button section-${stageKey.toLowerCase()} section-${stageKey.toLowerCase()}-${sectionIndex + 1} ${status.status} ${isActive ? 'active' : ''} ${status.disabled ? 'disabled' : ''}`}
                     onClick={() => handleSectionClick(section.id, status)}
                     disabled={status.disabled}
                     title={`${section.description} - ${status.message}`}
