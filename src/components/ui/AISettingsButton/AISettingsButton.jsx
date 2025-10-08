@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAIConfig } from '../../../contexts/AIConfigContext.jsx';
 import { AI_PROVIDERS, MOCK_SPEEDS } from '../../../constants/aiProviders.js';
-import { clearMockData, seedMockData } from '../../../services/aiService.js';
+import { clearMockData, seedMockData, regenerateCompleteData } from '../../../services/aiService.js';
 import './AISettingsButton.css';
 
 const AISettingsButton = () => {
@@ -55,6 +55,21 @@ const AISettingsButton = () => {
       }
     } catch (error) {
       alert('Error al crear datos de ejemplo: ' + error.message);
+    }
+  };
+
+  const handleRegenerateCompleteData = async () => {
+    try {
+      const result = await regenerateCompleteData();
+      if (result.success) {
+        alert('Datos completos regenerados exitosamente!\nEl proyecto E-commerce Platform ahora tiene todos los documentos.');
+        // Recargar la página para refrescar todos los componentes
+        window.location.reload();
+      } else {
+        alert('Error: ' + result.message);
+      }
+    } catch (error) {
+      alert('Error al regenerar datos completos: ' + error.message);
     }
   };
 
@@ -168,6 +183,13 @@ const AISettingsButton = () => {
                       title="Crear proyectos de ejemplo para testing"
                     >
                       📊 Generar Datos de Ejemplo
+                    </button>
+                    <button 
+                      className="utility-button regenerate-button"
+                      onClick={handleRegenerateCompleteData}
+                      title="Regenerar datos completos con documentos para todas las etapas"
+                    >
+                      🔄 Regenerar Datos Completos
                     </button>
                     <button 
                       className="utility-button clear-button"

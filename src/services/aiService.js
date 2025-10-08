@@ -529,6 +529,15 @@ export const seedMockData = async () => {
   return { success: false, message: 'Solo disponible en modo Test IA' };
 };
 
+// Función de utilidad para regenerar datos completos (solo en modo test)
+export const regenerateCompleteData = async () => {
+  if (isTestMode()) {
+    const MockProjectService = (await import('./mockProjectService.js')).default;
+    return await MockProjectService.regenerateCompleteData();
+  }
+  return { success: false, message: 'Solo disponible en modo Test IA' };
+};
+
 // Exportar por defecto
 export default {
   processDocuments,
@@ -551,5 +560,6 @@ export default {
   getAvailableModels,
   testAI,
   clearMockData,
-  seedMockData
+  seedMockData,
+  regenerateCompleteData
 };

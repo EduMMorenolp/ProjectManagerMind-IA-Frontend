@@ -426,6 +426,11 @@
   color: #28a745;
 }
 
+.regenerate-button:hover {
+  border-color: #17a2b8;
+  color: #17a2b8;
+}
+
 .clear-button:hover {
   border-color: #dc3545;
   color: #dc3545;
