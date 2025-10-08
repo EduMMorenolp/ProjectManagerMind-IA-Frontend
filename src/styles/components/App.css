@@ -1,0 +1,267 @@
+/* ===============================================
+   APP COMPONENT STYLES
+   =============================================== */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+/* Header Styles */
+.app-header {
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  padding: 0.75rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1000;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-left h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.settings-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dark-color);
+  border-radius: var(--radius-sm);
+}
+
+.settings-button:hover {
+  background-color: var(--secondary-color);
+}
+
+.settings-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Main Content Area */
+.app-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Panel Layout Base */
+.sources-panel, .chat-panel, .study-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--light-color);
+  min-height: 0;
+}
+
+.sources-panel {
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  width: auto; /* El ancho será controlado por el componente interno */
+  min-width: auto; /* El min-width será controlado por el componente interno */
+}
+
+.study-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+}
+
+.chat-panel {
+  flex-shrink: 0;
+  border-right: none;
+  transition: all 0.3s ease;
+  width: auto; /* El ancho será controlado por el componente interno */
+  min-width: auto; /* El min-width será controlado por el componente interno */
+}
+
+/* Transiciones suaves para cambios de layout */
+.sources-panel, .study-panel, .chat-panel {
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
+}
+
+/* Responsive Styles */
+
+/* Tablet Landscape */
+@media (max-width: 1200px) {
+  .sources-panel {
+    width: 280px;
+    min-width: 260px;
+  }
+  
+  .chat-panel {
+    width: 300px;
+    min-width: 280px;
+  }
+}
+
+/* Tablet Portrait */
+@media (max-width: 1024px) {
+  .sources-panel {
+    width: 260px;
+    min-width: 240px;
+  }
+  
+  .chat-panel {
+    width: 280px;
+    min-width: 260px;
+  }
+  
+  .study-panel {
+    min-width: 300px;
+  }
+}
+
+/* Ajustes adicionales para pantallas intermedias */
+@media (max-width: 1400px) and (min-width: 1201px) {
+  .study-panel {
+    min-width: 450px;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 901px) {
+  .app-main {
+    gap: 0;
+  }
+  
+  .sources-panel {
+    width: 240px;
+    min-width: 220px;
+  }
+  
+  .chat-panel {
+    width: 260px;
+    min-width: 240px;
+  }
+}
+
+/* Small Tablets */
+@media (max-width: 900px) {
+  .app-main {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .sources-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+    height: auto;
+    min-height: 250px;
+    max-height: 350px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+    position: relative;
+    transform: none;
+    z-index: auto;
+  }
+
+  .study-panel {
+    flex: 1;
+    min-width: auto;
+    min-height: 400px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .chat-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+    height: auto;
+    min-height: 300px;
+    flex-shrink: 0;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .app-main {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .sources-panel {
+    /* Mantener el comportamiento colapsable en móvil */
+    position: relative;
+    width: 100%;
+    min-width: auto;
+    max-width: none;
+    height: auto;
+    min-height: 60px; /* Altura mínima para el botón de menú */
+    transform: none;
+    transition: all 0.3s ease;
+    z-index: 10;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: none;
+    order: -1; /* Poner el panel de fuentes arriba en móvil */
+  }
+
+
+
+  .study-panel {
+    width: 100%;
+    min-width: auto;
+    height: 60vh;
+    min-height: 400px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .chat-panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+    height: auto;
+    min-height: 60px; /* Altura mínima para el botón de menú */
+    flex-shrink: 0;
+  }
+}
+
+/* Very Small Mobile */
+@media (max-width: 480px) {
+  .app-header {
+    padding: 0.5rem 1rem;
+  }
+  
+  .header-left h1 {
+    font-size: 1rem;
+  }
+  
+  .study-panel {
+    min-height: 350px;
+  }
+  
+  .chat-panel {
+    min-height: 250px;
+  }
+}

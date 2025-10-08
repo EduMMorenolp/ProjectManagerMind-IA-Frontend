@@ -1,0 +1,456 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { processDocuments, getAIInfo } from '../../../services';
+import { loadClientInfo, generateRelevamiento, generateInformeEjecutivo } from '../../../services/aiService';
+import { FileIcon, PdfIcon, DocIcon, DownloadIcon, PlayIcon } from '../../ui/Icons';
+import {
+  ClienteSection,
+  RelevamientoSection,
+  InformeSection,
+  ObjetivosSection,
+  DiagramasFlujoSection,
+  HistoriasUsuarioSection,
+  SprintsSection,
+  DerSection,
+  CasosUsoSection
+} from './sections';
+
+// Importar nuevos componentes
+import ProjectProgress from './ProjectProgress';
+import GenerationProgress from './GenerationProgress';
+import NotificationSystem from './NotificationSystem';
+
+// Importar contexto y hooks
+import { useStudy } from '../../../contexts';
+// import { useNotifications } from '../../../hooks';
+
+const StudyPanel = ({ selectedFiles, selectedProject }) => {
+  const [activeTab, setActiveTab] = useState('CLIENTE');
+  
+  // Usar el contexto de estudio
+  const { 
+    prerequisites,
+    isDocumentEnabled,
+    updateDocumentStates,
+    dispatch
+  } = useStudy();
+  
+  // Estados temporales (mantenemos compatibilidad mientras refactorizamos)
+  const [processing, setProcessing] = useState(false);
+  const [results, setResults] = useState(null);
+  const [error, setError] = useState(null);
+  // Removed projectId state - using selectedProject.id directly
+  const [clientInfo, setClientInfo] = useState({
+    name: '', 
+    business: '', 
+    description: '', 
+    needs: '', 
+    history: ''
+  });
+
+  const [relevamientoInfo, setRelevamientoInfo] = useState({
+    entrevistas: {
+      stakeholders: [
+        { id: 1, nombre: '', cargo: '', area: '', contacto: '', notas: '' }
+      ],
+      preguntas: [
+        { id: 1, categoria: 'Procesos Actuales', pregunta: '', respuesta: '' }
+      ]
+    },
+    cuestionarios: {
+      areas: ['Operaciones', 'IT', 'RRHH', 'Finanzas'],
+      preguntas: [
+        { id: 1, area: 'Operaciones', tipo: 'abierta', pregunta: '', respuesta: '' }
+      ]
+    },
+    observacion: {
+      procesos: [
+        { id: 1, proceso: '', descripcion: '', problemas: '', oportunidades: '' }
+      ],
+      sistemas: [
+        { id: 1, sistema: '', version: '', usuarios: '', problemas: '' }
+      ]
+    },
+    documentacion: {
+      archivos: [
+        { id: 1, nombre: '', tipo: '', ubicacion: '', relevancia: '', notas: '' }
+      ],
+      normativas: ''
+    }
+  });
+
+  // Cargar información existente del cliente para un proyecto
+  const loadExistingClientInfo = useCallback(async (projectId) => {
+    try {
+      const response = await loadClientInfo(projectId);
+      
+      if (response.success && response.clientInfo) {
+        setClientInfo(response.clientInfo);
+      } else {
+        // Limpiar el formulario si no hay información
+        setClientInfo({
+          name: '', 
+          business: '', 
+          description: '', 
+          needs: '', 
+          history: ''
+        });
+      }
+    } catch (error) {
+      console.error('Error loading client info:', error);
+      console.error('Error details:', error.response?.data || error.message);
+      // Limpiar el formulario en caso de error
+      setClientInfo({
+        name: '', 
+        business: '', 
+        description: '', 
+        needs: '', 
+        history: ''
+      });
+    }
+  }, []);
+
+  // Sincronizar projectId con selectedProject
+  useEffect(() => {
+    console.log('📋 StudyPanel: Proyecto seleccionado cambiado:', selectedProject?.name);
+    
+    if (selectedProject && selectedProject.id) {
+      // Project ID is now accessed directly from selectedProject.id
+      
+      // Limpiar información del cliente antes de cargar la nueva
+      setClientInfo({
+        name: '', 
+        business: '', 
+        description: '', 
+        needs: '', 
+        history: ''
+      });
+      
+      // Limpiar información de relevamiento
+      setRelevamientoInfo({
+        entrevistas: {
+          stakeholders: [{ id: 1, nombre: '', cargo: '', area: '', contacto: '', notas: '' }],
+          preguntas: [{ id: 1, categoria: 'Procesos Actuales', pregunta: '', respuesta: '' }]
+        },
+        cuestionarios: {
+          areas: ['Operaciones', 'IT', 'RRHH', 'Finanzas'],
+          preguntas: [{ id: 1, area: 'Operaciones', tipo: 'abierta', pregunta: '', respuesta: '' }]
+        },
+        observacion: {
+          procesos: [{ id: 1, proceso: '', descripcion: '', problemas: '', oportunidades: '' }],
+          sistemas: [{ id: 1, sistema: '', version: '', usuarios: '', problemas: '' }]
+        },
+        documentacion: {
+          archivos: [{ id: 1, nombre: '', tipo: '', ubicacion: '', relevancia: '', notas: '' }],
+          normativas: ''
+        }
+      });
+      
+      // Cargar información del cliente si existe para este proyecto
+      loadExistingClientInfo(selectedProject.id);
+      
+      // Actualizar estados de documentos en el contexto (esto reseteará el estado)
+      updateDocumentStates(selectedProject.id);
+      
+      // Actualizar información de proyecto en el contexto
+      dispatch({
+        type: 'SET_PROJECT',
+        payload: { id: selectedProject.id, name: selectedProject.name }
+      });
+      
+      console.log('✅ StudyPanel: Estado actualizado para proyecto:', selectedProject.name);
+      
+      // Resetear al primer tab
+      setActiveTab('CLIENTE');
+      
+    } else {
+      // No selected project
+      // Limpiar información del cliente
+      setClientInfo({
+        name: '', 
+        business: '', 
+        description: '', 
+        needs: '', 
+        history: ''
+      });
+    }
+  }, [selectedProject, loadExistingClientInfo, updateDocumentStates, dispatch]);
+
+  useEffect(() => {
+    loadAIInfo();
+  }, []);
+
+  const loadAIInfo = async () => {
+    try {
+      await getAIInfo();
+    } catch (err) {
+      console.error('Error al cargar información de IA:', err);
+    }
+  };
+
+  // Función para manejar notificaciones
+  const handleNotification = (notification) => {
+    console.log('Notification:', notification);
+    // Aquí se podría integrar con un sistema de notificaciones más complejo
+    if (notification.type === 'error') {
+      setError(notification.message);
+    }
+  };
+
+  // Función para descargar documentos generados
+  const downloadGeneratedDocument = (result) => {
+    if (!result.content && !result.fileName) {
+      console.error('No hay contenido para descargar');
+      return;
+    }
+
+    const content = result.content || JSON.stringify(result, null, 2);
+    const fileName = result.fileName || `documento_${result.documentType || 'generado'}.md`;
+    
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleGenerateDocument = async (documentType, additionalParams = {}) => {
+    if (!selectedProject) {
+      setError('Selecciona un proyecto primero');
+      return;
+    }
+
+    setProcessing(true);
+    setError(null);
+    setResults(null);
+
+    try {
+      let response;
+
+      // Manejar generación específica de relevamiento
+      if (documentType === 'RELEVAMIENTO') {
+        response = await generateRelevamiento(selectedProject.id, clientInfo, relevamientoInfo);
+      } 
+      // Manejar generación específica de informe ejecutivo
+      else if (documentType === 'informe-ejecutivo') {
+        const { configuracion } = additionalParams;
+        response = await generateInformeEjecutivo(
+          selectedProject.id, 
+          clientInfo, 
+          relevamientoInfo, 
+          configuracion
+        );
+      } 
+      else {
+        // Preparar datos para otros tipos de documento
+        let requestData = {
+          documentType,
+          projectId: selectedProject.id,
+          projectName: selectedProject.name,
+          clientInfo: clientInfo,
+          ...additionalParams
+        };
+
+        // Agregar archivos si están disponibles
+        if (selectedFiles.length > 0) {
+          requestData.extractedTexts = selectedFiles.map(file => ({
+            fileName: file.fileName || file,
+            text: file.extractedText || `Contenido extraído de ${file.fileName || file}`,
+            extractedAt: new Date().toISOString()
+          }));
+        }
+
+        response = await processDocuments(requestData);
+      }
+
+      setResults(response);
+      
+      // Revalidar precondiciones después de generar un documento
+      if (documentType === 'RELEVAMIENTO' || documentType === 'informe-ejecutivo') {
+        // Actualizar estados de documentos después de generar
+        setTimeout(() => {
+          updateDocumentStates(selectedProject?.id);
+        }, 1000);
+      }
+      
+      // Opcional: cambiar a una tab de resultados
+      // setActiveTab('results');
+      
+    } catch (err) {
+      console.error(`Error al generar ${documentType}:`, err);
+      setError(err.message || `Error al generar ${documentType}`);
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  return (
+    <div className="study-panel-container">
+      {/* Sistema de notificaciones */}
+      <NotificationSystem />
+      
+      {/* Progreso de generación */}
+      <GenerationProgress />
+      
+      <div className="study-panel-header">
+        <h2>Gestión de Proyectos</h2>
+        
+        {/* Navegación inteligente con progreso */}
+        <ProjectProgress activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
+
+      {error && <div className="error-message">{error}</div>}
+
+      <div className="study-panel-content">
+        
+        {/* ETAPA PRELIMINAR */}
+        {activeTab === 'CLIENTE' && (
+          <ClienteSection 
+            clientInfo={clientInfo}
+            setClientInfo={setClientInfo}
+            projectId={selectedProject?.id}
+            setProjectId={() => {}} // Dummy function since we're using selectedProject directly
+          />
+        )}
+
+        {activeTab === 'RELEVAMIENTO' && (
+          <RelevamientoSection 
+            relevamientoInfo={relevamientoInfo}
+            setRelevamientoInfo={setRelevamientoInfo}
+            projectId={selectedProject?.id}
+            selectedProject={selectedProject}
+            handleGenerateDocument={handleGenerateDocument}
+            processing={processing}
+          />
+        )}
+
+        {activeTab === 'INFORME' && (
+          <InformeSection 
+            projectId={selectedProject?.id}
+            clientInfo={clientInfo}
+            relevamientoInfo={relevamientoInfo}
+            handleGenerateDocument={handleGenerateDocument}
+            processing={processing}
+            generationResults={results?.results || []}
+          />
+        )}
+
+        {/* ETAPA DE ANÁLISIS */}
+        {activeTab === 'OBJETIVOS' && (
+          <ObjetivosSection 
+            handleGenerateDocument={handleGenerateDocument}
+            processing={processing}
+          />
+        )}
+
+        {activeTab === 'DIAGRAMAS_FLUJO' && (
+          <DiagramasFlujoSection 
+            projectId={selectedProject?.id}
+            onNotification={handleNotification}
+          />
+        )}
+
+        {activeTab === 'HISTORIAS_USUARIO' && (
+          <HistoriasUsuarioSection 
+            projectId={selectedProject?.id}
+            processing={processing}
+            setProcessing={setProcessing}
+          />
+        )}
+
+        {/* ETAPA DE DISEÑO */}
+        {activeTab === 'SPRINTS' && (
+          <SprintsSection 
+            projectId={selectedProject?.id}
+            onNotification={handleNotification}
+          />
+        )}
+
+        {activeTab === 'DER' && (
+          <DerSection 
+            processing={processing}
+            selectedFiles={selectedFiles}
+            selectedProject={selectedProject}
+          />
+        )}
+
+        {activeTab === 'CASOS_USO' && (
+          <CasosUsoSection 
+            handleGenerateDocument={handleGenerateDocument}
+            processing={processing}
+          />
+        )}
+
+        {/* Sección de Resultados */}
+        {results && (
+          <div className="results-panel">
+            <div className="results-header">
+              <h4>📊 Resultados Generados</h4>
+              {results.fileName && (
+                <button 
+                  className="download-button"
+                  onClick={() => downloadGeneratedDocument(results)}
+                  title="Descargar documento"
+                >
+                  <DownloadIcon className="download-icon" />
+                  Descargar
+                </button>
+              )}
+            </div>
+            <div className="results-content">
+              {results.content ? (
+                <div className="document-preview">
+                  <div className="document-info">
+                    <p><strong>Archivo:</strong> {results.fileName}</p>
+                    <p><strong>Tipo:</strong> {results.documentType || 'Documento generado'}</p>
+                    <p><strong>Proyecto:</strong> {results.projectName}</p>
+                    {results.wordCount && (
+                      <p><strong>Palabras:</strong> {results.wordCount}</p>
+                    )}
+                  </div>
+                  <div className="document-content">
+                    <h5>Vista previa del contenido:</h5>
+                    <div className="content-preview">
+                      {results.content.substring(0, 500)}...
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="results-raw">
+                  <pre>{JSON.stringify(results, null, 2)}</pre>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        {error && <div className="error-message">{error}</div>}
+      </div>
+    </div>
+  );
+};
+
+// Componente reutilizable para botones de generación
+const GenerateButton = ({ onClick, documentType, processing, children }) => (
+  <div className="generate-section">
+    <button 
+      className="generate-button" 
+      onClick={() => onClick(documentType)}
+      disabled={processing}
+    >
+      {processing ? (
+        <span>Generando...</span>
+      ) : (
+        <>
+          <PlayIcon className="button-icon" />
+          {children}
+        </>
+      )}
+    </button>
+  </div>
+);
+
+export default StudyPanel;

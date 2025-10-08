@@ -1,0 +1,159 @@
+/* Estilos para el contenido markdown renderizado en DocumentModal */
+
+.document-modal .markdown-content {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.document-modal .markdown-content h1 {
+  color: #2c3e50;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.document-modal .markdown-content h2 {
+  color: #34495e;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 0.3rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.document-modal .markdown-content h3 {
+  color: #34495e;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.document-modal .markdown-content h4 {
+  color: #34495e;
+  margin-top: 1.2rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.document-modal .markdown-content p {
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.document-modal .markdown-content strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.document-modal .markdown-content ul, 
+.document-modal .markdown-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.document-modal .markdown-content li {
+  margin-bottom: 0.5rem;
+}
+
+.document-modal .markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.document-modal .markdown-content th,
+.document-modal .markdown-content td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.document-modal .markdown-content th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.document-modal .markdown-content tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.document-modal .markdown-content hr {
+  border: none;
+  border-top: 2px solid #ecf0f1;
+  margin: 2rem 0;
+}
+
+.document-modal .markdown-content blockquote {
+  border-left: 4px solid #3498db;
+  margin: 1rem 0;
+  padding-left: 1rem;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.document-modal .markdown-content code {
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #e74c3c;
+}
+
+.document-modal .markdown-content pre {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.document-modal .markdown-content pre code {
+  background: none;
+  padding: 0;
+  color: #2c3e50;
+}
+
+/* Estilos para checkboxes en listas de tareas */
+.document-modal .markdown-content input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Estilo para el documento completo */
+.document-modal .markdown-content {
+  max-width: none;
+  margin: 0;
+}
+
+/* Responsive para dispositivos móviles */
+@media (max-width: 768px) {
+  .document-modal .markdown-content {
+    padding: 1rem;
+  }
+  
+  .document-modal .markdown-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  .document-modal .markdown-content h2 {
+    font-size: 1.3rem;
+  }
+  
+  .document-modal .markdown-content table {
+    font-size: 0.8rem;
+  }
+  
+  .document-modal .markdown-content th,
+  .document-modal .markdown-content td {
+    padding: 0.5rem;
+  }
+}

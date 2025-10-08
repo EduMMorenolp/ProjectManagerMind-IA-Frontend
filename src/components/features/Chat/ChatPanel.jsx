@@ -1,0 +1,111 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { SendIcon, MenuIcon } from '../../ui/Icons';
+import { chatWithDocuments } from '../../../services';
+
+const ChatPanel = ({ selectedFiles, selectedProject }) => {
+  const [messages, setMessages] = useState([
+    { type: 'system', text: 'Bienvenido al asistente de documentos IA. ¿En qué puedo ayudarte hoy?' }
+  ]);
+  const [input, setInput] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  // Scroll al final de los mensajes cuando se añade uno nuevo
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (input.trim() === '' || isProcessing || selectedFiles.length === 0) return;
+    
+    const userMessage = { type: 'user', text: input };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsProcessing(true);
+    
+    try {
+      const response = await chatWithDocuments({
+        query: input,
+        projectId: selectedProject?.id,
+        documentIds: selectedFiles // Assuming selectedFiles contains document IDs
+      });
+      
+      const assistantMessage = { 
+        type: 'assistant', 
+        text: response.response || 'No se pudo procesar tu consulta.' 
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error al procesar la consulta:', error);
+      const errorMessage = { 
+        type: 'system', 
+        text: `Error: ${error.response?.data?.message || error.message}` 
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  return (
+    <div className={`chat-panel-container ${isCollapsed ? 'collapsed' : 'expanded'}`}>
+      {/* Botón de menú siempre visible */}
+      <div className="chat-menu-button-container">
+        <button className="chat-menu-button" onClick={toggleCollapse} title={isCollapsed ? 'Expandir chat' : 'Colapsar chat'}>
+          <MenuIcon className="chat-menu-icon" />
+        </button>
+      </div>
+
+      {/* Contenido del chat (solo visible cuando no está colapsado) */}
+      <div className={`chat-content ${isCollapsed ? 'hidden' : 'visible'}`}>
+        <div className="chat-messages">
+        {messages.map((msg, index) => (
+          <div key={index} className={`message ${msg.type}`}>
+            <div className="message-content">
+              {msg.text}
+            </div>
+          </div>
+        ))}
+        {isProcessing && (
+          <div className="message assistant loading">
+            <div className="loading-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+      
+      <form className="chat-input-container" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={selectedFiles.length > 0 
+            ? "Pregunta algo sobre tus documentos..." 
+            : "Selecciona documentos para hacer consultas..."}
+          disabled={isProcessing || selectedFiles.length === 0}
+        />
+        <button 
+          type="submit" 
+          className="send-button"
+          disabled={input.trim() === '' || isProcessing || selectedFiles.length === 0}
+        >
+          <SendIcon className="send-icon" />
+          <span>Enviar</span>
+        </button>
+      </form>
+      </div> {/* Cierre de chat-content */}
+    </div>
+  );
+};
+
+export default ChatPanel;

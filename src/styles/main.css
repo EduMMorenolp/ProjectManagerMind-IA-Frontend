@@ -1,0 +1,243 @@
+/* ===============================================
+   MAIN STYLES - Import all component styles
+   =============================================== */
+
+/* Base styles (variables, reset, utilities) */
+@import './base.css';
+
+/* App component styles */
+@import './components/App.css';
+
+/* Feature component styles */
+@import './components/features/SourcesPanel.css';
+@import './components/features/ChatPanel.css';
+@import './components/features/StudyPanel.css';
+@import './components/features/StudySections.css';
+
+/* UI component styles */
+@import './components/ui/common.css';
+@import './components/DocumentTypeSelector.css';
+@import './components/DiagramViewer.css';
+@import './components/workflow-dashboard.css';
+@import './components/validation-panel.css';
+@import './components/SprintPlanning.css';
+@import './components/der-viewer.css';
+@import './components/der-hardcoded.css';
+
+/* Upload modal styles (keep existing) */
+@import './upload-modal.css';
+
+/* Global overrides and utilities */
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.nav-links a {
+  color: var(--dark-color);
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+  color: var(--primary-color);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 57px - 42px);
+  overflow: hidden;
+}
+
+/* Panel Layout - Similar a la imagen de referencia */
+.notebook-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Studio Panel (renamed from studio-panel to avoid conflicts) */
+.studio-panel {
+  width: 350px;
+  min-width: 300px;
+  max-width: 400px;
+  border-left: 1px solid var(--border-color);
+  background-color: white;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  padding: 1.5rem 0;
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+/* Dashboard */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.dashboard-card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+.card-content {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Projects List */
+.projects-list {
+  margin-top: 1.5rem;
+}
+
+.project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease;
+}
+
+.project-item:hover {
+  transform: translateX(5px);
+}
+
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.project-name {
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+.project-meta {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.project-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Document Types */
+.document-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.document-type-card {
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  background-color: white;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.document-type-card:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-3px);
+}
+
+.document-type-card.active {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(87, 84, 228, 0.2);
+}
+
+.document-type-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.document-type-description {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 0.75rem;
+}
+
+.formats-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.format-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background-color: var(--light-color);
+  color: var(--dark-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  
+  .document-types {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dashboard-card,
+  .project-item,
+  .document-type-card {
+    background-color: #1f2937;
+  }
+  
+  .document-type-title {
+    color: var(--light-color);
+  }
+}
