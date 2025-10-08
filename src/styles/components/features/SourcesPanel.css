@@ -406,3 +406,274 @@
     height: 22px !important;
   }
 }
+
+/* ===============================================
+   STAGE COLORS AND ICONS STYLES
+   =============================================== */
+
+/* Stage sections with colors */
+.stage-section {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s;
+}
+
+/* Colores específicos para cada etapa */
+.stage-section.stage-preliminar {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+}
+
+.stage-section.stage-analisis {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+}
+
+.stage-section.stage-diseno {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #fffbeb 0%, #fefce8 100%);
+}
+
+/* Stage header */
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stage-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.stage-preliminar .stage-title {
+  color: #065f46;
+}
+
+.stage-analisis .stage-title {
+  color: #1e40af;
+}
+
+.stage-diseno .stage-title {
+  color: #92400e;
+}
+
+.stage-progress {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.stage-preliminar .stage-progress {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+}
+
+.stage-analisis .stage-progress {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #1e40af;
+}
+
+.stage-diseno .stage-progress {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #92400e;
+}
+
+/* Document type sections with progressive colors */
+.document-type-section {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s;
+}
+
+.document-type-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.type-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.type-icon {
+  font-size: 1.1rem;
+}
+
+.type-count {
+  padding: 0.1rem 0.4rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  min-width: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* PRELIMINAR - Verde con progresión */
+.document-type-section.type-preliminar-1 {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+.document-type-section.type-preliminar-1 .type-count {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #065f46;
+}
+
+.document-type-section.type-preliminar-2 {
+  border-color: rgba(16, 185, 129, 0.6);
+  background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+}
+
+.document-type-section.type-preliminar-2 .type-count {
+  background-color: rgba(16, 185, 129, 0.3);
+  color: #065f46;
+}
+
+/* ANÁLISIS - Azul con progresión */
+.document-type-section.type-analisis-1 {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #f0f9ff 0%, #eff6ff 100%);
+}
+
+.document-type-section.type-analisis-1 .type-count {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #1e40af;
+}
+
+.document-type-section.type-analisis-2 {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.document-type-section.type-analisis-2 .type-count {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: #1e40af;
+}
+
+.document-type-section.type-analisis-3 {
+  border-color: rgba(59, 130, 246, 0.7);
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.document-type-section.type-analisis-3 .type-count {
+  background-color: rgba(59, 130, 246, 0.4);
+  color: #1e40af;
+}
+
+.document-type-section.type-analisis-4 {
+  border-color: rgba(59, 130, 246, 0.8);
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+}
+
+.document-type-section.type-analisis-4 .type-count {
+  background-color: rgba(59, 130, 246, 0.5);
+  color: #1e40af;
+}
+
+/* DISEÑO - Amarillo/Ámbar con progresión */
+.document-type-section.type-diseno-1 {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, #fefce8 0%, #fffbeb 100%);
+}
+
+.document-type-section.type-diseno-1 .type-count {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #92400e;
+}
+
+.document-type-section.type-diseno-2 {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+}
+
+.document-type-section.type-diseno-2 .type-count {
+  background-color: rgba(245, 158, 11, 0.3);
+  color: #92400e;
+}
+
+.document-type-section.type-diseno-3 {
+  border-color: rgba(245, 158, 11, 0.7);
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+}
+
+.document-type-section.type-diseno-3 .type-count {
+  background-color: rgba(245, 158, 11, 0.4);
+  color: #92400e;
+}
+
+/* Hover effects */
+.document-type-section:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stage-preliminar .document-type-section:hover {
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.stage-analisis .document-type-section:hover {
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.stage-diseno .document-type-section:hover {
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+/* Type files container */
+.type-files {
+  margin-left: 1.5rem;
+  border-left: 2px solid var(--border-color);
+  padding-left: 0.75rem;
+}
+
+/* Progressive border colors for type files */
+.type-preliminar-1 .type-files {
+  border-left-color: rgba(16, 185, 129, 0.4);
+}
+
+.type-preliminar-2 .type-files {
+  border-left-color: rgba(16, 185, 129, 0.6);
+}
+
+.type-analisis-1 .type-files {
+  border-left-color: rgba(59, 130, 246, 0.3);
+}
+
+.type-analisis-2 .type-files {
+  border-left-color: rgba(59, 130, 246, 0.5);
+}
+
+.type-analisis-3 .type-files {
+  border-left-color: rgba(59, 130, 246, 0.7);
+}
+
+.type-analisis-4 .type-files {
+  border-left-color: rgba(59, 130, 246, 0.8);
+}
+
+.type-diseno-1 .type-files {
+  border-left-color: rgba(245, 158, 11, 0.3);
+}
+
+.type-diseno-2 .type-files {
+  border-left-color: rgba(245, 158, 11, 0.5);
+}
+
+.type-diseno-3 .type-files {
+  border-left-color: rgba(245, 158, 11, 0.7);
+}

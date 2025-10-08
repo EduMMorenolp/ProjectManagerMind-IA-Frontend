@@ -13,24 +13,24 @@ const DOCUMENT_TYPES = {
     name: 'Etapa Preliminar',
     types: [
       { id: 'CLIENTE', name: 'Cliente', icon: '👤', description: 'Información del cliente y requerimientos' },
-      { id: 'RELEVAMIENTO', name: 'Relevamiento', icon: '📋', description: 'Análisis y recopilación de información' }
+      { id: 'RELEVAMIENTO', name: 'Relevamiento', icon: '📋', description: 'Análisis y recopilación de información' },
+      { id: 'INFORME', name: 'Informe', icon: '📊', description: 'Informe ejecutivo del relevamiento' }
     ]
   },
   ANALISIS: {
     name: 'Etapa de Análisis',
     types: [
-      { id: 'INFORME', name: 'Informe', icon: '📄', description: 'Informe ejecutivo del relevamiento' },
-      { id: 'OBJETIVOS', name: 'Objetivos', icon: '🎯', description: 'Objetivos del sistema informático' },
-      { id: 'DIAGRAMAS_FLUJO', name: 'Diagramas de Flujo', icon: '🔄', description: 'Diagramas de flujo de datos (DFD)' },
-      { id: 'HISTORIAS_USUARIO', name: 'Historias de Usuario', icon: '📖', description: 'Historias de usuario y metodologías ágiles' }
+      { id: 'OBJETIVOS', name: 'Objetivos', icon: '🎯', description: 'Objetivos del proyecto' },
+      { id: 'HISTORIAS_USUARIO', name: 'Historias de Usuario', icon: '👥', description: 'Historias de usuario' },
+      { id: 'CASOS_USO', name: 'Casos de Uso', icon: '🔄', description: 'Casos de uso' }
     ]
   },
   DISENO: {
     name: 'Etapa de Diseño',
     types: [
-      { id: 'SPRINTS', name: 'Sprints', icon: '⚡', description: 'Planificación de sprints SCRUM' },
-      { id: 'DER', name: 'DER', icon: '🗄️', description: 'Diagrama Entidad-Relación' },
-      { id: 'CASOS_USO', name: 'Casos de Uso', icon: '⚙️', description: 'Casos de uso del sistema' }
+      { id: 'DIAGRAMAS_FLUJO', name: 'Diagramas de Flujo', icon: '📊', description: 'Diagramas de flujo' },
+      { id: 'DER', name: 'DER', icon: '🗃️', description: 'Diagrama entidad-relación' },
+      { id: 'SPRINTS', name: 'Sprints', icon: '🏃', description: 'Planificación de sprints' }
     ]
   }
 };
@@ -409,49 +409,29 @@ const SourcesPanel = ({ selectedFiles, setSelectedFiles, selectedProject, setSel
           ) : files.length > 0 ? (
             <div className="documents-by-stage">
               {Object.entries(organizeFilesByStageAndType()).map(([stageKey, stage]) => (
-                <div key={stageKey} className="stage-section" style={{ marginBottom: '1.5rem' }}>
-                  <h3 className="stage-title" style={{ 
-                    fontSize: '1.1rem', 
-                    fontWeight: '600', 
-                    marginBottom: '0.75rem',
-                    color: 'var(--text-color)',
-                    borderBottom: '2px solid var(--border-color)',
-                    paddingBottom: '0.25rem'
-                  }}>
-                    {stage.name}
-                  </h3>
+                <div key={stageKey} className={`stage-section stage-${stageKey.toLowerCase()}`} style={{ marginBottom: '1.5rem' }}>
+                  <div className="stage-header">
+                    <h3 className="stage-title">
+                      {stage.name}
+                    </h3>
+                    <div className="stage-progress">
+                      {Object.values(stage.types).reduce((acc, type) => acc + type.files.length, 0)}
+                    </div>
+                  </div>
                   <div className="types-container">
-                    {Object.entries(stage.types).map(([typeKey, docType]) => (
-                      <div key={typeKey} className="document-type-section" style={{ marginBottom: '1rem' }}>
-                        <div className="document-type-header" style={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          gap: '0.5rem',
-                          marginBottom: '0.5rem',
-                          fontSize: '0.9rem',
-                          fontWeight: '500',
-                          color: 'var(--text-color-secondary)'
-                        }}>
-                          <span className="type-icon" style={{ fontSize: '1.1rem' }}>{docType.icon}</span>
-                          <span className="type-name">{docType.name}</span>
-                          <span className="type-count" style={{ 
-                            background: docType.files.length > 0 ? 'var(--primary-color)' : 'var(--border-color)',
-                            color: docType.files.length > 0 ? 'white' : 'var(--text-color-secondary)',
-                            padding: '0.1rem 0.4rem',
-                            borderRadius: '12px',
-                            fontSize: '0.75rem',
-                            minWidth: '1.5rem',
-                            textAlign: 'center'
-                          }}>
+                    {Object.entries(stage.types).map(([typeKey, docType], typeIndex) => (
+                      <div key={typeKey} className={`document-type-section type-${stageKey.toLowerCase()}-${typeIndex + 1}`} style={{ marginBottom: '1rem' }}>
+                        <div className="document-type-header">
+                          <div className="type-info">
+                            <span className="type-icon">{docType.icon}</span>
+                            <span className="type-name">{docType.name}</span>
+                          </div>
+                          <span className="type-count">
                             {docType.files.length}
                           </span>
                         </div>
                         {docType.files.length > 0 && (
-                          <div className="type-files" style={{ 
-                            marginLeft: '1.5rem',
-                            borderLeft: '2px solid var(--border-color)',
-                            paddingLeft: '0.75rem'
-                          }}>
+                          <div className="type-files">
                             {docType.files.map((file, index) => (
                               <div key={`${file.id}-${index}`} className="file-item-container">
                                 <div 
