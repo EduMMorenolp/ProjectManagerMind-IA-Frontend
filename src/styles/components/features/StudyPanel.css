@@ -814,56 +814,162 @@
   background-color: #f9fafb;
 }
 
-/* Estilos específicos para botones de sección por etapa */
-.section-button.section-preliminar {
-  border-color: rgba(16, 185, 129, 0.3);
-  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+/* Estilos específicos para botones de sección por etapa con progresión de intensidad */
+
+/* PRELIMINAR - Verde con progresión más suave */
+.section-button.section-preliminar-1 {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
 }
 
-.section-button.section-preliminar:hover:not(.disabled) {
+.section-button.section-preliminar-1:hover:not(.disabled) {
   border-color: #10b981;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
 }
 
-.section-button.section-preliminar.active {
+.section-button.section-preliminar-1.active {
   border-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
 }
 
-.section-button.section-analisis {
+.section-button.section-preliminar-2 {
+  border-color: rgba(16, 185, 129, 0.6);
+  background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+}
+
+.section-button.section-preliminar-2:hover:not(.disabled) {
+  border-color: #10b981;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
+}
+
+.section-button.section-preliminar-2.active {
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
+}
+
+.section-button.section-preliminar-3 {
+  border-color: rgba(16, 185, 129, 0.7);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+}
+
+.section-button.section-preliminar-3:hover:not(.disabled) {
+  border-color: #059669;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.section-button.section-preliminar-3.active {
+  border-color: #059669;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* ANÁLISIS - Azul con progresión */
+.section-button.section-analisis-1 {
   border-color: rgba(59, 130, 246, 0.3);
   background: linear-gradient(135deg, #f0f9ff 0%, #eff6ff 100%);
 }
 
-.section-button.section-analisis:hover:not(.disabled) {
+.section-button.section-analisis-1:hover:not(.disabled) {
   border-color: #3b82f6;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
 }
 
-.section-button.section-analisis.active {
+.section-button.section-analisis-1.active {
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
 }
 
-.section-button.section-diseno {
+.section-button.section-analisis-2 {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.section-button.section-analisis-2:hover:not(.disabled) {
+  border-color: #2563eb;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.section-button.section-analisis-2.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.section-button.section-analisis-3 {
+  border-color: rgba(59, 130, 246, 0.7);
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.section-button.section-analisis-3:hover:not(.disabled) {
+  border-color: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+}
+
+.section-button.section-analisis-3.active {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+}
+
+/* DISEÑO - Amarillo/Ámbar con progresión */
+.section-button.section-diseno-1 {
   border-color: rgba(245, 158, 11, 0.3);
   background: linear-gradient(135deg, #fefce8 0%, #fffbeb 100%);
 }
 
-.section-button.section-diseno:hover:not(.disabled) {
+.section-button.section-diseno-1:hover:not(.disabled) {
   border-color: #f59e0b;
   box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
   background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
 }
 
-.section-button.section-diseno.active {
+.section-button.section-diseno-1.active {
   border-color: #f59e0b;
   box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
   background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+}
+
+.section-button.section-diseno-2 {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+}
+
+.section-button.section-diseno-2:hover:not(.disabled) {
+  border-color: #d97706;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+}
+
+.section-button.section-diseno-2.active {
+  border-color: #d97706;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+}
+
+.section-button.section-diseno-3 {
+  border-color: rgba(245, 158, 11, 0.7);
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+}
+
+.section-button.section-diseno-3:hover:not(.disabled) {
+  border-color: #b45309;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+  background: linear-gradient(135deg, #fdba74 0%, #fb923c 100%);
+}
+
+.section-button.section-diseno-3.active {
+  border-color: #b45309;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #fdba74 0%, #fb923c 100%);
 }
 
 .section-icon {
