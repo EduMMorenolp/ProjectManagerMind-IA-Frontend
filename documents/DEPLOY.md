@@ -12,7 +12,7 @@ npm install --save-dev gh-pages
 ### 2. Scripts agregados al package.json
 ```json
 {
-  "homepage": "https://edummorenolp.github.io/Notebook-IA-Develop",
+  "homepage": "https://edummorenolp.github.io/ProjectManagerMind-IA",
   "scripts": {
     "deploy": "npm run build && gh-pages -d dist",
     "predeploy": "npm run build"
@@ -75,7 +75,7 @@ Alternativamente, si usas GitHub Actions:
 
 - **Desarrollo**: http://localhost:5173
 - **Preview**: Después de `npm run build && npm run preview`
-- **Producción**: https://edummorenolp.github.io/Notebook-IA-Develop
+- **Producción**: https://edummorenolp.github.io/ProjectManagerMind-IA
 
 ## ⚙️ Variables de entorno
 

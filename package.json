@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "Frontend de ProjectManagerMind IA - Sistema inteligente de gestión de proyectos de software",
-  "homepage": "https://edummorenolp.github.io/Notebook-IA-Develop",
+  "homepage": "https://edummorenolp.github.io/ProjectManagerMind-IA",
   "type": "module",
   "scripts": {
     "dev": "vite",

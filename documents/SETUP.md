@@ -43,11 +43,11 @@ code --version  # 1.80.0 o superior
 
 ```bash
 # Clonar desde GitHub
-git clone https://github.com/EduMMorenolp/Notebook-IA-Develop-Frontend.git
-cd Notebook-IA-Develop-Frontend
+git clone https://github.com/EduMMorenolp/ProjectManagerMind-IA-Frontend.git
+cd ProjectManagerMind-IA-Frontend
 
 # O si ya tienes el proyecto localmente
-cd d:\Proyectos\Notebook-IA-Develop\frontend
+cd d:\Proyectos\ProjectManagerMind-IA\frontend
 ```
 
 ### 2. Instalar Dependencias
