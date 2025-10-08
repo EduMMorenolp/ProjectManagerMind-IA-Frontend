@@ -104,6 +104,13 @@ function studyReducer(state, action) {
         projectName: action.payload.name
       };
       
+    case 'RESET_PROJECT_STATE':
+      return {
+        ...initialState,
+        projectId: action.payload.id,
+        projectName: action.payload.name
+      };
+      
     case 'SET_CLIENT_INFO':
       return {
         ...state,
@@ -256,7 +263,17 @@ export const StudyProvider = ({ children }) => {
     if (!projectId) return;
     
     try {
+      // Primero resetear completamente el estado para el nuevo proyecto
+      dispatch({
+        type: 'RESET_PROJECT_STATE',
+        payload: { id: projectId, name: '' }
+      });
+      
+      console.log('🔄 StudyContext: Reseteando estado para proyecto:', projectId);
+      
       const documents = await projectService.getProjectDocuments(projectId);
+      console.log('📄 StudyContext: Documentos cargados:', documents.length);
+      
       dispatch({
         type: 'UPDATE_DOCUMENT_STATES',
         payload: { documents }

@@ -38,7 +38,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
   const [processing, setProcessing] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
-  const [projectId, setProjectId] = useState(null);
+  // Removed projectId state - using selectedProject.id directly
   const [clientInfo, setClientInfo] = useState({
     name: '', 
     business: '', 
@@ -111,16 +111,59 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
   // Sincronizar projectId con selectedProject
   useEffect(() => {
+    console.log('📋 StudyPanel: Proyecto seleccionado cambiado:', selectedProject?.name);
+    
     if (selectedProject && selectedProject.id) {
-      setProjectId(selectedProject.id);
+      // Project ID is now accessed directly from selectedProject.id
+      
+      // Limpiar información del cliente antes de cargar la nueva
+      setClientInfo({
+        name: '', 
+        business: '', 
+        description: '', 
+        needs: '', 
+        history: ''
+      });
+      
+      // Limpiar información de relevamiento
+      setRelevamientoInfo({
+        entrevistas: {
+          stakeholders: [{ id: 1, nombre: '', cargo: '', area: '', contacto: '', notas: '' }],
+          preguntas: [{ id: 1, categoria: 'Procesos Actuales', pregunta: '', respuesta: '' }]
+        },
+        cuestionarios: {
+          areas: ['Operaciones', 'IT', 'RRHH', 'Finanzas'],
+          preguntas: [{ id: 1, area: 'Operaciones', tipo: 'abierta', pregunta: '', respuesta: '' }]
+        },
+        observacion: {
+          procesos: [{ id: 1, proceso: '', descripcion: '', problemas: '', oportunidades: '' }],
+          sistemas: [{ id: 1, sistema: '', version: '', usuarios: '', problemas: '' }]
+        },
+        documentacion: {
+          archivos: [{ id: 1, nombre: '', tipo: '', ubicacion: '', relevancia: '', notas: '' }],
+          normativas: ''
+        }
+      });
       
       // Cargar información del cliente si existe para este proyecto
       loadExistingClientInfo(selectedProject.id);
       
-      // Actualizar estados de documentos en el contexto
+      // Actualizar estados de documentos en el contexto (esto reseteará el estado)
       updateDocumentStates(selectedProject.id);
+      
+      // Actualizar información de proyecto en el contexto
+      dispatch({
+        type: 'SET_PROJECT',
+        payload: { id: selectedProject.id, name: selectedProject.name }
+      });
+      
+      console.log('✅ StudyPanel: Estado actualizado para proyecto:', selectedProject.name);
+      
+      // Resetear al primer tab
+      setActiveTab('CLIENTE');
+      
     } else {
-      setProjectId(null);
+      // No selected project
       // Limpiar información del cliente
       setClientInfo({
         name: '', 
@@ -130,7 +173,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         history: ''
       });
     }
-  }, [selectedProject, loadExistingClientInfo, updateDocumentStates]);
+  }, [selectedProject, loadExistingClientInfo, updateDocumentStates, dispatch]);
 
   useEffect(() => {
     loadAIInfo();
@@ -227,10 +270,9 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
       
       // Revalidar precondiciones después de generar un documento
       if (documentType === 'RELEVAMIENTO' || documentType === 'informe-ejecutivo') {
-        // Esto activará la revalidación en las secciones correspondientes
+        // Actualizar estados de documentos después de generar
         setTimeout(() => {
-          // Trigger re-validation by updating a dependency
-          setProjectId(prev => prev);
+          updateDocumentStates(selectedProject?.id);
         }, 1000);
       }
       
@@ -269,8 +311,8 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
           <ClienteSection 
             clientInfo={clientInfo}
             setClientInfo={setClientInfo}
-            projectId={projectId}
-            setProjectId={setProjectId}
+            projectId={selectedProject?.id}
+            setProjectId={() => {}} // Dummy function since we're using selectedProject directly
           />
         )}
 
@@ -278,7 +320,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
           <RelevamientoSection 
             relevamientoInfo={relevamientoInfo}
             setRelevamientoInfo={setRelevamientoInfo}
-            projectId={projectId}
+            projectId={selectedProject?.id}
             selectedProject={selectedProject}
             handleGenerateDocument={handleGenerateDocument}
             processing={processing}
@@ -287,7 +329,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
         {activeTab === 'INFORME' && (
           <InformeSection 
-            projectId={projectId}
+            projectId={selectedProject?.id}
             clientInfo={clientInfo}
             relevamientoInfo={relevamientoInfo}
             handleGenerateDocument={handleGenerateDocument}
@@ -306,14 +348,14 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
 
         {activeTab === 'DIAGRAMAS_FLUJO' && (
           <DiagramasFlujoSection 
-            projectId={projectId}
+            projectId={selectedProject?.id}
             onNotification={handleNotification}
           />
         )}
 
         {activeTab === 'HISTORIAS_USUARIO' && (
           <HistoriasUsuarioSection 
-            projectId={projectId}
+            projectId={selectedProject?.id}
             processing={processing}
             setProcessing={setProcessing}
           />
@@ -322,7 +364,7 @@ const StudyPanel = ({ selectedFiles, selectedProject }) => {
         {/* ETAPA DE DISEÑO */}
         {activeTab === 'SPRINTS' && (
           <SprintsSection 
-            projectId={projectId}
+            projectId={selectedProject?.id}
             onNotification={handleNotification}
           />
         )}
